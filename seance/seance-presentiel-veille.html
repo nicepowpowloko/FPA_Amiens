@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de séance — Veille informationnelle | FPA | Real Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --slate:        #3D5A80;
+  --slate-dark:   #1C3A5C;
+  --slate-mid:    #4E6F99;
+  --slate-light:  #8BAABF;
+  --slate-pale:   #C8D9E8;
+  --slate-ghost:  #EEF3F8;
+  --amber:        #E07A2F;
+  --amber-light:  #F0A060;
+  --amber-pale:   #FBF0E4;
+  --bg:           #F4F6F9;
+  --bg-card:      #FFFFFF;
+  --bg-card2:     #F8FAFB;
+  --text:         #1C2B3A;
+  --text-muted:   #4A5D70;
+  --text-dim:     #8A9EAF;
+  --border:       #D0DCE8;
+  --border-soft:  #E8EFF5;
+  --green:        #2D7D52;
+  --green-bg:     #E8F5EE;
+  --orange:       #C8612A;
+  --orange-bg:    #FBF0E8;
+  --red:          #B84040;
+  --red-bg:       #FAEAEA;
+  --purple:       #6B5EA8;
+  --purple-bg:    #F0EEF8;
+  --sidebar-w:    290px;
+  --radius:       12px;
+  --shadow:       0 2px 12px rgba(28,42,58,0.08);
+  --shadow-md:    0 4px 24px rgba(28,42,58,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; font-size:15px; line-height:1.75; }
+
+/* SIDEBAR */
+#sidebar { width:var(--sidebar-w); min-height:100vh; background:#fff; position:fixed; top:0; left:0; display:flex; flex-direction:column; border-right:1px solid var(--border); z-index:100; overflow-y:auto; box-shadow:2px 0 16px rgba(28,42,58,0.06); }
+.sidebar-brand { padding:22px 22px 18px; border-bottom:1px solid var(--border-soft); background:var(--slate-dark); }
+.sidebar-brand .rc-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; letter-spacing:0.12em; color:#fff; text-transform:uppercase; }
+.sidebar-brand .formation-tag { display:inline-block; margin-top:8px; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9); font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; }
+.livrable-tag { display:inline-block; margin-top:6px; background:rgba(107,94,168,0.3); color:#C8C0F0; font-size:10.5px; font-weight:700; font-family:'Syne',sans-serif; padding:2px 9px; border-radius:20px; }
+.sidebar-module-info { padding:16px 22px; border-bottom:1px solid var(--border-soft); background:var(--slate-ghost); }
+.module-title-side { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; color:var(--text); line-height:1.4; }
+.sidebar-nav { padding:14px 0; flex:1; }
+.nav-section-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); padding:0 22px; margin-bottom:4px; margin-top:14px; }
+.nav-link { display:flex; align-items:center; gap:10px; padding:9px 22px; color:var(--text-muted); text-decoration:none; font-size:13px; border-left:3px solid transparent; transition:all 0.2s; }
+.nav-link:hover { color:var(--text); background:var(--slate-ghost); border-left-color:var(--slate-light); }
+.nav-link.active { color:var(--slate-dark); background:var(--slate-ghost); border-left-color:var(--slate); font-weight:500; }
+.nav-link .seq-num { font-family:'Fira Code',monospace; font-size:11px; color:var(--text-dim); background:var(--bg-card2); padding:2px 6px; border-radius:4px; min-width:28px; text-align:center; border:1px solid var(--border-soft); }
+.nav-link.active .seq-num { color:var(--slate-dark); background:var(--slate-ghost); border-color:var(--slate-pale); }
+.sidebar-footer { padding:16px 22px; border-top:1px solid var(--border-soft); }
+.back-link { display:flex; align-items:center; gap:8px; color:var(--text-dim); text-decoration:none; font-size:12px; transition:color 0.2s; }
+.back-link:hover { color:var(--slate-dark); }
+
+/* MAIN */
+#main { margin-left:var(--sidebar-w); flex:1; max-width:920px; padding:48px 52px 100px; }
+.module-header { margin-bottom:48px; padding:36px 40px; background:#fff; border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.module-header::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg, var(--purple), #9B8FD8); }
+.module-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.badge-fpa { display:inline-flex; align-items:center; gap:5px; background:var(--slate-ghost); color:var(--slate-dark); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid var(--slate-pale); }
+.badge-livrable { display:inline-flex; align-items:center; gap:5px; background:var(--purple-bg); color:var(--purple); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid rgba(107,94,168,0.2); }
+.badge-level { display:inline-flex; align-items:center; gap:5px; background:var(--green-bg); color:var(--green); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid rgba(45,125,82,0.2); }
+.module-h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:var(--text); line-height:1.25; margin-bottom:12px; }
+.module-h1 em { color:var(--purple); font-style:normal; }
+.module-desc { color:var(--text-muted); font-size:15px; max-width:680px; line-height:1.7; margin-bottom:20px; }
+.module-meta { display:flex; gap:12px; flex-wrap:wrap; }
+.meta-item { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-dim); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border); }
+.meta-item span { color:var(--text-muted); font-weight:500; }
+
+section { margin-bottom:52px; scroll-margin-top:24px; }
+.section-label { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.section-label .icon { font-size:18px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:var(--slate-ghost); border-radius:10px; border:1px solid var(--border); }
+.section-label h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; color:var(--text); }
+
+/* FICHE IDENTITE */
+.data-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:13.5px; border-radius:10px; overflow:hidden; box-shadow:var(--shadow); }
+.data-table th { background:var(--slate-dark); color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; padding:11px 16px; text-align:left; width:30%; }
+.data-table td { padding:10px 16px; color:var(--text-muted); border-bottom:1px solid var(--border-soft); background:#fff; vertical-align:top; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:var(--slate-ghost); }
+
+/* CHECKLIST */
+.checklist-block { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow); }
+.checklist-subsection { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-dim); margin:14px 0 6px; }
+.checklist-subsection:first-child { margin-top:0; }
+.checklist-item { display:flex; align-items:flex-start; gap:12px; padding:7px 0; border-bottom:1px solid var(--border-soft); }
+.checklist-item:last-child { border-bottom:none; }
+.checklist-item input[type="checkbox"] { width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--slate); cursor:pointer; }
+.checklist-item label { font-size:13px; color:var(--text-muted); cursor:pointer; flex:1; line-height:1.5; }
+.checklist-item input:checked + label { color:var(--text-dim); text-decoration:line-through; }
+.checklist-progress { margin-top:12px; display:flex; align-items:center; gap:10px; }
+.checklist-bar { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.checklist-bar-fill { height:100%; background:var(--slate); border-radius:2px; transition:width 0.3s; }
+.checklist-count { font-family:'Fira Code',monospace; font-size:11px; color:var(--text-dim); white-space:nowrap; }
+
+/* TIMELINE */
+.timeline { position:relative; padding-left:28px; }
+.timeline::before { content:''; position:absolute; left:10px; top:0; bottom:0; width:2px; background:var(--border); }
+.phase-block { position:relative; margin-bottom:20px; }
+.phase-block::before { content:''; position:absolute; left:-24px; top:22px; width:12px; height:12px; border-radius:50%; background:var(--slate); border:2px solid #fff; box-shadow:0 0 0 2px var(--slate-pale); }
+.phase-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+.phase-header { display:flex; align-items:flex-start; gap:14px; padding:16px 20px; border-bottom:1px solid var(--border-soft); }
+.phase-time-block { display:flex; flex-direction:column; gap:4px; flex-shrink:0; min-width:90px; }
+.phase-time { font-family:'Fira Code',monospace; font-size:11.5px; font-weight:500; color:var(--slate-dark); }
+.phase-duration-badge { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; background:var(--slate-ghost); color:var(--slate-dark); border:1px solid var(--slate-pale); white-space:nowrap; }
+.phase-header-content { flex:1; }
+.phase-num { font-family:'Fira Code',monospace; font-size:10px; color:var(--text-dim); margin-bottom:3px; letter-spacing:0.04em; }
+.phase-title { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; color:var(--text); line-height:1.3; margin-bottom:6px; }
+.phase-badges { display:flex; gap:6px; flex-wrap:wrap; }
+.modalite-badge { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:0.03em; }
+.mb-magistral { background:var(--slate-ghost); color:var(--slate-dark); border:1px solid var(--slate-pale); }
+.mb-activite  { background:var(--amber-pale); color:var(--amber); border:1px solid rgba(224,122,47,0.2); }
+.mb-echange   { background:var(--green-bg); color:var(--green); border:1px solid rgba(45,125,82,0.2); }
+.mb-pratique  { background:var(--purple-bg); color:var(--purple); border:1px solid rgba(107,94,168,0.2); }
+.phase-body { padding:16px 20px; display:flex; flex-direction:column; gap:12px; }
+
+/* BLOCS CONTENU */
+.script-block { background:var(--slate-ghost); border:1px solid var(--slate-pale); border-radius:10px; overflow:hidden; }
+.script-header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; cursor:pointer; user-select:none; }
+.script-header:hover { background:rgba(61,90,128,0.08); }
+.script-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--slate-dark); display:flex; align-items:center; gap:6px; }
+.script-toggle { font-size:14px; color:var(--text-dim); transition:transform 0.2s; }
+.script-block.open .script-toggle { transform:rotate(180deg); }
+.script-body { display:none; padding:12px 14px; border-top:1px solid var(--slate-pale); font-size:13.5px; color:var(--text-muted); line-height:1.7; font-style:italic; }
+.script-block.open .script-body { display:block; }
+.script-body strong { color:var(--text); font-style:normal; }
+
+.activite-block { background:var(--amber-pale); border:1px solid rgba(224,122,47,0.2); border-radius:10px; padding:14px 16px; }
+.activite-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--amber); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.activite-content { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+.activite-content strong { color:var(--text); }
+.activite-content ul { padding-left:16px; margin-top:6px; }
+.activite-content li { margin-bottom:4px; }
+
+.vigilance-block { background:var(--orange-bg); border:1px solid rgba(200,97,42,0.2); border-radius:10px; padding:14px 16px; }
+.vigilance-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--orange); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.vigilance-content { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+.vigilance-content strong { color:var(--text); }
+
+.materiel-block { background:var(--purple-bg); border:1px solid rgba(107,94,168,0.2); border-radius:10px; padding:14px 16px; }
+.materiel-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--purple); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.materiel-content { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+.materiel-content ul { padding-left:16px; margin-top:4px; }
+.materiel-content li { margin-bottom:3px; }
+
+.distanciel-block { background:var(--green-bg); border:1px solid rgba(45,125,82,0.2); border-radius:8px; padding:11px 14px; }
+.distanciel-label { font-family:'Syne',sans-serif; font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--green); margin-bottom:5px; }
+.distanciel-content { font-size:13px; color:var(--text-muted); line-height:1.6; }
+
+/* GESTION IMPREVUS */
+.imprevus-grid { display:flex; flex-direction:column; gap:10px; }
+.imprevu-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); display:flex; gap:14px; }
+.imprevu-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+.imprevu-body { flex:1; }
+.imprevu-title { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; color:var(--text); margin-bottom:5px; }
+.imprevu-desc { font-size:13px; color:var(--text-muted); line-height:1.6; }
+.imprevu-desc strong { color:var(--text); }
+
+/* QUIZ AUTO-EVAL */
+.quiz-intro { background:var(--slate-ghost); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; gap:12px; font-size:13.5px; color:var(--text-muted); }
+.quiz-score-box { margin-left:auto; font-family:'Fira Code',monospace; font-size:13px; font-weight:500; color:var(--slate-dark); background:#fff; padding:5px 14px; border-radius:20px; border:2px solid var(--slate-pale); white-space:nowrap; }
+.quiz-container { display:flex; flex-direction:column; gap:12px; }
+.quiz-item { background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); transition:border-color 0.2s; }
+.quiz-item.revealed { border-color:var(--slate-light); }
+.quiz-question { padding:14px 18px; font-size:14px; color:var(--text); cursor:pointer; display:flex; align-items:flex-start; gap:12px; user-select:none; transition:background 0.2s; }
+.quiz-question:hover { background:var(--slate-ghost); }
+.quiz-q-icon { width:28px; height:28px; background:var(--slate-ghost); color:var(--slate-dark); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'Fira Code',monospace; flex-shrink:0; border:1px solid var(--border); margin-top:1px; }
+.quiz-q-text { flex:1; line-height:1.55; }
+.quiz-reveal { display:none; padding:16px 18px; background:var(--green-bg); border-top:1px solid rgba(45,125,82,0.15); }
+.quiz-item.revealed .quiz-reveal { display:block; }
+.quiz-reveal .answer-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:6px; }
+.quiz-reveal p { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+.quiz-reveal strong { color:var(--text); }
+
+/* VARIANTES TABLE */
+.var-table { width:100%; border-collapse:collapse; font-size:13px; border-radius:10px; overflow:hidden; box-shadow:var(--shadow); }
+.var-table th { background:var(--slate-dark); color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; padding:10px 14px; text-align:left; }
+.var-table td { padding:10px 14px; color:var(--text-muted); border-bottom:1px solid var(--border-soft); background:#fff; vertical-align:top; }
+.var-table tr:last-child td { border-bottom:none; }
+.var-table tr:hover td { background:var(--slate-ghost); }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--slate-pale); border-radius:3px; }
+
+@media(max-width:900px) {
+  #sidebar { display:none; }
+  #main { margin-left:0; padding:24px 20px 60px; }
+  .timeline { padding-left:20px; }
+}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="sidebar-brand">
+    <div class="rc-logo">Real Conseil</div>
+    <span class="formation-tag">FPA — RNCP 35030</span><br>
+    <span class="livrable-tag">🎤 Plan de séance</span>
+  </div>
+  <div class="sidebar-module-info">
+    <div class="module-title-side">Plan de séance animateur — 2h présentiel</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Préparation</div>
+    <a href="#identite" class="nav-link active"><span class="seq-num">📋</span> Fiche d'identité</a>
+    <a href="#prep" class="nav-link"><span class="seq-num">✅</span> Checklist préparation</a>
+    <div class="nav-section-label">Déroulé — 8 phases</div>
+    <a href="#p1" class="nav-link"><span class="seq-num">P1</span> Accueil &amp; accroche</a>
+    <a href="#p2" class="nav-link"><span class="seq-num">P2</span> Définition &amp; types</a>
+    <a href="#p3" class="nav-link"><span class="seq-num">P3</span> Sources &amp; évaluation</a>
+    <a href="#p4" class="nav-link"><span class="seq-num">P4</span> Activité CRAAP</a>
+    <a href="#p5" class="nav-link"><span class="seq-num">P5</span> Démo outils</a>
+    <a href="#p6" class="nav-link"><span class="seq-num">P6</span> Pratique individuelle</a>
+    <a href="#p7" class="nav-link"><span class="seq-num">P7</span> Synthèse collective</a>
+    <a href="#p8" class="nav-link"><span class="seq-num">P8</span> Clôture</a>
+    <div class="nav-section-label">Ressources animateur</div>
+    <a href="#imprevus" class="nav-link"><span class="seq-num">🚨</span> Gestion des imprévus</a>
+    <a href="#variantes" class="nav-link"><span class="seq-num">💻</span> Variantes distanciel</a>
+    <a href="#autoeval" class="nav-link"><span class="seq-num">🔍</span> Auto-évaluation</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../index.html" class="back-link">← Retour à l'index FPA</a>
+  </div>
+</aside>
+
+<main id="main">
+
+  <header class="module-header">
+    <div class="module-eyebrow">
+      <span class="badge-fpa">FPA — RNCP 35030</span>
+      <span class="badge-livrable">🎤 Plan de séance</span>
+      <span class="badge-level">Guide animateur</span>
+    </div>
+    <h1 class="module-h1">Plan de séance —<br><em>La veille informationnelle</em></h1>
+    <p class="module-desc">Guide complet pour l'animateur. 8 phases minutées avec scripts, activités, points de vigilance et variantes distanciel. Objectif : 100% des apprenants repartent avec 1 alerte Google active et 1 flux Feedly.</p>
+    <div class="module-meta">
+      <div class="meta-item">⏱ <span>2 heures (120 min)</span></div>
+      <div class="meta-item">👥 <span>8 à 20 apprenants</span></div>
+      <div class="meta-item">📶 <span>Aucun prérequis</span></div>
+      <div class="meta-item">🎤 <span>Usage animateur uniquement</span></div>
+    </div>
+  </header>
+
+  <!-- FICHE IDENTITE -->
+  <section id="identite">
+    <div class="section-label"><div class="icon">📋</div><h2>Fiche d'identité de la séance</h2></div>
+    <table class="data-table">
+      <tbody>
+        <tr><th>Titre</th><td>La veille informationnelle du formateur</td></tr>
+        <tr><th>Durée</th><td>2h — 120 minutes</td></tr>
+        <tr><th>Public</th><td>Apprenants FPA, débutants en veille</td></tr>
+        <tr><th>Effectif</th><td>8 à 20 apprenants</td></tr>
+        <tr><th>Prérequis</th><td>Aucun</td></tr>
+        <tr><th>Matériel</th><td>Vidéoprojecteur, ordinateurs apprenants, connexion internet, fiches méthode imprimées</td></tr>
+        <tr><th>Objectif principal</th><td>Chaque apprenant repart avec 1 alerte Google créée et 1 flux Feedly</td></tr>
+        <tr><th>Indicateur de réussite</th><td>100% des apprenants ont créé au moins 1 alerte Google active</td></tr>
+        <tr><th>Lien Qualiopi</th><td>Indicateur 2 — actualisation des compétences du formateur</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- CHECKLIST PREP -->
+  <section id="prep">
+    <div class="section-label"><div class="icon">✅</div><h2>Checklist de préparation</h2></div>
+    <div class="checklist-block">
+      <div class="checklist-subsection">La veille — à préparer</div>
+      <div id="prepList">
+        <div class="checklist-item"><input type="checkbox" id="c1" onchange="updateChecklist()"><label for="c1">Tester la connexion internet en salle</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c2" onchange="updateChecklist()"><label for="c2">Imprimer les fiches méthode (1 par apprenant + 2 en réserve)</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c3" onchange="updateChecklist()"><label for="c3">Préparer les 3 sources à évaluer pour la phase 4 (imprimer ou partager le lien)</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c4" onchange="updateChecklist()"><label for="c4">Créer un compte Feedly de démonstration (différent du vôtre)</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c5" onchange="updateChecklist()"><label for="c5">Préparer un Google Slides ou tableau avec les 4 types de veille</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c6" onchange="updateChecklist()"><label for="c6">Préparer l'activité mind map (tableau blanc ou Jamboard)</label></div>
+        <div class="checklist-subsection" style="margin-top:16px;">30 minutes avant</div>
+        <div class="checklist-item"><input type="checkbox" id="c7" onchange="updateChecklist()"><label for="c7">Connecter le vidéoprojecteur et tester l'affichage</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c8" onchange="updateChecklist()"><label for="c8">Ouvrir les onglets : Google Alertes, Feedly, France Compétences, LinkedIn</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c9" onchange="updateChecklist()"><label for="c9">Disposer les fiches méthode sur les tables</label></div>
+        <div class="checklist-item"><input type="checkbox" id="c10" onchange="updateChecklist()"><label for="c10">Écrire au tableau : "Quand avez-vous appris quelque chose de nouveau sur votre métier ?"</label></div>
+      </div>
+      <div class="checklist-progress">
+        <div class="checklist-bar"><div class="checklist-bar-fill" id="prepBar" style="width:0%"></div></div>
+        <span class="checklist-count" id="prepCount">0 / 10 validés</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEROULÉ -->
+  <section id="derouled">
+    <div class="section-label"><div class="icon">⏱</div><h2>Déroulé minuté — 8 phases</h2></div>
+
+    <div class="timeline">
+
+      <!-- PHASE 1 -->
+      <div class="phase-block" id="p1">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">0h00 → 0h10</span>
+              <span class="phase-duration-badge">10 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 01 / 08</div>
+              <div class="phase-title">Accueil et accroche</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-echange">🟩 Échange collectif</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="script-block">
+              <div class="script-header" onclick="toggleScript(this)">
+                <span class="script-label">🎤 Script formateur</span>
+                <span class="script-toggle">▾</span>
+              </div>
+              <div class="script-body">« Avant de commencer, j'aimerais qu'on parte de votre expérience. Regardez la question au tableau. Prenez <strong>30 secondes pour y réfléchir</strong>, puis on partage. »</div>
+            </div>
+            <div class="activite-block">
+              <div class="activite-label">🟧 Activité</div>
+              <div class="activite-content">Question ouverte, 3-4 apprenants s'expriment. Le formateur écoute sans juger, <strong>note les sources citées au tableau</strong>. Objectif : créer le besoin, montrer que tout le monde fait déjà une forme de veille sans le savoir.</div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">Si personne ne répond → reformuler : <strong>"La dernière formation que vous avez suivie, c'était quand ?"</strong> Si quelqu'un répond "jamais" → valoriser l'honnêteté et en faire le point de départ de la séance.</div>
+            </div>
+            <p style="font-size:13px;color:var(--text-dim);font-style:italic;">Transition : « Ce que vous venez de décrire, c'est déjà de la veille. On va maintenant lui donner une structure. »</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 -->
+      <div class="phase-block" id="p2">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">0h10 → 0h25</span>
+              <span class="phase-duration-badge">15 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 02 / 08</div>
+              <div class="phase-title">Apport 1 : Définition et types de veille</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-magistral">🟦 Apport magistral</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="script-block">
+              <div class="script-header" onclick="toggleScript(this)">
+                <span class="script-label">🎤 Script formateur</span>
+                <span class="script-toggle">▾</span>
+              </div>
+              <div class="script-body">« La veille informationnelle, c'est un processus <strong>continu, organisé et délibéré</strong> de surveillance de son environnement. Pour un formateur, ça se décline en 4 types que je vais vous présenter... »</div>
+            </div>
+            <div class="activite-block">
+              <div class="activite-label">📝 Contenu à présenter</div>
+              <div class="activite-content">
+                <ul>
+                  <li>Définition complète de la veille informationnelle</li>
+                  <li>4 types avec exemples concrets (schéma visuel recommandé)</li>
+                  <li>Pourquoi c'est obligatoire pour un FPA (Qualiopi indicateur 2)</li>
+                  <li>Distinction veille active / passive</li>
+                </ul>
+                <strong>Activité intégrée (2 min)</strong> : après les 4 types, demander : "Pour votre domaine de formation, quel type est le plus critique ?"
+              </div>
+            </div>
+            <div class="materiel-block">
+              <div class="materiel-label">📦 Matériel</div>
+              <div class="materiel-content">Slide ou dessin au tableau avec les 4 quadrants colorés (🎓 pédagogique · ⚖️ juridique · 💻 technologique · 🏭 sectorielle)</div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">Ne pas noyer dans les exemples. <strong>Rester sur 1 exemple concret par type.</strong> Si le groupe est avancé → aller plus vite sur cette phase, gagner du temps pour la phase 6 (pratique).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 -->
+      <div class="phase-block" id="p3">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">0h25 → 0h40</span>
+              <span class="phase-duration-badge">15 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 03 / 08</div>
+              <div class="phase-title">Apport 2 : Sources et évaluation rapide</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-magistral">🟦 Apport</span>
+                <span class="modalite-badge mb-echange">🟩 Échange</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="script-block">
+              <div class="script-header" onclick="toggleScript(this)">
+                <span class="script-label">🎤 Script formateur</span>
+                <span class="script-toggle">▾</span>
+              </div>
+              <div class="script-body">« Vous venez de citer vos sources habituelles. Voyons maintenant celles qui sont <strong>incontournables pour nous, formateurs</strong>. Je vais vous les montrer en direct. »</div>
+            </div>
+            <div class="activite-block">
+              <div class="activite-label">🖥️ Navigation en direct</div>
+              <div class="activite-content">Présenter les 5 sources institutionnelles clés sur le vidéoprojecteur : <strong>France Compétences, DREETS HdF, Centre Inffo, Légifrance, CARIF-OREF</strong>. Montrer 1 contenu concret sur chaque site (30 sec par site max).<br><br><strong>Activité intégrée :</strong> chaque apprenant dit 1 source qu'il utilise déjà → formateur indique si fiable / à compléter.</div>
+            </div>
+            <div class="distanciel-block">
+              <div class="distanciel-label">💻 Variante distanciel</div>
+              <div class="distanciel-content">Partager l'écran et naviguer sur les sites. Demander aux apprenants de noter dans le <strong>chat</strong> leur source habituelle.</div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">Certains peuvent citer des sources peu fiables (Facebook, forums) → ne pas critiquer frontalement. Rebondir : <strong>"C'est intéressant, on va voir comment évaluer une source juste après."</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4 -->
+      <div class="phase-block" id="p4">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">0h40 → 0h55</span>
+              <span class="phase-duration-badge">15 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 04 / 08</div>
+              <div class="phase-title">Activité : Évaluer des sources avec CRAAP</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-activite">🟧 Activité groupes</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="activite-block">
+              <div class="activite-label">🟧 Consigne groupes de 3-4</div>
+              <div class="activite-content">
+                Groupes de 3-4 apprenants. Chaque groupe reçoit 3 sources à évaluer. <strong>10 min</strong> pour évaluer chaque source avec la méthode CRAAP.<br><br>
+                <strong>Source A :</strong> Article France Compétences sur les certifications → Fiable ✅<br>
+                <strong>Source B :</strong> Article de blog anonyme "Les 10 secrets de la formation réussie" sans date → À éviter ⚠️<br>
+                <strong>Source C :</strong> Post Facebook "CPF bientôt supprimé, partagez !" → Fausse info ❌<br><br>
+                <strong>Restitution :</strong> 2 minutes par groupe, formateur synthétise au tableau.
+              </div>
+            </div>
+            <div class="script-block">
+              <div class="script-header" onclick="toggleScript(this)">
+                <span class="script-label">🎤 Corrigé type</span>
+                <span class="script-toggle">▾</span>
+              </div>
+              <div class="script-body">
+                Source A : C=✅ R=✅ A=✅ A=✅ P=✅ → <strong>Source fiable, institutionnelle</strong><br>
+                Source B : C=⚠️ R=⚠️ A=❌ A=⚠️ P=⚠️ → <strong>À éviter comme référence</strong><br>
+                Source C : C=❌ A=❌ A=❌ → <strong>Fausse information, ne pas partager</strong>
+              </div>
+            </div>
+            <div class="distanciel-block">
+              <div class="distanciel-label">💻 Variante distanciel</div>
+              <div class="distanciel-content">Salles de sous-groupes Zoom/Teams (10 min) + restitution en grand groupe. 1 Google Doc partagé par groupe avec le tableau CRAAP.</div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">Groupes qui finissent trop vite → demander de justifier chaque critère avec un argument précis. Groupes bloqués → rappeler : CRAAP c'est 5 questions simples, une par lettre.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 5 -->
+      <div class="phase-block" id="p5">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">0h55 → 1h15</span>
+              <span class="phase-duration-badge">20 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 05 / 08</div>
+              <div class="phase-title">Apport 3 + Démo live : Les outils</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-magistral">🟦 Apport</span>
+                <span class="modalite-badge mb-pratique">🟪 Pratique guidée</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="script-block">
+              <div class="script-header" onclick="toggleScript(this)">
+                <span class="script-label">🎤 Script formateur</span>
+                <span class="script-toggle">▾</span>
+              </div>
+              <div class="script-body">« Maintenant qu'on sait où chercher et comment évaluer, voyons comment <strong>automatiser et organiser</strong>. Je vais vous montrer 3 outils en direct, vous suivez sur votre propre appareil. »</div>
+            </div>
+            <div class="activite-block">
+              <div class="activite-label">🖥️ 3 démos en direct</div>
+              <div class="activite-content">
+                <strong>Démo 1 — Google Alertes (5 min) :</strong> Ouvrir google.fr/alerts · Créer une alerte "formation professionnelle" · Montrer les paramètres · Les apprenants font en même temps<br><br>
+                <strong>Démo 2 — Feedly (10 min) :</strong> Ouvrir le compte de démo préparé · Montrer Today, Collections, flux · Ajouter Centre Inffo en direct · Les apprenants créent leur compte<br><br>
+                <strong>Démo 3 — LinkedIn hashtags (5 min) :</strong> Montrer comment suivre #formation · Montrer un groupe formateurs
+              </div>
+            </div>
+            <div class="materiel-block">
+              <div class="materiel-label">📦 Matériel indispensable</div>
+              <div class="materiel-content">
+                <ul>
+                  <li>Compte Feedly de démo préparé à l'avance (différent du compte personnel)</li>
+                  <li>Connexion internet stable testée avant la séance</li>
+                  <li>Captures d'écran de backup si la connexion lâche</li>
+                </ul>
+              </div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">La connexion internet peut lâcher → avoir les <strong>captures d'écran en backup</strong>. Feedly peut être lent à charger → prévenir les apprenants dès le début de la démo. Certains n'ont pas de compte Google → les jumeler avec un voisin.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 6 -->
+      <div class="phase-block" id="p6">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">1h15 → 1h30</span>
+              <span class="phase-duration-badge">15 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 06 / 08 — Phase clé</div>
+              <div class="phase-title">Mise en pratique individuelle</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-pratique">🟪 Pratique individuelle</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="activite-block">
+              <div class="activite-label">🟪 Consigne individuelle</div>
+              <div class="activite-content">« Vous avez 15 minutes. Créez <strong>1 alerte Google sur votre domaine de formation</strong> ET abonnez-vous à <strong>1 flux Feedly</strong>. C'est votre livrable de la séance. »<br><br>Le formateur circule, aide individuellement, répond aux questions.<br><br><strong>Check de fin :</strong> lever la main quand les 2 sont créés → formateur valide visuellement.</div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">Apprenants sans compte Google → aide à créer rapidement ou utiliser l'email existant. Apprenants en difficulté technique → <strong>jumeler avec un apprenant plus à l'aise</strong>. Ne jamais sacrifier cette phase si en retard — c'est le livrable principal.</div>
+            </div>
+            <div class="distanciel-block">
+              <div class="distanciel-label">💻 Variante distanciel</div>
+              <div class="distanciel-content">Même consigne. Formateur disponible dans le chat. Partage d'écran à la demande pour aide individuelle.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 7 -->
+      <div class="phase-block" id="p7">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">1h30 → 1h50</span>
+              <span class="phase-duration-badge">20 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 07 / 08</div>
+              <div class="phase-title">Synthèse collective : Kit de veille idéal</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-echange">🟩 Échange collectif</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="activite-block">
+              <div class="activite-label">🟩 Mind map collectif</div>
+              <div class="activite-content">
+                Consigne : <strong>"On va construire ensemble le kit de veille idéal du formateur. Chacun contribue 1 élément au tableau."</strong><br><br>
+                Mind map au tableau blanc (ou Jamboard en distanciel) avec comme centre <strong>"Kit de veille FPA"</strong>.<br><br>
+                Branches : <strong>Sources · Outils · Fréquence · Organisation · Traçabilité Qualiopi</strong><br><br>
+                Chaque apprenant écrit ou dicte 1 élément — formateur structure et complète les manques.
+              </div>
+            </div>
+            <div class="materiel-block">
+              <div class="materiel-label">📦 Matériel</div>
+              <div class="materiel-content">Tableau blanc + feutres (présentiel) · Jamboard ou Miro avec post-its numériques (distanciel)</div>
+            </div>
+            <div class="vigilance-block">
+              <div class="vigilance-label">⚠️ Point de vigilance</div>
+              <div class="vigilance-content">Si certains éléments importants manquent (ex: Qualiopi) → poser des questions ouvertes pour les faire émerger plutôt que de les imposer. <strong>Ne jamais compléter sans impliquer le groupe.</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 8 -->
+      <div class="phase-block" id="p8">
+        <div class="phase-card">
+          <div class="phase-header">
+            <div class="phase-time-block">
+              <span class="phase-time">1h50 → 2h00</span>
+              <span class="phase-duration-badge">10 min</span>
+            </div>
+            <div class="phase-header-content">
+              <div class="phase-num">PHASE 08 / 08</div>
+              <div class="phase-title">Clôture et évaluation à chaud</div>
+              <div class="phase-badges">
+                <span class="modalite-badge mb-echange">🟩 Bilan</span>
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <div class="activite-block">
+              <div class="activite-label">📝 Évaluation à chaud</div>
+              <div class="activite-content">
+                Distribution fiche méthode (si pas encore distribuée).<br><br>
+                <strong>Tour de table rapide :</strong> chaque apprenant dit en 1 phrase son prochain créneau de veille.<br><br>
+                3 questions sur post-it ou formulaire numérique :
+                <ul>
+                  <li>La chose la plus importante que j'ai apprise aujourd'hui : ______</li>
+                  <li>Ce que je vais appliquer dès cette semaine : ______</li>
+                  <li>Une question qui reste : ______</li>
+                </ul>
+              </div>
+            </div>
+            <div class="script-block">
+              <div class="script-header" onclick="toggleScript(this)">
+                <span class="script-label">🎤 Script de clôture</span>
+                <span class="script-toggle">▾</span>
+              </div>
+              <div class="script-body">« Vous repartez avec <strong>2 outils opérationnels</strong>, une méthode d'évaluation et un plan. La veille, ça se construit progressivement. <strong>L'important c'est la régularité.</strong> 10 minutes par jour valent mieux que 2 heures une fois par mois. »</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </section>
+
+  <!-- GESTION IMPREVUS -->
+  <section id="imprevus">
+    <div class="section-label"><div class="icon">🚨</div><h2>Gestion des imprévus — 5 situations</h2></div>
+    <div class="imprevus-grid">
+      <div class="imprevu-card">
+        <span class="imprevu-icon">🚫</span>
+        <div class="imprevu-body">
+          <div class="imprevu-title">Pas de connexion internet</div>
+          <div class="imprevu-desc">Utiliser les fiches méthode papier uniquement. Mener les phases 1-3 et 7 sans démo live. <strong>Reporter les phases 5-6 à une prochaine séance</strong> et le signaler clairement au groupe. Utiliser l'activité CRAAP papier uniquement (phase 4).</div>
+        </div>
+      </div>
+      <div class="imprevu-card">
+        <span class="imprevu-icon">😶</span>
+        <div class="imprevu-body">
+          <div class="imprevu-title">Groupe peu participatif</div>
+          <div class="imprevu-desc">Utiliser des questions fermées d'abord : <strong>"Oui ou non : vous faites déjà de la veille ?"</strong> puis ouvrir progressivement. Proposer des tours de table courts (1 mot par personne). Utiliser Mentimeter (word cloud) pour dépasser la timidité.</div>
+        </div>
+      </div>
+      <div class="imprevu-card">
+        <span class="imprevu-icon">🙋</span>
+        <div class="imprevu-body">
+          <div class="imprevu-title">Apprenant expert qui monopolise</div>
+          <div class="imprevu-desc">Valoriser son expertise : <strong>"Vous pourrez enrichir ça tout à l'heure."</strong> Lui donner un rôle d'aide aux autres en phase 6 (pratique individuelle). Invitation à partager son système lors de la synthèse phase 7.</div>
+        </div>
+      </div>
+      <div class="imprevu-card">
+        <span class="imprevu-icon">⏰</span>
+        <div class="imprevu-body">
+          <div class="imprevu-title">Retard sur le timing</div>
+          <div class="imprevu-desc">Comprimer la phase 3 (passer à 8 min) et la phase 7 (mind map raccourci — demander juste les 3 éléments les plus importants). <strong>Ne jamais sacrifier la phase 6</strong> (pratique individuelle = livrable clé de la séance).</div>
+        </div>
+      </div>
+      <div class="imprevu-card">
+        <span class="imprevu-icon">📱</span>
+        <div class="imprevu-body">
+          <div class="imprevu-title">Apprenants sur téléphone uniquement</div>
+          <div class="imprevu-desc"><strong>Google Alertes fonctionne sur mobile</strong> (application ou navigateur). <strong>Feedly aussi</strong> (application mobile gratuite). Adapter les instructions de navigation pour l'interface mobile. Jumeler avec les apprenants qui ont un ordinateur si besoin.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VARIANTES DISTANCIEL -->
+  <section id="variantes">
+    <div class="section-label"><div class="icon">💻</div><h2>Variantes distanciel — Tableau récapitulatif</h2></div>
+    <table class="var-table">
+      <thead><tr><th>Phase</th><th>Outil recommandé</th><th>Adaptation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Accueil P1</strong></td><td>Mentimeter word cloud</td><td>Les apprenants tapent leur source sur leur téléphone — résultat affiché en temps réel</td></tr>
+        <tr><td><strong>Groupes P4</strong></td><td>Salles Zoom + Google Docs partagé</td><td>1 doc par groupe avec le tableau CRAAP à 5 colonnes</td></tr>
+        <tr><td><strong>Démo P5</strong></td><td>Partage d'écran + annotation</td><td>Apprenants annotent en direct sur l'écran partagé · Spotlight sur le curseur formateur</td></tr>
+        <tr><td><strong>Pratique P6</strong></td><td>Formateur disponible en chat</td><td>Partage d'écran individuel à la demande pour aide technique</td></tr>
+        <tr><td><strong>Synthèse P7</strong></td><td>Jamboard ou Miro</td><td>Post-its numériques par catégorie · Chaque apprenant dépose le sien</td></tr>
+        <tr><td><strong>Évaluation P8</strong></td><td>Google Forms ou Klaxoon</td><td>Réponses anonymes en temps réel · Partager les résultats en direct</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- AUTO-EVAL -->
+  <section id="autoeval">
+    <div class="section-label"><div class="icon">🔍</div><h2>Auto-évaluation formateur — Post-séance</h2></div>
+    <div class="quiz-intro">
+      <span>5 questions pour évaluer la qualité de votre animation. Cliquez pour révéler les critères de succès.</span>
+      <span class="quiz-score-box" id="quizScore">0 / 5 révélées</span>
+    </div>
+    <div class="quiz-container">
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q1</span><div class="quiz-q-text">Ai-je bien créé le besoin en phase 1 ? Les apprenants ont-ils compris pourquoi la veille est importante pour eux ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Critères de succès</div><p>Les apprenants ont <strong>pris la parole spontanément</strong> sur leurs pratiques actuelles. La question au tableau a généré <strong>au moins 3-4 réponses</strong> différentes. Les sources citées ont été reprises pour illustrer les 4 types de veille. Aucun apprenant n'a eu l'air de ne pas comprendre pourquoi il est là.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q2</span><div class="quiz-q-text">La démo live des outils était-elle fluide et adaptée au niveau du groupe ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Critères de succès</div><p>La démo n'a pas été interrompue par des problèmes techniques. Les apprenants ont pu <strong>suivre en temps réel</strong> sur leur propre appareil. La vitesse était adaptée — ni trop rapide ni trop lente. Les <strong>captures d'écran de backup</strong> étaient prêtes si besoin.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q3</span><div class="quiz-q-text">100% des apprenants ont-ils créé au moins 1 alerte Google active ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Critères de succès</div><p>C'est <strong>l'indicateur de réussite principal</strong> de la séance. Si non : identifier pourquoi (problème technique, temps insuffisant, blocage compte Google). Proposer un suivi individualisé. <strong>Taux cible : 100%</strong>. En deçà de 80%, la phase 6 était insuffisante ou mal préparée.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q4</span><div class="quiz-q-text">Le kit de veille collectif (phase 7) reflète-t-il les 4 types de veille et les 3 règles d'or ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Critères de succès</div><p>Le mind map collectif contient <strong>des éléments sur les 4 types de veille</strong>. La traçabilité Qualiopi est mentionnée. Les 3 niveaux de traitement (scanner/lire/archiver) apparaissent. Les <strong>apprenants se réfèrent au kit</strong> comme "leur" production, pas comme celle du formateur.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q5</span><div class="quiz-q-text">Les apprenants repartent-ils avec un engagement concret et réaliste ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Critères de succès</div><p>Chaque apprenant a dit à voix haute <strong>son créneau fixe de veille</strong> lors du tour de table final. Les engagements cités sont <strong>réalistes</strong> (10-30 min/semaine, pas "1h par jour"). Les fiches méthode ont été remises. <strong>Un suivi dans 30 jours</strong> a été proposé et accepté par le groupe.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggleScript(header) {
+  const block = header.closest('.script-block');
+  block.classList.toggle('open');
+}
+
+function updateChecklist() {
+  const list = document.getElementById('prepList');
+  const boxes = list.querySelectorAll('input[type="checkbox"]');
+  const total = boxes.length;
+  const checked = [...boxes].filter(b => b.checked).length;
+  document.getElementById('prepCount').textContent = checked + ' / ' + total + ' validés';
+  document.getElementById('prepBar').style.width = (checked / total * 100) + '%';
+  boxes.forEach((b, i) => localStorage.setItem('seance_prep_' + i, b.checked));
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const list = document.getElementById('prepList');
+  const boxes = list.querySelectorAll('input[type="checkbox"]');
+  boxes.forEach((b, i) => {
+    if (localStorage.getItem('seance_prep_' + i) === 'true') b.checked = true;
+  });
+  updateChecklist();
+});
+
+let revealed = 0;
+function revealQuiz(item) {
+  if (!item.classList.contains('revealed')) {
+    item.classList.add('revealed');
+    revealed++;
+    document.getElementById('quizScore').textContent = revealed + ' / 5 révélées';
+  }
+}
+
+// Scroll-spy
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = document.querySelectorAll('section[id], .phase-block[id]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier — Veille informationnelle | FPA | Real Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --slate:        #3D5A80;
+  --slate-dark:   #1C3A5C;
+  --slate-mid:    #4E6F99;
+  --slate-light:  #8BAABF;
+  --slate-pale:   #C8D9E8;
+  --slate-ghost:  #EEF3F8;
+  --amber:        #E07A2F;
+  --amber-light:  #F0A060;
+  --amber-pale:   #FBF0E4;
+  --bg:           #F4F6F9;
+  --bg-card:      #FFFFFF;
+  --bg-card2:     #F8FAFB;
+  --text:         #1C2B3A;
+  --text-muted:   #4A5D70;
+  --text-dim:     #8A9EAF;
+  --border:       #D0DCE8;
+  --border-soft:  #E8EFF5;
+  --green:        #2D7D52;
+  --green-bg:     #E8F5EE;
+  --orange:       #C8612A;
+  --orange-bg:    #FBF0E8;
+  --red:          #B84040;
+  --red-bg:       #FAEAEA;
+  --purple:       #6B5EA8;
+  --purple-bg:    #F0EEF8;
+  --sidebar-w:    290px;
+  --radius:       12px;
+  --shadow:       0 2px 12px rgba(28,42,58,0.08);
+  --shadow-md:    0 4px 24px rgba(28,42,58,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; font-size:15px; line-height:1.75; }
+
+/* SIDEBAR */
+#sidebar { width:var(--sidebar-w); min-height:100vh; background:#fff; position:fixed; top:0; left:0; display:flex; flex-direction:column; border-right:1px solid var(--border); z-index:100; overflow-y:auto; box-shadow:2px 0 16px rgba(28,42,58,0.06); }
+.sidebar-brand { padding:22px 22px 18px; border-bottom:1px solid var(--border-soft); background:var(--slate-dark); }
+.sidebar-brand .rc-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; letter-spacing:0.12em; color:#fff; text-transform:uppercase; }
+.sidebar-brand .formation-tag { display:inline-block; margin-top:8px; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9); font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; letter-spacing:0.05em; }
+.livrable-tag { display:inline-block; margin-top:6px; background:rgba(224,122,47,0.25); color:var(--amber-light); font-size:10.5px; font-weight:700; font-family:'Syne',sans-serif; padding:2px 9px; border-radius:20px; letter-spacing:0.05em; }
+.sidebar-module-info { padding:16px 22px; border-bottom:1px solid var(--border-soft); background:var(--slate-ghost); }
+.module-title-side { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; color:var(--text); line-height:1.4; }
+.sidebar-nav { padding:14px 0; flex:1; }
+.nav-section-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); padding:0 22px; margin-bottom:4px; margin-top:14px; }
+.nav-link { display:flex; align-items:center; gap:10px; padding:9px 22px; color:var(--text-muted); text-decoration:none; font-size:13px; border-left:3px solid transparent; transition:all 0.2s; }
+.nav-link:hover { color:var(--text); background:var(--slate-ghost); border-left-color:var(--slate-light); }
+.nav-link.active { color:var(--slate-dark); background:var(--slate-ghost); border-left-color:var(--slate); font-weight:500; }
+.nav-link .seq-num { font-family:'Fira Code',monospace; font-size:11px; color:var(--text-dim); background:var(--bg-card2); padding:2px 6px; border-radius:4px; min-width:28px; text-align:center; border:1px solid var(--border-soft); }
+.nav-link.active .seq-num { color:var(--slate-dark); background:var(--slate-ghost); border-color:var(--slate-pale); }
+.sidebar-footer { padding:16px 22px; border-top:1px solid var(--border-soft); }
+.back-link { display:flex; align-items:center; gap:8px; color:var(--text-dim); text-decoration:none; font-size:12px; transition:color 0.2s; }
+.back-link:hover { color:var(--slate-dark); }
+
+/* MAIN */
+#main { margin-left:var(--sidebar-w); flex:1; max-width:920px; padding:48px 52px 100px; }
+.module-header { margin-bottom:48px; padding:36px 40px; background:#fff; border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.module-header::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg, var(--amber), var(--amber-light)); }
+.module-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.badge-fpa { display:inline-flex; align-items:center; gap:5px; background:var(--slate-ghost); color:var(--slate-dark); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid var(--slate-pale); }
+.badge-livrable { display:inline-flex; align-items:center; gap:5px; background:var(--amber-pale); color:var(--amber); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid rgba(224,122,47,0.2); }
+.badge-level { display:inline-flex; align-items:center; gap:5px; background:var(--green-bg); color:var(--green); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid rgba(45,125,82,0.2); }
+.module-h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:var(--text); line-height:1.25; margin-bottom:12px; }
+.module-h1 em { color:var(--amber); font-style:normal; }
+.module-desc { color:var(--text-muted); font-size:15px; max-width:680px; line-height:1.7; margin-bottom:20px; }
+.module-meta { display:flex; gap:12px; flex-wrap:wrap; }
+.meta-item { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-dim); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border); }
+.meta-item span { color:var(--text-muted); font-weight:500; }
+
+/* SECTIONS */
+section { margin-bottom:52px; scroll-margin-top:24px; }
+.section-label { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.section-label .icon { font-size:18px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:var(--slate-ghost); border-radius:10px; border:1px solid var(--border); }
+.section-label h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; color:var(--text); }
+
+/* CHECKLIST */
+.checklist-block { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:22px 26px; box-shadow:var(--shadow); }
+.checklist-title { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; color:var(--text); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.checklist-title span { font-family:'Fira Code',monospace; font-size:11px; color:var(--text-dim); font-weight:400; }
+.checklist-item { display:flex; align-items:flex-start; gap:12px; padding:8px 0; border-bottom:1px solid var(--border-soft); }
+.checklist-item:last-child { border-bottom:none; }
+.checklist-item input[type="checkbox"] { width:18px; height:18px; margin-top:2px; flex-shrink:0; accent-color:var(--slate); cursor:pointer; }
+.checklist-item label { font-size:13.5px; color:var(--text-muted); line-height:1.5; cursor:pointer; flex:1; }
+.checklist-item input:checked + label { color:var(--text-dim); text-decoration:line-through; }
+.checklist-progress { margin-top:12px; display:flex; align-items:center; gap:10px; }
+.checklist-bar { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.checklist-bar-fill { height:100%; background:var(--slate); border-radius:2px; transition:width 0.3s; }
+.checklist-count { font-family:'Fira Code',monospace; font-size:11px; color:var(--text-dim); }
+
+/* ETAPE BLOCK */
+.etape-block { background:#fff; border:1px solid var(--border); border-radius:16px; margin-bottom:20px; overflow:hidden; box-shadow:var(--shadow); }
+.etape-header { display:flex; align-items:flex-start; gap:16px; padding:22px 26px; border-bottom:1px solid var(--border-soft); }
+.etape-timer { font-family:'Fira Code',monospace; font-size:12px; font-weight:500; color:#fff; background:var(--amber); padding:5px 12px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+.etape-header-content { flex:1; }
+.etape-num { font-family:'Fira Code',monospace; font-size:10px; color:var(--text-dim); margin-bottom:3px; letter-spacing:0.05em; }
+.etape-title { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--text); line-height:1.3; }
+.etape-objective { font-size:13px; color:var(--text-dim); margin-top:4px; }
+.etape-body { padding:22px 26px; display:flex; flex-direction:column; gap:14px; }
+
+/* STEP-BY-STEP */
+.steps-block { background:var(--slate-ghost); border:1px solid var(--slate-pale); border-radius:10px; padding:18px 20px; }
+.steps-title { font-family:'Syne',sans-serif; font-weight:700; font-size:11.5px; text-transform:uppercase; letter-spacing:0.07em; color:var(--slate-dark); margin-bottom:12px; }
+.step-list { display:flex; flex-direction:column; gap:8px; }
+.step-item { display:flex; gap:12px; align-items:flex-start; }
+.step-num { font-family:'Fira Code',monospace; font-size:11px; font-weight:500; color:#fff; background:var(--slate); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.step-text { font-size:13.5px; color:var(--text-muted); line-height:1.6; }
+.step-text strong { color:var(--text); }
+
+/* LIVRABLE BLOCK */
+.livrable-block { background:var(--green-bg); border:1px solid rgba(45,125,82,0.2); border-radius:10px; padding:16px 20px; }
+.livrable-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.livrable-desc { font-size:13.5px; color:var(--text-muted); line-height:1.6; }
+.livrable-desc strong { color:var(--text); }
+
+/* FORMATEUR BLOCK */
+.formateur-block { background:var(--amber-pale); border:1px solid rgba(224,122,47,0.2); border-radius:10px; padding:16px 20px; }
+.formateur-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--amber); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.formateur-desc { font-size:13.5px; color:var(--text-muted); line-height:1.6; }
+.formateur-desc strong { color:var(--text); }
+
+/* DATA TABLE */
+.data-table { width:100%; border-collapse:collapse; margin:8px 0; font-size:13px; border-radius:10px; overflow:hidden; box-shadow:var(--shadow); }
+.data-table th { background:var(--slate-dark); color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; padding:10px 14px; text-align:left; }
+.data-table td { padding:9px 14px; color:var(--text-muted); border-bottom:1px solid var(--border-soft); background:#fff; vertical-align:top; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:var(--slate-ghost); }
+
+/* TABLEAU DE BORD */
+.dashboard-block { background:#fff; border:2px solid var(--slate-pale); border-radius:16px; padding:28px; box-shadow:var(--shadow-md); }
+.dashboard-title { font-family:'Syne',sans-serif; font-weight:800; font-size:16px; color:var(--slate-dark); margin-bottom:6px; }
+.dashboard-subtitle { font-size:13px; color:var(--text-dim); margin-bottom:22px; }
+.dashboard-section { margin-bottom:20px; }
+.dashboard-section-title { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.07em; color:var(--slate-dark); padding:8px 12px; background:var(--slate-ghost); border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.dashboard-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:8px; }
+.dashboard-field { display:flex; flex-direction:column; gap:4px; }
+.dashboard-field label { font-size:10.5px; color:var(--text-dim); font-family:'Syne',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+.dashboard-field .field-line { height:28px; border-bottom:2px solid var(--border); width:100%; display:flex; align-items:flex-end; }
+.dashboard-table-grid { width:100%; border-collapse:collapse; font-size:12px; }
+.dashboard-table-grid th { text-align:left; padding:6px 8px; background:var(--slate-ghost); color:var(--slate-dark); font-family:'Syne',sans-serif; font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid var(--border); }
+.dashboard-table-grid td { padding:8px 8px; border-bottom:1px solid var(--border-soft); }
+.dashboard-table-grid td .fill-line { border-bottom:1px solid var(--border); min-height:20px; display:block; }
+.print-btn { display:flex; align-items:center; gap:8px; background:var(--slate-dark); color:#fff; border:none; border-radius:8px; padding:10px 20px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; margin-top:16px; transition:background 0.2s; }
+.print-btn:hover { background:var(--slate); }
+
+/* ENGAGEMENT */
+.engagement-block { background:#fff; border:2px dashed var(--amber); border-radius:16px; padding:28px; }
+.engagement-title { font-family:'Syne',sans-serif; font-weight:800; font-size:15px; color:var(--amber); margin-bottom:4px; }
+.engagement-sub { font-size:12px; color:var(--text-dim); margin-bottom:18px; }
+.engagement-row { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:13.5px; color:var(--text-muted); }
+.engagement-row:last-of-type { border-bottom:none; }
+.eng-bullet { color:var(--amber); font-size:16px; flex-shrink:0; margin-top:1px; }
+.eng-fill { flex:1; border-bottom:1px solid var(--border); min-height:20px; }
+
+/* QUIZ ATELIER */
+.quiz-intro { background:var(--slate-ghost); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; gap:12px; font-size:13.5px; color:var(--text-muted); }
+.quiz-score-box { margin-left:auto; font-family:'Fira Code',monospace; font-size:13px; font-weight:500; color:var(--slate-dark); background:#fff; padding:5px 14px; border-radius:20px; border:2px solid var(--slate-pale); white-space:nowrap; }
+.quiz-container { display:flex; flex-direction:column; gap:12px; }
+.quiz-item { background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); transition:border-color 0.2s; }
+.quiz-item.revealed { border-color:var(--slate-light); }
+.quiz-question { padding:14px 18px; font-size:14px; color:var(--text); cursor:pointer; display:flex; align-items:flex-start; gap:12px; user-select:none; transition:background 0.2s; }
+.quiz-question:hover { background:var(--slate-ghost); }
+.quiz-q-icon { width:28px; height:28px; background:var(--slate-ghost); color:var(--slate-dark); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'Fira Code',monospace; flex-shrink:0; border:1px solid var(--border); margin-top:1px; }
+.quiz-q-text { flex:1; line-height:1.55; }
+.quiz-reveal { display:none; padding:16px 18px; background:var(--green-bg); border-top:1px solid rgba(45,125,82,0.15); }
+.quiz-item.revealed .quiz-reveal { display:block; }
+.quiz-reveal .answer-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:6px; }
+.quiz-reveal p { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+.quiz-reveal strong { color:var(--text); }
+
+/* CAS SYNTHESE */
+.cas-block { background:#fff; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:16px; overflow:hidden; box-shadow:var(--shadow); }
+.cas-header { display:flex; align-items:center; gap:14px; padding:18px 22px; background:var(--amber-pale); border-bottom:1px solid rgba(224,122,47,0.2); }
+.cas-num { font-family:'Fira Code',monospace; font-size:11px; font-weight:500; color:var(--amber); background:#fff; padding:4px 10px; border-radius:5px; border:1px solid rgba(224,122,47,0.25); white-space:nowrap; }
+.cas-title { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; color:var(--text); flex:1; }
+.cas-body { padding:20px 22px; }
+.scenario-box { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:16px 18px; margin-bottom:14px; font-size:14px; color:var(--text-muted); line-height:1.7; border-left:4px solid var(--amber); }
+.scenario-box .scenario-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--amber); margin-bottom:8px; }
+.questions-list { list-style:none; padding:0; margin-bottom:14px; }
+.questions-list li { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:13.5px; color:var(--text-muted); line-height:1.55; }
+.questions-list li:last-child { border-bottom:none; }
+.q-bullet { font-family:'Fira Code',monospace; font-size:11px; color:var(--amber); background:var(--amber-pale); padding:2px 7px; border-radius:4px; height:fit-content; margin-top:1px; flex-shrink:0; border:1px solid rgba(224,122,47,0.2); }
+.cas-solution { display:none; background:var(--green-bg); border-top:1px solid rgba(45,125,82,0.15); padding:18px 22px; }
+.cas-block.open .cas-solution { display:block; }
+.solution-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:10px; }
+.solution-item { display:flex; gap:10px; padding:7px 0; font-size:13.5px; color:var(--text-muted); line-height:1.55; border-bottom:1px solid rgba(45,125,82,0.1); }
+.solution-item:last-child { border-bottom:none; }
+.sol-num { font-family:'Fira Code',monospace; font-size:11px; color:var(--green); background:#fff; padding:2px 7px; border-radius:4px; height:fit-content; margin-top:1px; flex-shrink:0; border:1px solid rgba(45,125,82,0.2); }
+.solution-item strong { color:var(--text); }
+.toggle-solution-btn { display:flex; align-items:center; gap:8px; background:none; border:1px solid var(--border); border-radius:8px; padding:9px 16px; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text-muted); cursor:pointer; transition:all 0.2s; margin-top:6px; }
+.toggle-solution-btn:hover { background:var(--slate-ghost); border-color:var(--slate-light); color:var(--slate-dark); }
+
+/* RESSOURCES */
+.ressource-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.ressource-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); }
+.ressource-card h4 { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.07em; color:var(--slate-dark); margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border-soft); }
+.ressource-card ul { padding-left:0; list-style:none; }
+.ressource-card ul li { font-size:13px; color:var(--text-muted); padding:4px 0 4px 16px; position:relative; line-height:1.5; }
+.ressource-card ul li::before { content:'›'; position:absolute; left:0; color:var(--amber); font-weight:700; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--slate-pale); border-radius:3px; }
+
+@media print {
+  .print-btn { display:none !important; }
+  .engagement-block { page-break-before:always; }
+}
+
+@media(max-width:900px) {
+  #sidebar { display:none; }
+  #main { margin-left:0; padding:24px 20px 60px; }
+  .dashboard-row { grid-template-columns:1fr 1fr; }
+  .ressource-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="sidebar-brand">
+    <div class="rc-logo">Real Conseil</div>
+    <span class="formation-tag">FPA — RNCP 35030</span><br>
+    <span class="livrable-tag">🛠️ Atelier</span>
+  </div>
+  <div class="sidebar-module-info">
+    <div class="module-title-side">Atelier pratique — Veille informationnelle</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Préparation</div>
+    <a href="#materiel" class="nav-link active"><span class="seq-num">📦</span> Matériel nécessaire</a>
+    <div class="nav-section-label">Étapes atelier</div>
+    <a href="#e1" class="nav-link"><span class="seq-num">E1</span> Audit de départ (15 min)</a>
+    <a href="#e2" class="nav-link"><span class="seq-num">E2</span> Explorer 5 sources (30 min)</a>
+    <a href="#e3" class="nav-link"><span class="seq-num">E3</span> Google Alertes (20 min)</a>
+    <a href="#e4" class="nav-link"><span class="seq-num">E4</span> Paramétrer Feedly (30 min)</a>
+    <a href="#e5" class="nav-link"><span class="seq-num">E5</span> Tableau de bord (45 min)</a>
+    <a href="#e6" class="nav-link"><span class="seq-num">E6</span> Restitution binôme (20 min)</a>
+    <a href="#e7" class="nav-link"><span class="seq-num">E7</span> Plan 30 jours (20 min)</a>
+    <div class="nav-section-label">Évaluation</div>
+    <a href="#quiz" class="nav-link"><span class="seq-num">❓</span> Quiz validation</a>
+    <a href="#cas" class="nav-link"><span class="seq-num">💼</span> Cas synthèse</a>
+    <a href="#ressources" class="nav-link"><span class="seq-num">🔗</span> Ressources</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../index.html" class="back-link">← Retour à l'index FPA</a>
+  </div>
+</aside>
+
+<main id="main">
+
+  <header class="module-header">
+    <div class="module-eyebrow">
+      <span class="badge-fpa">FPA — RNCP 35030</span>
+      <span class="badge-livrable">🛠️ Atelier pratique</span>
+      <span class="badge-level">6 à 16 personnes</span>
+    </div>
+    <h1 class="module-h1">Atelier — <em>Construire sa veille</em><br>informationnelle</h1>
+    <p class="module-desc">7 étapes pratiques pour créer son système de veille de A à Z. Chaque apprenant repart avec une alerte Google active, un espace Feedly configuré et son plan de veille personnalisé.</p>
+    <div class="module-meta">
+      <div class="meta-item">⏱ <span>3 heures</span></div>
+      <div class="meta-item">👥 <span>6 à 16 personnes</span></div>
+      <div class="meta-item">🖥️ <span>Présentiel ou distanciel</span></div>
+      <div class="meta-item">🏛️ <span>Real Conseil · Hauts-de-France</span></div>
+    </div>
+  </header>
+
+  <!-- MATERIEL -->
+  <section id="materiel">
+    <div class="section-label"><div class="icon">📦</div><h2>Matériel nécessaire</h2></div>
+    <div class="checklist-block">
+      <div class="checklist-title">Checklist avant l'atelier <span id="materielCount">0 / 7 validés</span></div>
+      <div id="materielList">
+        <div class="checklist-item"><input type="checkbox" id="m1" onchange="updateChecklist('materiel')"><label for="m1">Ordinateur ou tablette avec connexion internet par apprenant</label></div>
+        <div class="checklist-item"><input type="checkbox" id="m2" onchange="updateChecklist('materiel')"><label for="m2">Compte Google (Gmail) créé à l'avance par chaque apprenant</label></div>
+        <div class="checklist-item"><input type="checkbox" id="m3" onchange="updateChecklist('materiel')"><label for="m3">Compte LinkedIn créé à l'avance (optionnel mais recommandé)</label></div>
+        <div class="checklist-item"><input type="checkbox" id="m4" onchange="updateChecklist('materiel')"><label for="m4">Vidéoprojecteur / écran de partage pour les démonstrations</label></div>
+        <div class="checklist-item"><input type="checkbox" id="m5" onchange="updateChecklist('materiel')"><label for="m5">Fiche méthode imprimée (1 par apprenant)</label></div>
+        <div class="checklist-item"><input type="checkbox" id="m6" onchange="updateChecklist('materiel')"><label for="m6">Tableau blanc ou Jamboard pour la restitution collective</label></div>
+        <div class="checklist-item"><input type="checkbox" id="m7" onchange="updateChecklist('materiel')"><label for="m7">Post-its (présentiel) ou outil collaboratif (Miro, Klaxoon) en distanciel</label></div>
+      </div>
+      <div class="checklist-progress">
+        <div class="checklist-bar"><div class="checklist-bar-fill" id="materielBar" style="width:0%"></div></div>
+        <span class="checklist-count" id="materielPct">0%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 1 -->
+  <section id="e1">
+    <div class="section-label"><div class="icon">1️⃣</div><h2>Étape 1 — Audit de départ</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 15 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 01 / 07</div>
+          <div class="etape-title">Ma veille aujourd'hui — prise de conscience</div>
+          <div class="etape-objective">Objectif : activer les représentations, créer le besoin, brise-glace</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="steps-block">
+          <div class="steps-title">📋 Instructions individuelles</div>
+          <div class="step-list">
+            <div class="step-item"><span class="step-num">1</span><span class="step-text">Combien de sources d'information sur la formation consultez-vous par semaine ? <strong>(0 · 1-3 · 4-10 · +10)</strong></span></div>
+            <div class="step-item"><span class="step-num">2</span><span class="step-text">Lesquelles ? <strong>(lister)</strong></span></div>
+            <div class="step-item"><span class="step-num">3</span><span class="step-text">Combien de temps par semaine consacrez-vous à votre veille ? <strong>(0 · -15min · 15-30min · +30min)</strong></span></div>
+            <div class="step-item"><span class="step-num">4</span><span class="step-text">Avez-vous un système d'organisation de votre veille ? <strong>(oui / non / en partie)</strong></span></div>
+            <div class="step-item"><span class="step-num">5</span><span class="step-text">Avez-vous partagé une info de veille avec un collègue ce mois-ci ? <strong>(oui / non)</strong></span></div>
+            <div class="step-item"><span class="step-num">6</span><span class="step-text">Êtes-vous capable de citer une actualité réglementaire formation des 3 derniers mois ? <strong>(oui / non)</strong></span></div>
+          </div>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc"><strong>Score personnel de départ sur 6 points</strong> — à conserver pour comparaison en fin d'atelier. Ce score est confidentiel.</div>
+        </div>
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur</div>
+          <div class="formateur-desc">Ne pas commenter les scores, c'est confidentiel. Demander juste à main levée : <strong>"Qui a répondu 0 à la question 1 ?"</strong> pour calibrer le groupe. Valoriser : <strong>"Vous avez déjà tous une forme de veille, même informelle."</strong> Durée max : 15 min, ne pas s'étendre.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 2 -->
+  <section id="e2">
+    <div class="section-label"><div class="icon">2️⃣</div><h2>Étape 2 — Explorer 5 sources FPA</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 30 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 02 / 07</div>
+          <div class="etape-title">Découvrir concrètement les sources institutionnelles clés</div>
+          <div class="etape-objective">Objectif : développer ses réflexes de navigation sur les sites incontournables</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="steps-block">
+          <div class="steps-title">📋 Instructions pas à pas</div>
+          <div class="step-list">
+            <div class="step-item"><span class="step-num">1</span><span class="step-text">Ouvrez <strong>francecompetences.fr</strong> → aller dans "Actualités" → noter 1 info récente</span></div>
+            <div class="step-item"><span class="step-num">2</span><span class="step-text">Ouvrez <strong>c2rp.fr</strong> (CARIF-OREF HdF) → aller dans "Publications" → identifier 1 ressource utile pour votre domaine</span></div>
+            <div class="step-item"><span class="step-num">3</span><span class="step-text">Ouvrez <strong>centreinffo.fr</strong> → aller dans "Actualités" → noter 1 article de la semaine</span></div>
+            <div class="step-item"><span class="step-num">4</span><span class="step-text">Ouvrez <strong>cursus.edu</strong> (Thot Cursus) → aller dans "Articles" → trouver 1 article sur la pédagogie numérique</span></div>
+            <div class="step-item"><span class="step-num">5</span><span class="step-text">Sur <strong>LinkedIn</strong> : chercher le hashtag #formation → noter 1 post pertinent</span></div>
+          </div>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc">Tableau à 5 lignes : <strong>Source · Info trouvée · Pertinence pour moi · Je m'abonne : oui/non</strong></div>
+        </div>
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur</div>
+          <div class="formateur-desc">Circuler pendant l'exploration, aider à naviguer. Prévoir <strong>5 min de debriefing collectif</strong> : "Qu'est-ce qui vous a surpris ? Qu'est-ce que vous ne connaissiez pas ?" <strong>Distanciel 💻 :</strong> partager l'écran et guider site par site, demander aux apprenants de noter dans le chat leur source préférée.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 3 -->
+  <section id="e3">
+    <div class="section-label"><div class="icon">3️⃣</div><h2>Étape 3 — Créer sa première alerte Google</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 20 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 03 / 07</div>
+          <div class="etape-title">Maîtriser Google Alertes — créer 3 alertes pertinentes</div>
+          <div class="etape-objective">Objectif : paramétrer des alertes efficaces et bien ciblées</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="steps-block">
+          <div class="steps-title">📋 Instructions pas à pas</div>
+          <div class="step-list">
+            <div class="step-item"><span class="step-num">1</span><span class="step-text">Aller sur <strong>google.fr/alerts</strong> (connexion compte Google requise)</span></div>
+            <div class="step-item"><span class="step-num">2</span><span class="step-text">Créer la 1ère alerte : taper <strong>"formateur professionnel"</strong> (avec guillemets) → Paramétrer : Fréquence = <strong>Hebdomadaire</strong> · Sources = <strong>Toutes</strong> · Langue = <strong>Français</strong> · Région = <strong>France</strong> · Volume = <strong>Meilleurs résultats</strong></span></div>
+            <div class="step-item"><span class="step-num">3</span><span class="step-text">Créer la 2ème alerte sur <strong>votre domaine de formation</strong> (ex: "aide à domicile" formation)</span></div>
+            <div class="step-item"><span class="step-num">4</span><span class="step-text">Créer la 3ème alerte réglementaire : <strong>Qualiopi actualité 2024</strong></span></div>
+            <div class="step-item"><span class="step-num">5</span><span class="step-text">Cliquer sur <strong>"Créer l'alerte"</strong> pour chacune → vérifier que vos 3 alertes apparaissent dans la liste</span></div>
+          </div>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc"><strong>Capture d'écran ou liste des 3 alertes créées</strong> avec leurs paramètres — à conserver dans son journal de veille Qualiopi</div>
+        </div>
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur</div>
+          <div class="formateur-desc">Démontrer en direct sur l'écran projeté avant de laisser faire. <strong>Point de vigilance :</strong> certains n'ont pas de compte Google → prévoir un compte de démonstration. <strong>Distanciel 💻 :</strong> partager l'écran et guider étape par étape en mode "shadow" — chaque apprenant fait en même temps.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 4 -->
+  <section id="e4">
+    <div class="section-label"><div class="icon">4️⃣</div><h2>Étape 4 — Paramétrer Feedly</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 30 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 04 / 07</div>
+          <div class="etape-title">Comprendre le RSS — créer son espace de veille centralisé</div>
+          <div class="etape-objective">Objectif : maîtriser Feedly et organiser ses sources en Collections</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="steps-block">
+          <div class="steps-title">📋 Instructions pas à pas</div>
+          <div class="step-list">
+            <div class="step-item"><span class="step-num">1</span><span class="step-text">Aller sur <strong>feedly.com</strong> → "Get started for free" → créer un compte (email ou Google)</span></div>
+            <div class="step-item"><span class="step-num">2</span><span class="step-text">Dans la barre de recherche Feedly, taper <strong>"Centre Inffo"</strong> → cliquer sur le résultat → "Follow"</span></div>
+            <div class="step-item"><span class="step-num">3</span><span class="step-text">Chercher <strong>"Thot Cursus"</strong> → "Follow"</span></div>
+            <div class="step-item"><span class="step-num">4</span><span class="step-text">Chercher <strong>"France Compétences"</strong> → "Follow" (ou coller l'URL du flux si non trouvé)</span></div>
+            <div class="step-item"><span class="step-num">5</span><span class="step-text">Créer une Collection : cliquer sur <strong>"New Collection"</strong> → nommer <strong>"Veille FPA"</strong> → y déplacer les 3 flux</span></div>
+            <div class="step-item"><span class="step-num">6</span><span class="step-text">Explorer l'interface : cliquer sur un article, le marquer <strong>"Read Later"</strong>, explorer "Today"</span></div>
+            <div class="step-item"><span class="step-num">7</span><span class="step-text">Ajouter <strong>1 flux au choix</strong> sur votre secteur d'enseignement</span></div>
+          </div>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc">Collection <strong>"Veille FPA"</strong> avec au moins 4 flux, <strong>1 article sauvegardé en "Read Later"</strong></div>
+        </div>
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur</div>
+          <div class="formateur-desc">URLs directes si flux introuvables : Centre Inffo = <strong>centreinffo.fr/feed</strong>, Thot Cursus = <strong>cursus.edu/feed</strong>. Rappeler : version gratuite Feedly = 100 sources max, largement suffisant. <strong>Distanciel 💻 :</strong> partager l'écran du formateur pendant la démo, puis apprenants reproduisent en autonomie.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 5 -->
+  <section id="e5">
+    <div class="section-label"><div class="icon">5️⃣</div><h2>Étape 5 — Tableau de bord de veille personnel</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 45 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 05 / 07 — Étape clé</div>
+          <div class="etape-title">Créer son système de veille personnalisé et durable</div>
+          <div class="etape-objective">Objectif : produire un tableau de bord actionnable et imprimable</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur — Avant de commencer</div>
+          <div class="formateur-desc">C'est l'étape la plus importante. Passer dans le groupe, aider à définir les thématiques (beaucoup hésitent). Rappeler : <strong>3 thématiques max</strong>, mieux vaut peu et régulier que beaucoup et jamais. Variante si temps insuffisant : compléter sections A et B en atelier, C à E en autonomie.</div>
+        </div>
+        <div class="dashboard-block">
+          <div class="dashboard-title">Mon tableau de bord de veille</div>
+          <div class="dashboard-subtitle">À compléter en atelier · À imprimer et à conserver</div>
+
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">🎯 Section A — Mes thématiques (3 max)</div>
+            <div class="dashboard-row">
+              <div class="dashboard-field"><label>Thématique 1</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Thématique 2</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Thématique 3</label><div class="field-line"></div></div>
+            </div>
+          </div>
+
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">🔗 Section B — Mes sources par thématique</div>
+            <table class="dashboard-table-grid">
+              <thead><tr><th>Thématique</th><th>Source</th><th>Type</th><th>Outil</th><th>Fréquence</th><th>Temps</th></tr></thead>
+              <tbody>
+                <tr><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td></tr>
+                <tr><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td></tr>
+                <tr><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td></tr>
+                <tr><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td></tr>
+                <tr><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td></tr>
+                <tr><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td><td><span class="fill-line"></span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">📅 Section C — Mon planning de veille hebdomadaire</div>
+            <div class="dashboard-row" style="grid-template-columns:1fr 1fr 1fr 1fr 1fr;">
+              <div class="dashboard-field"><label>Lundi</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Mardi</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Mercredi</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Jeudi</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Vendredi</label><div class="field-line"></div></div>
+            </div>
+          </div>
+
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">📁 Section D — Mon système de stockage</div>
+            <div class="dashboard-row">
+              <div class="dashboard-field"><label>Où je stocke</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Comment j'organise</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Comment j'intègre dans mes cours</label><div class="field-line"></div></div>
+            </div>
+          </div>
+
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">✅ Section E — Ma traçabilité Qualiopi</div>
+            <div class="dashboard-row" style="grid-template-columns:1fr 1fr;">
+              <div class="dashboard-field"><label>Comment je documente</label><div class="field-line"></div></div>
+              <div class="dashboard-field"><label>Fréquence de documentation</label><div class="field-line"></div></div>
+            </div>
+          </div>
+
+          <button class="print-btn" onclick="window.print()">🖨️ Imprimer mon tableau de bord</button>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc"><strong>Tableau de bord personnel complété</strong> — à imprimer ou sauvegarder. Ce document est une preuve de veille valable pour Qualiopi.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 6 -->
+  <section id="e6">
+    <div class="section-label"><div class="icon">6️⃣</div><h2>Étape 6 — Restitution en binôme</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 20 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 06 / 07</div>
+          <div class="etape-title">Consolider par la verbalisation — évaluer avec CRAAP</div>
+          <div class="etape-objective">Objectif : ancrer les apprentissages par la mise en mots et l'évaluation croisée</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="steps-block">
+          <div class="steps-title">📋 Instructions binôme</div>
+          <div class="step-list">
+            <div class="step-item"><span class="step-num">1</span><span class="step-text"><strong>Se mettre en binôme</strong> (tirage au sort)</span></div>
+            <div class="step-item"><span class="step-num">2</span><span class="step-text">Personne A présente en <strong>3 min</strong> : 1 info trouvée, la source, pourquoi c'est pertinent, comment l'utiliser en cours</span></div>
+            <div class="step-item"><span class="step-num">3</span><span class="step-text">Personne B applique rapidement la méthode <strong>CRAAP sur la source</strong> présentée (2 min)</span></div>
+            <div class="step-item"><span class="step-num">4</span><span class="step-text"><strong>Échange de feedback</strong> constructif (2 min)</span></div>
+            <div class="step-item"><span class="step-num">5</span><span class="step-text"><strong>On inverse les rôles</strong> — même séquence pour la personne B</span></div>
+          </div>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc"><strong>Évaluation CRAAP rapide</strong> de la source de son binôme : 5 critères notés ✅ / ⚠️ / ❌</div>
+        </div>
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur</div>
+          <div class="formateur-desc">Donner un signal clair pour le changement de rôle. Prévoir une <strong>variante trio si nombre impair</strong>. <strong>Distanciel 💻 :</strong> salles de sous-groupes Zoom/Teams (10 min) + restitution rapide en grand groupe.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPE 7 -->
+  <section id="e7">
+    <div class="section-label"><div class="icon">7️⃣</div><h2>Étape 7 — Plan de veille 30 jours</h2></div>
+    <div class="etape-block">
+      <div class="etape-header">
+        <span class="etape-timer">⏱ 20 min</span>
+        <div class="etape-header-content">
+          <div class="etape-num">ÉTAPE 07 / 07</div>
+          <div class="etape-title">Créer un engagement concret pour ancrer la pratique</div>
+          <div class="etape-objective">Objectif : repartir avec un plan d'action signé et réaliste pour les 30 prochains jours</div>
+        </div>
+      </div>
+      <div class="etape-body">
+        <div class="engagement-block">
+          <div class="engagement-title">MON ENGAGEMENT DE VEILLE — 30 JOURS</div>
+          <div class="engagement-sub">À compléter, signer et conserver — preuve valable pour Qualiopi</div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Nom :</span><span class="eng-fill" style="margin-left:8px;"></span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Je consulterai</span><span class="eng-fill" style="margin-left:8px;max-width:60px;"></span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;margin-left:8px;">sources par semaine</span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">J'y consacrerai</span><span class="eng-fill" style="margin-left:8px;max-width:60px;"></span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;margin-left:8px;">minutes par semaine</span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Mes 3 thématiques :</span><span class="eng-fill" style="margin-left:8px;"></span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Mon outil principal :</span><span class="eng-fill" style="margin-left:8px;"></span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Mon créneau fixe :</span><span class="eng-fill" style="margin-left:8px;max-width:80px;"></span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;margin-left:8px;">(jour) à</span><span class="eng-fill" style="margin-left:8px;max-width:60px;"></span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;margin-left:8px;">h</span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Comment je documente :</span><span class="eng-fill" style="margin-left:8px;"></span></div>
+          <div class="engagement-row"><span class="eng-bullet">✦</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Dans 30 jours, j'aurai intégré</span><span class="eng-fill" style="margin-left:8px;max-width:60px;"></span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;margin-left:8px;">nouvelles infos dans mes cours</span></div>
+          <div class="engagement-row" style="margin-top:8px;"><span class="eng-bullet">✍️</span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;">Signature :</span><span class="eng-fill" style="margin-left:8px;"></span><span style="font-size:13.5px;color:var(--text-muted);flex-shrink:0;margin-left:16px;">Date :</span><span class="eng-fill" style="margin-left:8px;max-width:100px;"></span></div>
+          <button class="print-btn" onclick="window.print()" style="margin-top:16px;">🖨️ Imprimer mon engagement</button>
+        </div>
+        <div class="livrable-block">
+          <div class="livrable-label">📤 Livrable attendu</div>
+          <div class="livrable-desc"><strong>Plan signé</strong> — Photo ou scan à archiver pour Qualiopi</div>
+        </div>
+        <div class="formateur-block">
+          <div class="formateur-label">🎯 Bloc formateur</div>
+          <div class="formateur-desc">La signature symbolique est importante — elle crée un engagement. Proposer un <strong>point de suivi en 30 jours</strong> (email ou séance de suivi). Terminer par un tour de table : chaque apprenant dit à voix haute <strong>son créneau fixe de veille</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="section-label"><div class="icon">❓</div><h2>Quiz de validation — 5 questions</h2></div>
+    <div class="quiz-intro">
+      <span>Validation des acquis de l'atelier. Cliquez sur chaque question pour révéler la réponse.</span>
+      <span class="quiz-score-box" id="quizScore">0 / 5 révélées</span>
+    </div>
+    <div class="quiz-container">
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q1</span><div class="quiz-q-text">Citez les 3 étapes pour créer une alerte Google efficace avec les paramètres clés.</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>1.</strong> Définir le mot-clé précis (avec guillemets pour une expression exacte, ex: "formation professionnelle"). <strong>2.</strong> Paramétrer : Fréquence = Hebdomadaire, Langue = Français, Région = France, Volume = Meilleurs résultats. <strong>3.</strong> Choisir l'email de réception et cliquer "Créer l'alerte".</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q2</span><div class="quiz-q-text">Qu'est-ce qu'une Collection dans Feedly ? À quoi ça sert ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>Une <strong>Collection dans Feedly</strong> est un dossier thématique qui regroupe plusieurs flux RSS. Elle permet d'<strong>organiser ses sources par catégorie</strong> (ex: "Réglementation", "Pédagogie", "Outils numériques") pour retrouver facilement les articles selon la thématique de veille souhaitée, sans mélanger tous les contenus.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q3</span><div class="quiz-q-text">Comment évalue-t-on rapidement une source avec CRAAP en 2 minutes ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>En 2 min, poser 5 questions rapides : <strong>C</strong> — La date de publication est-elle récente ? <strong>R</strong> — Le contenu répond-il à mon besoin ? <strong>A</strong> — L'auteur est-il identifié et qualifié ? <strong>A</strong> — Y a-t-il des sources citées ? <strong>P</strong> — Y a-t-il un intérêt commercial derrière cette publication ? Si 3 réponses ou plus sont négatives → source à rejeter ou à vérifier avec d'autres sources.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q4</span><div class="quiz-q-text">Quelle est la fréquence de veille minimale recommandée pour un FPA actif ?</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>10 min par jour</strong> (scan des alertes et Feedly) + <strong>30 min par semaine</strong> (lecture approfondie des articles retenus) + <strong>1h par mois</strong> (bilan stratégique et intégration dans les cours). Soit environ <strong>2h30 par mois</strong> au minimum — un investissement réaliste pour maintenir sa crédibilité professionnelle.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q5</span><div class="quiz-q-text">Citez 2 types de preuves de veille acceptables pour un audit Qualiopi.</div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>Preuves acceptables : <strong>Journal de veille daté</strong> (tableur ou Notion avec date, source, info retenue, action suite à la veille). <strong>Attestations de formations suivies</strong> ou webinaires. Captures d'écran de newsletters reçues avec date. <strong>Modifications datées</strong> dans ses supports de formation. Compte-rendu de réunion de veille d'équipe.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CAS SYNTHESE -->
+  <section id="cas">
+    <div class="section-label"><div class="icon">💼</div><h2>Cas pratique synthèse</h2></div>
+    <div class="cas-block">
+      <div class="cas-header">
+        <span class="cas-num">CAS SYNTHÈSE</span>
+        <span class="cas-title">Mon plan de veille — 30 minutes par semaine</span>
+      </div>
+      <div class="cas-body">
+        <div class="scenario-box"><div class="scenario-label">📖 Situation</div>Vous venez de terminer l'atelier. Vous avez exactement <strong>30 minutes par semaine</strong> à consacrer à votre veille — pas plus. Rédigez votre plan de veille personnel complet et réaliste.</div>
+        <ul class="questions-list">
+          <li><span class="q-bullet">Q1</span>Vos 3 thématiques prioritaires justifiées</li>
+          <li><span class="q-bullet">Q2</span>Vos 5 sources sélectionnées et pourquoi</li>
+          <li><span class="q-bullet">Q3</span>Vos outils choisis avec leur rôle</li>
+          <li><span class="q-bullet">Q4</span>Votre planning hebdomadaire sur 30 minutes</li>
+          <li><span class="q-bullet">Q5</span>Comment vous documentez pour Qualiopi</li>
+          <li><span class="q-bullet">Q6</span>Comment vous intégrerez votre veille dans vos cours le mois prochain</li>
+        </ul>
+        <button class="toggle-solution-btn" onclick="toggleSolution(this)">🔍 Voir les éléments de réponse</button>
+        <div class="cas-solution">
+          <div class="solution-label">Éléments de réponse</div>
+          <div class="solution-item"><span class="sol-num">Q1</span><span>Thématiques : <strong>(1) Réglementation formation</strong> (impératif pour la crédibilité et Qualiopi), <strong>(2) Pédagogie numérique</strong> (évolution rapide, fort impact sur les cours), <strong>(3) Mon secteur</strong> (contexte employeurs et apprenants). Max 3 pour rester réaliste.</span></div>
+          <div class="solution-item"><span class="sol-num">Q2</span><span>Sources : <strong>France Compétences</strong> (réglementation officielle), <strong>Centre Inffo newsletter</strong> (synthèse hebdo, 5 min de lecture), <strong>Thot Cursus via Feedly</strong> (pédagogie numérique), <strong>LinkedIn #formation</strong> (réseau pro, retours terrain), <strong>CARIF-OREF HdF</strong> (contexte régional).</span></div>
+          <div class="solution-item"><span class="sol-num">Q3</span><span>Outils : <strong>Google Alertes</strong> (3 alertes hebdomadaires → livraison passive sans effort), <strong>Feedly</strong> (agrégateur des flux RSS, consultation 2x/semaine), <strong>Excel ou Notion</strong> (journal de veille pour Qualiopi). Pas plus de 3 outils.</span></div>
+          <div class="solution-item"><span class="sol-num">Q4</span><span>Planning 30 min : <strong>Lundi 5 min</strong> — scan alertes Google. <strong>Mercredi 5 min</strong> — scan Feedly titres. <strong>Vendredi 20 min</strong> — lecture approfondie 2-3 articles retenus + 1 entrée dans le journal de veille.</span></div>
+          <div class="solution-item"><span class="sol-num">Q5</span><span>Documentation Qualiopi : <strong>Journal de veille Excel</strong> — 1 ligne par semaine : date | source | info retenue | action suite à la veille. Sauvegarder dans un dossier partagé avec le responsable pédagogique. Objectif : <strong>1 entrée documentée par semaine</strong>.</span></div>
+          <div class="solution-item"><span class="sol-num">Q6</span><span>Intégration dans les cours : créer une <strong>rubrique "Actualité du secteur"</strong> de 5 min en début de chaque module. Mettre à jour 1 exemple ou 1 chiffre par cours à chaque nouvelle session. Partager 1 ressource utile aux apprenants par module.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESSOURCES -->
+  <section id="ressources">
+    <div class="section-label"><div class="icon">🔗</div><h2>Ressources complémentaires</h2></div>
+    <div class="ressource-grid">
+      <div class="ressource-card">
+        <h4>Sources institutionnelles</h4>
+        <ul>
+          <li>francecompetences.fr — RNCP et certifications</li>
+          <li>legifrance.gouv.fr — Textes de loi officiels</li>
+          <li>c2rp.fr — Formation et emploi HdF</li>
+          <li>hauts-de-france.dreets.gouv.fr — Réglementation régionale</li>
+          <li>moncompteformation.gouv.fr — Catalogue CPF</li>
+        </ul>
+      </div>
+      <div class="ressource-card">
+        <h4>Médias spécialisés</h4>
+        <ul>
+          <li>centreinffo.fr — Actualité formation pro</li>
+          <li>cursus.edu — Pédagogie numérique</li>
+          <li>formateurpro.fr — Blog formateurs</li>
+          <li>e-learning letter — Outils e-learning</li>
+          <li>ffp.org — Fédération formation pro</li>
+        </ul>
+      </div>
+      <div class="ressource-card">
+        <h4>Podcasts recommandés</h4>
+        <ul>
+          <li>"Apprendre à apprendre" — Yann Leroux</li>
+          <li>"Les Formateurs" — Interviews praticiens</li>
+          <li>"Formation 2.0" — Outils numériques</li>
+          <li>"Le Podcast Formation" — Centre Inffo</li>
+          <li>"Work In Progress" — Travail &amp; compétences</li>
+        </ul>
+      </div>
+      <div class="ressource-card">
+        <h4>Outils à tester</h4>
+        <ul>
+          <li>feedly.com — Agrégateur RSS (gratuit)</li>
+          <li>google.fr/alerts — Alertes automatiques</li>
+          <li>getpocket.com — Lecture différée</li>
+          <li>scoop.it — Curation thématique</li>
+          <li>notion.so — Base de connaissance</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function updateChecklist(id) {
+  const list = document.getElementById(id + 'List');
+  const boxes = list.querySelectorAll('input[type="checkbox"]');
+  const total = boxes.length;
+  const checked = [...boxes].filter(b => b.checked).length;
+  document.getElementById(id + 'Count').textContent = checked + ' / ' + total + ' validés';
+  document.getElementById(id + 'Bar').style.width = (checked / total * 100) + '%';
+  document.getElementById(id + 'Pct').textContent = Math.round(checked / total * 100) + '%';
+  // Persist
+  boxes.forEach((b, i) => localStorage.setItem('atelier_' + id + '_' + i, b.checked));
+}
+
+// Restore checklist state
+window.addEventListener('DOMContentLoaded', () => {
+  ['materiel'].forEach(id => {
+    const list = document.getElementById(id + 'List');
+    const boxes = list.querySelectorAll('input[type="checkbox"]');
+    boxes.forEach((b, i) => {
+      const saved = localStorage.getItem('atelier_' + id + '_' + i);
+      if (saved === 'true') b.checked = true;
+    });
+    updateChecklist(id);
+  });
+});
+
+let revealed = 0;
+function revealQuiz(item) {
+  if (!item.classList.contains('revealed')) {
+    item.classList.add('revealed');
+    revealed++;
+    document.getElementById('quizScore').textContent = revealed + ' / 5 révélées';
+  }
+}
+
+function toggleSolution(btn) {
+  const block = btn.closest('.cas-block');
+  const isOpen = block.classList.toggle('open');
+  btn.textContent = isOpen ? '🔍 Masquer les éléments de réponse' : '🔍 Voir les éléments de réponse';
+}
+
+// Scroll-spy
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = document.querySelectorAll('section[id]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activité Interactive — Fiche CP12 Veille | FPA | Real Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --slate:        #3D5A80;
+  --slate-dark:   #1C3A5C;
+  --slate-mid:    #4E6F99;
+  --slate-light:  #8BAABF;
+  --slate-pale:   #C8D9E8;
+  --slate-ghost:  #EEF3F8;
+  --amber:        #E07A2F;
+  --amber-light:  #F0A060;
+  --amber-pale:   #FBF0E4;
+  --bg:           #F4F6F9;
+  --bg-card:      #FFFFFF;
+  --text:         #1C2B3A;
+  --text-muted:   #4A5D70;
+  --text-dim:     #8A9EAF;
+  --border:       #D0DCE8;
+  --border-soft:  #E8EFF5;
+  --green:        #2D7D52;
+  --green-bg:     #E8F5EE;
+  --green-light:  #A8D5BB;
+  --red:          #B84040;
+  --red-bg:       #FAEAEA;
+  --purple:       #6B5EA8;
+  --purple-bg:    #F0EEF8;
+  --sidebar-w:    300px;
+  --radius:       12px;
+  --shadow:       0 2px 12px rgba(28,42,58,0.08);
+  --shadow-md:    0 4px 24px rgba(28,42,58,0.14);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  min-height:100vh;
+  font-size:15px;
+  line-height:1.8;
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  width:var(--sidebar-w);
+  min-height:100vh;
+  background:#fff;
+  position:fixed;
+  top:0; left:0;
+  display:flex;
+  flex-direction:column;
+  border-right:1px solid var(--border);
+  z-index:100;
+  overflow-y:auto;
+  box-shadow:2px 0 16px rgba(28,42,58,0.06);
+}
+.sidebar-brand {
+  padding:20px 22px 16px;
+  border-bottom:1px solid var(--border-soft);
+  background:var(--slate-dark);
+}
+.sidebar-brand .rc-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; letter-spacing:0.12em; color:#fff; text-transform:uppercase; }
+.sidebar-brand .formation-tag { display:inline-block; margin-top:7px; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9); font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; }
+.livrable-tag { display:inline-block; margin-top:5px; background:rgba(224,122,47,0.25); color:var(--amber-light); font-size:10.5px; font-weight:700; font-family:'Syne',sans-serif; padding:2px 9px; border-radius:20px; }
+
+/* PROGRESS */
+.progress-block { padding:18px 22px; border-bottom:1px solid var(--border-soft); background:var(--slate-ghost); }
+.progress-title { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.07em; color:var(--slate-dark); margin-bottom:10px; }
+.progress-score { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.score-num { font-family:'Fira Code',monospace; font-size:22px; font-weight:500; color:var(--slate-dark); }
+.score-label { font-size:11px; color:var(--text-dim); text-align:right; }
+.progress-bar-track { height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:8px; }
+.progress-bar-fill { height:100%; background:linear-gradient(90deg, var(--slate), var(--green)); border-radius:3px; transition:width 0.5s ease; }
+.mistakes-row { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim); }
+.mistake-dot { width:8px; height:8px; border-radius:50%; background:var(--border); transition:background 0.3s; }
+.mistake-dot.active { background:var(--red); }
+
+/* MODE TOGGLE */
+.mode-block { padding:14px 22px; border-bottom:1px solid var(--border-soft); }
+.mode-title { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-dim); margin-bottom:8px; }
+.mode-toggle { display:flex; background:var(--bg); border-radius:8px; padding:3px; border:1px solid var(--border); gap:3px; }
+.mode-btn { flex:1; padding:7px 8px; border-radius:6px; border:none; font-family:'Syne',sans-serif; font-size:11.5px; font-weight:700; cursor:pointer; transition:all 0.2s; color:var(--text-dim); background:transparent; }
+.mode-btn.active { background:#fff; color:var(--slate-dark); box-shadow:0 1px 4px rgba(28,42,58,0.1); }
+.mode-btn.annot.active { background:var(--amber-pale); color:var(--amber); }
+
+/* KW CHECKLIST */
+.kw-block { padding:14px 22px; border-bottom:1px solid var(--border-soft); flex:1; }
+.kw-title { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-dim); margin-bottom:10px; }
+.kw-grid { display:flex; flex-wrap:wrap; gap:8px; }
+.kw-icon { width:34px; height:34px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:12px; font-family:'Fira Code',monospace; font-weight:500; transition:all 0.3s; color:var(--text-dim); background:var(--slate-ghost); }
+.kw-icon.found { background:var(--green); border-color:var(--green); color:#fff; transform:scale(1.1); }
+.kw-hint { font-size:11.5px; color:var(--text-dim); margin-top:10px; font-style:italic; line-height:1.4; }
+
+/* LOCKED overlay */
+.locked-banner { display:none; background:var(--red-bg); border:1px solid rgba(184,64,64,0.25); border-radius:8px; margin:0 22px 0; padding:10px 14px; font-size:12px; color:var(--red); font-weight:600; font-family:'Syne',sans-serif; text-align:center; line-height:1.4; }
+.locked-banner.show { display:block; }
+body.locked .kw { pointer-events:none !important; cursor:default !important; }
+body.locked .fiche-wrapper { pointer-events:none !important; }
+
+/* LEGEND */
+.legend-block { padding:12px 22px; border-bottom:1px solid var(--border-soft); }
+.legend-title { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-dim); margin-bottom:8px; }
+.legend-item { display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:12px; color:var(--text-muted); }
+.legend-dot { width:12px; height:12px; border-radius:3px; flex-shrink:0; }
+.legend-dot.hover { background:var(--slate-pale); border:1px dashed var(--slate-mid); }
+.legend-dot.correct { background:var(--green-bg); border:1px solid var(--green-light); }
+.legend-dot.wrong { background:var(--red-bg); border:1px solid #E8A0A0; }
+.legend-dot.annot { background:var(--amber-pale); border:1px solid rgba(224,122,47,0.4); }
+
+/* ANNOTATIONS */
+.annot-block { padding:14px 22px; border-bottom:1px solid var(--border-soft); display:none; }
+.annot-block.visible { display:block; }
+.annot-title { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--amber); margin-bottom:8px; }
+.annot-empty { font-size:12px; color:var(--text-dim); font-style:italic; }
+.annot-list { display:flex; flex-direction:column; gap:5px; }
+.annot-tag { display:flex; align-items:center; gap:7px; background:var(--amber-pale); border:1px solid rgba(224,122,47,0.25); border-radius:6px; padding:5px 10px; }
+.annot-tag-text { flex:1; font-size:12px; color:var(--amber); font-weight:500; line-height:1.3; }
+.annot-del { background:none; border:none; color:var(--amber-light); cursor:pointer; font-size:14px; padding:0 2px; flex-shrink:0; transition:color 0.2s; }
+.annot-del:hover { color:var(--red); }
+
+/* ACTIONS */
+.sidebar-actions { padding:14px 22px; border-bottom:1px solid var(--border-soft); display:flex; flex-direction:column; gap:8px; }
+.hint-btn { display:flex; align-items:center; gap:8px; background:var(--slate-ghost); color:var(--slate-dark); border:1px solid var(--slate-pale); border-radius:8px; padding:9px 14px; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+.hint-btn:hover { background:var(--slate-pale); }
+.reset-btn { display:flex; align-items:center; gap:8px; background:var(--red-bg); color:var(--red); border:1px solid rgba(184,64,64,0.2); border-radius:8px; padding:9px 14px; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+.reset-btn:hover { background:#F5D0D0; }
+
+.sidebar-footer { padding:14px 22px; border-top:1px solid var(--border-soft); margin-top:auto; }
+.back-link { display:flex; align-items:center; gap:8px; color:var(--text-dim); text-decoration:none; font-size:12px; transition:color 0.2s; }
+.back-link:hover { color:var(--slate-dark); }
+
+/* ===== MAIN ===== */
+#main { margin-left:var(--sidebar-w); flex:1; max-width:860px; padding:40px 48px 80px; }
+
+/* HEADER */
+.activity-header { margin-bottom:28px; padding:28px 32px; background:#fff; border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.activity-header::before { content:''; position:absolute; top:0;left:0;right:0; height:5px; background:linear-gradient(90deg, var(--slate-dark), var(--amber-light)); }
+.ah-eyebrow { display:flex; gap:9px; flex-wrap:wrap; margin-bottom:12px; }
+.badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; font-family:'Syne',sans-serif; padding:4px 11px; border-radius:20px; letter-spacing:0.04em; }
+.badge-fpa { background:var(--slate-ghost); color:var(--slate-dark); border:1px solid var(--slate-pale); }
+.badge-act { background:var(--amber-pale); color:var(--amber); border:1px solid rgba(224,122,47,0.2); }
+.badge-cp { background:var(--purple-bg); color:var(--purple); border:1px solid rgba(107,94,168,0.2); }
+.ah-h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; color:var(--text); line-height:1.3; margin-bottom:8px; }
+.ah-h1 em { color:var(--slate-dark); font-style:normal; }
+.ah-desc { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+
+/* INSTRUCTIONS */
+.instructions { background:var(--slate-ghost); border:1px solid var(--slate-pale); border-radius:12px; padding:16px 20px; margin-bottom:24px; }
+.instr-toggle { display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
+.instr-toggle-label { font-family:'Syne',sans-serif; font-weight:700; font-size:12.5px; color:var(--slate-dark); display:flex; align-items:center; gap:8px; }
+.instr-chevron { color:var(--text-dim); font-size:14px; transition:transform 0.2s; }
+.instructions.open .instr-chevron { transform:rotate(180deg); }
+.instr-body { display:none; margin-top:12px; }
+.instructions.open .instr-body { display:block; }
+.instr-steps { display:flex; flex-direction:column; gap:8px; }
+.instr-step { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--text-muted); }
+.instr-num { font-family:'Fira Code',monospace; font-size:11px; font-weight:500; color:#fff; background:var(--slate); width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.instr-step strong { color:var(--text); }
+.instr-annot-note { margin-top:10px; padding:10px 12px; background:var(--amber-pale); border-radius:8px; border-left:3px solid var(--amber); font-size:12.5px; color:var(--text-muted); display:none; }
+.instr-annot-note.visible { display:block; }
+.instr-annot-note strong { color:var(--amber); }
+
+/* FICHE CONTENT */
+.fiche-wrapper { background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); }
+.fiche-title-bar { background:var(--slate-dark); padding:20px 28px; }
+.fiche-cp-badge { font-family:'Fira Code',monospace; font-size:10px; font-weight:500; color:rgba(255,255,255,0.6); letter-spacing:0.05em; margin-bottom:6px; }
+.fiche-cp-title { font-family:'Syne',sans-serif; font-weight:800; font-size:15px; color:#fff; line-height:1.35; }
+.fiche-cp-sub { font-family:'Syne',sans-serif; font-weight:600; font-size:13px; color:var(--amber-light); margin-top:5px; line-height:1.4; }
+
+.fiche-section { padding:20px 28px; border-bottom:1px solid var(--border-soft); }
+.fiche-section:last-child { border-bottom:none; }
+.section-heading { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.07em; color:var(--slate-dark); margin-bottom:10px; padding-bottom:6px; border-bottom:2px solid var(--slate-pale); display:flex; align-items:center; gap:7px; }
+.section-heading .sh-icon { font-size:14px; }
+.fiche-p { font-size:14px; color:var(--text-muted); line-height:1.85; }
+.fiche-ul { list-style:none; padding:0; display:flex; flex-direction:column; gap:4px; }
+.fiche-ul li { font-size:13.5px; color:var(--text-muted); padding-left:16px; position:relative; line-height:1.6; }
+.fiche-ul li::before { content:'›'; position:absolute; left:0; color:var(--slate-mid); font-weight:700; }
+
+/* ===== INTERACTIVE SPANS ===== */
+/* Keyword spans (key phrases to find) */
+.kw {
+  cursor:pointer;
+  border-bottom:2px dashed transparent;
+  border-radius:3px;
+  padding:1px 2px;
+  transition:all 0.15s;
+  position:relative;
+}
+.kw:hover {
+  background:var(--slate-pale);
+  border-bottom-color:var(--slate-mid);
+}
+.kw.found {
+  background:var(--green-bg);
+  border-bottom:2px solid var(--green-light);
+  color:var(--green);
+  font-weight:500;
+  cursor:default;
+  border-radius:4px;
+  padding:1px 4px;
+}
+.kw.found:hover { background:var(--green-bg); }
+
+/* Decoy spans */
+.decoy {
+  cursor:pointer;
+  border-bottom:2px dashed transparent;
+  border-radius:3px;
+  padding:1px 2px;
+  transition:all 0.15s;
+}
+.decoy:hover {
+  background:var(--slate-pale);
+  border-bottom-color:var(--slate-mid);
+}
+.decoy.wrong-flash {
+  background:var(--red-bg) !important;
+  border-bottom-color:#E8A0A0 !important;
+  color:var(--red) !important;
+  animation:wrongShake 0.4s ease;
+}
+@keyframes wrongShake {
+  0%,100% { transform:translateX(0); }
+  20% { transform:translateX(-4px); }
+  60% { transform:translateX(4px); }
+}
+
+/* Annotation spans */
+.annot-span {
+  background:var(--amber-pale);
+  border-bottom:2px solid rgba(224,122,47,0.5);
+  border-radius:3px;
+  padding:1px 3px;
+  color:var(--amber);
+  cursor:default;
+}
+
+/* All fiche text is clickable */
+.fiche-p, .fiche-ul li { cursor:pointer; border-radius:4px; transition:background 0.12s; }
+.fiche-p:hover, .fiche-ul li:hover { background:rgba(61,90,128,0.05); }
+
+/* Annotation mode body class */
+body.annot-mode { cursor:text; }
+body.annot-mode .fiche-p,
+body.annot-mode .fiche-ul li { cursor:text; }
+body.annot-mode .fiche-p:hover,
+body.annot-mode .fiche-ul li:hover { background:rgba(224,122,47,0.05); }
+
+/* ===== TOAST ===== */
+#toast {
+  position:fixed;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#fff;
+  border-radius:12px;
+  padding:12px 20px;
+  box-shadow:0 8px 32px rgba(28,42,58,0.2);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:13.5px;
+  color:var(--text-muted);
+  z-index:1000;
+  opacity:0;
+  transition:all 0.3s ease;
+  min-width:260px;
+  max-width:480px;
+  border:1px solid var(--border);
+  pointer-events:none;
+}
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+#toast.correct { border-left:4px solid var(--green); }
+#toast.wrong { border-left:4px solid var(--red); }
+#toast.annot { border-left:4px solid var(--amber); }
+.toast-icon { font-size:18px; flex-shrink:0; }
+.toast-content { flex:1; }
+.toast-title { font-family:'Syne',sans-serif; font-weight:700; font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; }
+.toast-title.correct { color:var(--green); }
+.toast-title.wrong { color:var(--red); }
+.toast-title.annot { color:var(--amber); }
+.toast-msg { font-size:12.5px; color:var(--text-muted); margin-top:2px; line-height:1.4; }
+
+/* ===== POPUP ANNOTATION ===== */
+#annotPopup {
+  position:fixed;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
+  box-shadow:var(--shadow-md);
+  padding:10px 14px;
+  z-index:200;
+  display:none;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  color:var(--text-muted);
+  min-width:200px;
+}
+#annotPopup.visible { display:flex; }
+#annotPopup .ap-text { flex:1; font-size:12px; line-height:1.4; }
+#annotPopup .ap-text strong { color:var(--amber); font-size:11.5px; font-family:'Syne',sans-serif; text-transform:uppercase; letter-spacing:0.05em; }
+.ap-confirm { background:var(--amber); color:#fff; border:none; border-radius:6px; padding:6px 12px; font-family:'Syne',sans-serif; font-size:11.5px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.ap-cancel { background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:18px; line-height:1; }
+
+/* ===== SUCCESS OVERLAY ===== */
+#successOverlay {
+  position:fixed;
+  inset:0;
+  background:rgba(28,42,58,0.7);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+#successOverlay.show { display:flex; }
+.success-card {
+  background:#fff;
+  border-radius:20px;
+  padding:40px 48px;
+  text-align:center;
+  max-width:480px;
+  box-shadow:0 20px 60px rgba(28,42,58,0.3);
+  position:relative;
+  overflow:hidden;
+}
+.success-card::before { content:''; position:absolute; top:0;left:0;right:0; height:5px; background:linear-gradient(90deg, var(--green), var(--slate)); }
+.success-emoji { font-size:52px; margin-bottom:16px; display:block; }
+.success-title { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:var(--text); margin-bottom:8px; }
+.success-sub { font-size:14px; color:var(--text-muted); line-height:1.6; margin-bottom:20px; }
+.success-score { font-family:'Fira Code',monospace; font-size:32px; color:var(--green); font-weight:500; margin-bottom:6px; }
+.success-score-label { font-size:12px; color:var(--text-dim); margin-bottom:24px; }
+.success-btn { background:var(--slate-dark); color:#fff; border:none; border-radius:10px; padding:12px 28px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; margin-right:8px; transition:background 0.2s; }
+.success-btn:hover { background:var(--slate); }
+.success-btn-sec { background:var(--green-bg); color:var(--green); border:1px solid var(--green-light); border-radius:10px; padding:12px 28px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s; }
+.success-btn-sec:hover { background:#D0ECDC; }
+
+/* HINT HIGHLIGHT */
+.hint-highlight {
+  animation:hintPulse 2s ease 3;
+}
+@keyframes hintPulse {
+  0%,100% { background:transparent; }
+  50% { background:rgba(224,122,47,0.2); }
+}
+
+/* CONFETTI particles */
+.confetti { position:fixed; pointer-events:none; z-index:600; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--slate-pale); border-radius:3px; }
+
+@media(max-width:900px) {
+  #sidebar { display:none; }
+  #main { margin-left:0; padding:24px 20px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside id="sidebar">
+  <div class="sidebar-brand">
+    <div class="rc-logo">Real Conseil</div>
+    <span class="formation-tag">FPA — RNCP 35030</span><br>
+    <span class="livrable-tag">🎯 Activité interactive</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-block">
+    <div class="progress-title">Progression</div>
+    <div class="progress-score">
+      <span class="score-num"><span id="scoreNum">0</span><span style="font-size:16px;color:var(--text-dim)"> / 7</span></span>
+      <span class="score-label">mots-clés<br>trouvés</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="mistakes-row">
+      <span style="font-size:11px;color:var(--text-dim);margin-right:3px;">Erreurs :</span>
+      <span class="mistake-dot" id="md1"></span>
+      <span class="mistake-dot" id="md2"></span>
+      <span class="mistake-dot" id="md3"></span>
+      <span style="font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-left:4px;" id="mistakeCount">0 / 3</span>
+    </div>
+  </div>
+
+  <!-- LOCKED BANNER -->
+  <div class="locked-banner" id="lockedBanner">🔒 3 erreurs atteintes<br>Activité bloquée — Recommencez !</div>
+
+  <!-- MODE TOGGLE -->
+  <div class="mode-block">
+    <div class="mode-title">Mode</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btnSearch" onclick="setMode('search')">🔍 Chercher</button>
+      <button class="mode-btn annot" id="btnAnnot" onclick="setMode('annotate')">✏️ Annoter</button>
+    </div>
+  </div>
+
+  <!-- KW CHECKLIST (icônes mystère seulement) -->
+  <div class="kw-block">
+    <div class="kw-title">Mots-clés à trouver</div>
+    <div class="kw-grid">
+      <div class="kw-icon" id="kwIcon1">?</div>
+      <div class="kw-icon" id="kwIcon2">?</div>
+      <div class="kw-icon" id="kwIcon3">?</div>
+      <div class="kw-icon" id="kwIcon4">?</div>
+      <div class="kw-icon" id="kwIcon5">?</div>
+      <div class="kw-icon" id="kwIcon6">?</div>
+      <div class="kw-icon" id="kwIcon7">?</div>
+    </div>
+    <p class="kw-hint">Trouvez les 7 mots-clés cachés dans la fiche. À vous de les repérer !</p>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend-block">
+    <div class="legend-title">Légende</div>
+    <div class="legend-item"><div class="legend-dot hover"></div><span>Phrase cliquable (survolez)</span></div>
+    <div class="legend-item"><div class="legend-dot correct"></div><span>Mot-clé trouvé ✅</span></div>
+    <div class="legend-item"><div class="legend-dot wrong"></div><span>Fausse piste ❌</span></div>
+    <div class="legend-item"><div class="legend-dot annot"></div><span>Mon annotation ✏️</span></div>
+  </div>
+
+  <!-- ANNOTATIONS (mode annoter) -->
+  <div class="annot-block" id="annotBlock">
+    <div class="annot-title">✏️ Mes mots-clés personnels</div>
+    <div id="annotList"><p class="annot-empty">Sélectionnez du texte et cliquez "Ajouter"</p></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="sidebar-actions">
+    <button class="hint-btn" onclick="showHint()">💡 Indice — Où chercher ?</button>
+    <button class="reset-btn" onclick="resetActivity()">🔄 Recommencer</button>
+  </div>
+
+  <div class="sidebar-footer">
+    <a href="../index.html" class="back-link">← Retour à l'index FPA</a>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main id="main">
+
+  <!-- HEADER -->
+  <div class="activity-header">
+    <div class="ah-eyebrow">
+      <span class="badge badge-fpa">FPA — RNCP 35030</span>
+      <span class="badge badge-act">🎯 Activité interactive</span>
+      <span class="badge badge-cp">CP N°12</span>
+    </div>
+    <h1 class="ah-h1">Identifiez les <em>mots-clés</em><br>de la Fiche Compétence N°12</h1>
+    <p class="ah-desc">Lisez attentivement la fiche de compétence officielle. Cliquez sur les <strong>7 mots-clés importants</strong> cachés dans le texte. Attention aux fausses pistes !</p>
+  </div>
+
+  <!-- INSTRUCTIONS -->
+  <div class="instructions open" id="instructions">
+    <div class="instr-toggle" onclick="toggleInstructions()">
+      <span class="instr-toggle-label">📋 Comment jouer ?</span>
+      <span class="instr-chevron">▾</span>
+    </div>
+    <div class="instr-body">
+      <div class="instr-steps">
+        <div class="instr-step"><span class="instr-num">1</span><span>Lisez attentivement la fiche. <strong>Cliquez sur n'importe quel passage</strong> que vous pensez être un des 7 mots-clés importants de la compétence.</span></div>
+        <div class="instr-step"><span class="instr-num">2</span><span><strong>Bonne réponse ✅</strong> : le passage se surligne en vert et une icône se coche à gauche. <strong>Mauvaise réponse ❌</strong> : flash rouge, une erreur est comptabilisée.</span></div>
+        <div class="instr-step"><span class="instr-num">3</span><span><strong>Attention :</strong> après <strong>3 erreurs</strong>, l'activité est bloquée et vous devrez recommencer. Choisissez bien avant de cliquer !</span></div>
+        <div class="instr-step"><span class="instr-num">4</span><span><strong>Mode Annoter</strong> : sélectionnez n'importe quel texte avec la souris pour l'enregistrer comme votre mot-clé personnel (fond orange).</span></div>
+      </div>
+      <div class="instr-annot-note" id="annotNote">
+        <strong>✏️ Mode Annoter actif</strong> — Sélectionnez n'importe quel passage dans la fiche et cliquez "Ajouter" pour l'enregistrer comme votre mot-clé personnel.
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHE TEXTE -->
+  <div class="fiche-wrapper">
+
+    <!-- TITLE BAR -->
+    <div class="fiche-title-bar">
+      <div class="fiche-cp-badge">FICHE COMPÉTENCE PROFESSIONNELLE N° 12</div>
+      <div class="fiche-cp-title">Réaliser une veille pour maintenir son expertise de formateur<br>et de professionnel dans sa spécialité</div>
+    </div>
+
+    <!-- SECTION 1 : DESCRIPTION -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">📌</span>Description de la compétence — processus de mise en œuvre</div>
+      <p class="fiche-p">
+        A partir de ses connaissances et de ses compétences dans sa spécialité et dans la formation professionnelle, identifier
+        <span class="kw" data-kw="1" onclick="clickKw(1, this)">les sources d'information</span>,
+        les évènements et
+        <span class="kw" data-kw="2" onclick="clickKw(2, this)">les acteurs pertinents</span>,
+        rechercher des
+        <span class="kw" data-kw="3" onclick="clickKw(3, this)">informations fiables</span>
+        sur les
+        <span class="kw" data-kw="4" onclick="clickKw(4, this)">évolutions technologiques, concurrentielles, pédagogiques et règlementaires</span>
+        relatives à son secteur d'activité et à la formation professionnelle,
+        <span class="kw" data-kw="5" onclick="clickKw(5, this)">collecter et organiser les informations recueillies, créer</span>
+        et entretenir des relations avec un
+        <span class="decoy" onclick="clickDecoy(this)">réseau local d'acteurs</span>
+        et avec des
+        <span class="decoy" onclick="clickDecoy(this)">communautés professionnelles</span>,
+        et partager les informations avec son organisation, afin de mettre en œuvre une
+        <span class="decoy" onclick="clickDecoy(this)">démarche de veille formalisée</span>,
+        d'actualiser ses contenus de formation et ses
+        <span class="decoy" onclick="clickDecoy(this)">pratiques pédagogiques</span>,
+        de faciliter l'accompagnement des apprenants et de répondre aux obligations du
+        <span class="decoy" onclick="clickDecoy(this)">système de qualité et de conformité</span>.
+      </p>
+    </div>
+
+    <!-- SECTION 2 : CONTEXTE -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">🏢</span>Contexte(s) professionnel(s) de mise en œuvre</div>
+      <p class="fiche-p">
+        Cette compétence s'exerce de manière permanente, seul et en équipe, de manière formelle et informelle, en centre, dans des communautés virtuelles, lors de rencontres avec des professionnels de son domaine de spécialité (tuteurs, clients), avec des acteurs impliqués dans l'accompagnement des parcours des apprenants ou dans la construction, la mise en œuvre et le financement des formations (partenaires, commanditaires, financeurs…).
+      </p>
+    </div>
+
+    <!-- SECTION 3 : CRITERES -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">✅</span>Critères de performance</div>
+      <ul class="fiche-ul">
+        <li>
+          <span class="kw" data-kw="1" onclick="clickKw(1, this)">Les sources d'information</span>, les évènements et
+          <span class="kw" data-kw="2" onclick="clickKw(2, this)">les acteurs pertinents</span>
+          sont recensés
+        </li>
+        <li>Les données issues de la <span class="decoy" onclick="clickDecoy(this)">veille sectorielle et pédagogique</span> sont collectées et organisées</li>
+        <li>Les acteurs locaux mobilisables pour répondre aux demandes des apprenants sont identifiés</li>
+        <li>Les contenus de formation prennent en compte les <span class="decoy" onclick="clickDecoy(this)">évolutions sectorielles et pédagogiques</span></li>
+        <li>La règlementation relative à sa spécialité et à la formation professionnelle est connue</li>
+      </ul>
+    </div>
+
+    <!-- SECTION 4 : SAVOIR-FAIRE TECHNIQUES -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">🔧</span>Savoir-faire techniques</div>
+      <ul class="fiche-ul">
+        <li>Identifier <span class="decoy" onclick="clickDecoy(this)">les sources et les documents de référence</span> dans sa spécialité et dans la formation professionnelle</li>
+        <li>Identifier les communautés professionnelles, les réseaux sociaux pertinents dans sa spécialité et sur la formation professionnelle</li>
+        <li>Identifier les événements significatifs dans sa spécialité et dans la formation professionnelle</li>
+        <li>Repérer les <span class="decoy" onclick="clickDecoy(this)">évolutions sectorielles, technologiques, concurrentielles et règlementaires</span> dans sa spécialité et dans la formation professionnelle</li>
+        <li>Repérer les évolutions des entreprises et leurs besoins de formation</li>
+        <li>Repérer les évolutions des modalités de financement de la formation professionnelle</li>
+        <li>Vérifier que les sources et les informations collectées sont <span class="decoy" onclick="clickDecoy(this)">fiables et actualisées</span></li>
+        <li>Actualiser les contenus de formation, les activités d'apprentissage et les ressources pédagogiques</li>
+        <li>Actualiser son ingénierie et ses pratiques pédagogiques</li>
+        <li>Anticiper l'obsolescence des outils de formation (plateaux techniques, outils numériques...)</li>
+      </ul>
+    </div>
+
+    <!-- SECTION 5 : SAVOIR-FAIRE ORGANISATIONNELS -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">📋</span>Savoir-faire organisationnels</div>
+      <ul class="fiche-ul">
+        <li>Organiser, hiérarchiser et structurer les données issues de la veille</li>
+        <li>Réaliser un répertoire opérationnel local des acteurs de sa spécialité et de la formation professionnelle</li>
+        <li>Anticiper la participation aux événements significatifs dans sa spécialité et dans la formation professionnelle</li>
+        <li>Partager sa veille avec ses pairs et avec son organisation</li>
+        <li>Conserver et mettre à disposition les éléments de preuve attendus par le <span class="decoy" onclick="clickDecoy(this)">système de qualité et de conformité</span></li>
+      </ul>
+    </div>
+
+    <!-- SECTION 6 : SAVOIR-FAIRE RELATIONNELS -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">🤝</span>Savoir-faire relationnels</div>
+      <ul class="fiche-ul">
+        <li>Créer et entretenir des liens avec les professionnels de la formation et de sa spécialité</li>
+        <li>Participer aux <span class="decoy" onclick="clickDecoy(this)">communautés et aux réseaux sociaux professionnels</span></li>
+        <li>Relayer les besoins de formation des entreprises aux responsables de formation</li>
+        <li>Collaborer avec les acteurs du territoire pour favoriser la réussite du parcours des apprenants</li>
+      </ul>
+    </div>
+
+    <!-- SECTION 7 : SAVOIRS -->
+    <div class="fiche-section">
+      <div class="section-heading"><span class="sh-icon">📚</span>Savoirs</div>
+      <ul class="fiche-ul">
+        <li>Connaissance de méthodologies de recherche et de capitalisation d'informations</li>
+        <li>Connaissance d'<span class="kw" data-kw="6" onclick="clickKw(6, this)">outils d'organisation de la veille</span></li>
+        <li>Connaissance d'<span class="kw" data-kw="7" onclick="clickKw(7, this)">outils numériques de veille individuelle et partagée</span></li>
+        <li>Connaissance des lieux ressources et des évènements dans sa spécialité et dans la formation professionnelle</li>
+        <li>Connaissance des principes de fonctionnement des réseaux professionnels et des <span class="decoy" onclick="clickDecoy(this)">communautés professionnelles</span></li>
+        <li>Connaissance de la règlementation sur la <span class="decoy" onclick="clickDecoy(this)">protection des données personnelles</span></li>
+        <li>Connaissance de la règlementation sur la propriété intellectuelle, le droit à l'image et les libertés individuelles</li>
+      </ul>
+    </div>
+
+  </div><!-- /fiche-wrapper -->
+
+</main>
+
+<!-- ===== TOAST ===== -->
+<div id="toast">
+  <span class="toast-icon" id="toastIcon"></span>
+  <div class="toast-content">
+    <div class="toast-title" id="toastTitle"></div>
+    <div class="toast-msg" id="toastMsg"></div>
+  </div>
+</div>
+
+<!-- ===== ANNOTATION POPUP ===== -->
+<div id="annotPopup">
+  <div class="ap-text"><strong>✏️ Ajouter</strong><br><span id="apSelectedText" style="font-size:12px;color:var(--text-muted);"></span></div>
+  <button class="ap-confirm" onclick="confirmAnnotation()">Ajouter</button>
+  <button class="ap-cancel" onclick="cancelAnnotation()">✕</button>
+</div>
+
+<!-- ===== SUCCESS OVERLAY ===== -->
+<div id="successOverlay">
+  <div class="success-card">
+    <span class="success-emoji">🎉</span>
+    <div class="success-title">Bravo, tous les mots-clés trouvés !</div>
+    <p class="success-sub">Vous avez identifié les 7 mots-clés de la Fiche Compétence N°12. Vous maîtrisez les éléments essentiels de la veille informationnelle du formateur !</p>
+    <div class="success-score" id="successScore">7 / 7</div>
+    <div class="success-score-label" id="successMistakes"></div>
+    <button class="success-btn" onclick="closeSuccess()">Voir ma fiche annotée</button>
+    <button class="success-btn-sec" onclick="resetActivity()">Recommencer</button>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+const TOTAL = 7;
+const MAX_MISTAKES = 3;
+let found = new Set();
+let mistakes = 0;
+let locked = false;
+let mode = 'search'; // 'search' | 'annotate'
+let pendingSelection = null;
+let annotations = JSON.parse(localStorage.getItem('cp12_annotations') || '[]');
+let toastTimer = null;
+
+const kwSections = {
+  1: 'Description de la compétence',
+  2: 'Description de la compétence',
+  3: 'Description de la compétence',
+  4: 'Description de la compétence',
+  5: 'Description de la compétence',
+  6: 'Savoirs',
+  7: 'Savoirs'
+};
+
+const kwLabels = {
+  1: "les sources d'information",
+  2: "les acteurs pertinents",
+  3: "informations fiables",
+  4: "évolutions technologiques, concurrentielles, pédagogiques et règlementaires",
+  5: "collecter et organiser les informations recueillies, créer",
+  6: "outils d'organisation de la veille",
+  7: "outils numériques de veille individuelle et partagée"
+};
+
+// ===== KW CLICK =====
+function clickKw(id, el) {
+  if (mode !== 'search' || locked) return;
+  if (found.has(id)) return;
+
+  found.add(id);
+  document.querySelectorAll(`.kw[data-kw="${id}"]`).forEach(s => s.classList.add('found'));
+
+  const icon = document.getElementById('kwIcon' + id);
+  if (icon) { icon.classList.add('found'); icon.textContent = '✓'; }
+
+  updateProgress();
+  showToast('correct', '✅ Mot-clé trouvé !', `« ${kwLabels[id]} »`);
+
+  if (found.size === TOTAL) setTimeout(showSuccess, 800);
+}
+
+// ===== DECOY / WRONG CLICK =====
+function clickDecoy(el) {
+  if (mode !== 'search' || locked) return;
+  registerMistake(el);
+}
+
+function registerMistake(el) {
+  mistakes++;
+  if (el) {
+    el.classList.add('wrong-flash');
+    setTimeout(() => el && el.classList.remove('wrong-flash'), 800);
+  }
+  updateMistakes();
+
+  if (mistakes >= MAX_MISTAKES) {
+    lockActivity();
+  } else {
+    showToast('wrong', '❌ Fausse piste !', `Ce passage n'est pas un mot-clé. Plus que ${MAX_MISTAKES - mistakes} erreur${MAX_MISTAKES - mistakes > 1 ? 's' : ''} avant blocage !`);
+  }
+}
+
+// ===== GLOBAL CLICK on fiche (tout le texte est cliquable) =====
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelector('.fiche-wrapper').addEventListener('click', function(e) {
+    if (mode !== 'search' || locked) return;
+
+    // If clicking a .kw → handled by clickKw (onclick attr), stop here
+    if (e.target.closest('.kw')) return;
+    // If clicking a .decoy → handled by clickDecoy (onclick attr), stop here
+    if (e.target.closest('.decoy')) return;
+    // If clicking structural elements (headings, title bar, wrapper itself) → ignore
+    if (e.target.closest('.section-heading') || e.target.closest('.fiche-title-bar')) return;
+    // If clicking on p or li → wrong guess
+    if (e.target.closest('.fiche-p') || e.target.closest('.fiche-ul')) {
+      registerMistake(null);
+    }
+  });
+});
+
+// ===== LOCK =====
+function lockActivity() {
+  locked = true;
+  document.body.classList.add('locked');
+  document.getElementById('lockedBanner').classList.add('show');
+  showToast('wrong', '🔒 Activité bloquée !', '3 erreurs atteintes. Cliquez sur "Recommencer" pour réessayer.');
+}
+
+// ===== PROGRESS =====
+function updateProgress() {
+  const pct = (found.size / TOTAL) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('scoreNum').textContent = found.size;
+}
+
+function updateMistakes() {
+  document.getElementById('mistakeCount').textContent = mistakes + ' / ' + MAX_MISTAKES;
+  for (let i = 1; i <= MAX_MISTAKES; i++) {
+    const dot = document.getElementById('md' + i);
+    if (dot) dot.classList.toggle('active', i <= mistakes);
+  }
+}
+
+// ===== TOAST =====
+function showToast(type, title, msg) {
+  const toast = document.getElementById('toast');
+  toast.className = 'show ' + type;
+  document.getElementById('toastIcon').textContent = type === 'correct' ? '✅' : type === 'wrong' ? '❌' : '✏️';
+  const t = document.getElementById('toastTitle');
+  t.className = 'toast-title ' + type;
+  t.textContent = title;
+  document.getElementById('toastMsg').textContent = msg || '';
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.className = ''; }, 3500);
+}
+
+// ===== MODE =====
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnSearch').classList.toggle('active', m === 'search');
+  document.getElementById('btnAnnot').classList.toggle('active', m === 'annotate');
+  document.body.classList.toggle('annot-mode', m === 'annotate');
+  document.getElementById('annotBlock').classList.toggle('visible', m === 'annotate');
+  document.getElementById('annotNote').classList.toggle('visible', m === 'annotate');
+  if (m === 'annotate') {
+    showToast('annot', '✏️ Mode Annoter activé', 'Sélectionnez du texte dans la fiche, puis cliquez "Ajouter".');
+  }
+  cancelAnnotation();
+}
+
+// ===== ANNOTATION — sélection texte =====
+document.addEventListener('mouseup', function(e) {
+  if (mode !== 'annotate') return;
+  // Don't trigger if clicking inside popup or sidebar buttons
+  if (e.target.closest('#annotPopup')) return;
+  if (e.target.closest('.sidebar-actions') || e.target.closest('.mode-block')) return;
+
+  // Small delay to let the selection settle
+  setTimeout(function() {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed) { cancelAnnotation(); return; }
+    const text = sel.toString().trim();
+    if (text.length < 2 || text.length > 200) { cancelAnnotation(); return; }
+
+    pendingSelection = text;
+    const popup = document.getElementById('annotPopup');
+    const range = sel.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    // fixed = viewport coords → pas de scrollY
+    const top = Math.min(rect.bottom + 10, window.innerHeight - 80);
+    const left = Math.min(Math.max(8, rect.left), window.innerWidth - 320);
+    popup.style.top = top + 'px';
+    popup.style.left = left + 'px';
+    popup.classList.add('visible');
+    document.getElementById('apSelectedText').textContent = text.length > 55 ? text.substring(0, 55) + '…' : text;
+  }, 10);
+});
+
+function confirmAnnotation() {
+  if (!pendingSelection) return;
+  const text = pendingSelection;
+  annotations.push({ id: Date.now(), text });
+  localStorage.setItem('cp12_annotations', JSON.stringify(annotations));
+  renderAnnotationsList();
+  cancelAnnotation();
+  showToast('annot', '✏️ Mot-clé ajouté !', `« ${text.length > 45 ? text.substring(0,45)+'…' : text} » enregistré.`);
+  window.getSelection().removeAllRanges();
+}
+
+function cancelAnnotation() {
+  pendingSelection = null;
+  document.getElementById('annotPopup').classList.remove('visible');
+}
+
+function deleteAnnotation(id) {
+  annotations = annotations.filter(a => a.id !== id);
+  localStorage.setItem('cp12_annotations', JSON.stringify(annotations));
+  renderAnnotationsList();
+}
+
+function renderAnnotationsList() {
+  const list = document.getElementById('annotList');
+  if (annotations.length === 0) {
+    list.innerHTML = '<p class="annot-empty">Sélectionnez du texte et cliquez "Ajouter"</p>';
+    return;
+  }
+  list.innerHTML = '<div class="annot-list">' +
+    annotations.map(a =>
+      `<div class="annot-tag">
+        <span class="annot-tag-text">${a.text.length > 45 ? a.text.substring(0,45)+'…' : a.text}</span>
+        <button class="annot-del" onclick="deleteAnnotation(${a.id})" title="Supprimer">✕</button>
+      </div>`
+    ).join('') + '</div>';
+}
+
+// ===== HINT =====
+function showHint() {
+  if (locked) return;
+  const unfound = [1,2,3,4,5,6,7].filter(id => !found.has(id));
+  if (unfound.length === 0) { showToast('correct', '🎉 Bravo !', 'Vous avez trouvé tous les mots-clés !'); return; }
+  const nextId = unfound[0];
+  showToast('annot', '💡 Indice', `Cherchez dans la section : « ${kwSections[nextId]} »`);
+  const kwSpan = document.querySelector(`.kw[data-kw="${nextId}"]:not(.found)`);
+  if (kwSpan) {
+    const section = kwSpan.closest('.fiche-section');
+    if (section) {
+      section.classList.add('hint-highlight');
+      setTimeout(() => section.classList.remove('hint-highlight'), 6000);
+      section.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  }
+}
+
+// ===== SUCCESS =====
+function showSuccess() {
+  document.getElementById('successOverlay').classList.add('show');
+  document.getElementById('successScore').textContent = found.size + ' / ' + TOTAL;
+  document.getElementById('successMistakes').textContent =
+    mistakes === 0 ? '🏆 Sans aucune erreur — Parfait !' :
+    `Avec ${mistakes} erreur${mistakes > 1 ? 's' : ''}`;
+  launchConfetti();
+}
+
+function closeSuccess() {
+  document.getElementById('successOverlay').classList.remove('show');
+}
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors = ['#3D5A80','#E07A2F','#2D7D52','#6B5EA8','#F0A060'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    const size = Math.random() * 10 + 6;
+    el.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}vw;top:-20px;border-radius:${Math.random()>0.5?'50%':'2px'};opacity:${Math.random()*0.7+0.3};animation:fall ${Math.random()*2+1.5}s linear ${Math.random()*1.5}s forwards;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+  if (!document.getElementById('confettiStyle')) {
+    const s = document.createElement('style');
+    s.id = 'confettiStyle';
+    s.textContent = `@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}`;
+    document.head.appendChild(s);
+  }
+}
+
+// ===== RESET =====
+function resetActivity() {
+  if (!confirm('Recommencer l\'activité ? Votre progression sera réinitialisée.')) return;
+  found.clear();
+  mistakes = 0;
+  locked = false;
+
+  document.querySelectorAll('.kw').forEach(s => s.classList.remove('found'));
+  for (let i = 1; i <= 7; i++) {
+    const icon = document.getElementById('kwIcon' + i);
+    if (icon) { icon.classList.remove('found'); icon.textContent = '?'; }
+  }
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('scoreNum').textContent = '0';
+  for (let i = 1; i <= MAX_MISTAKES; i++) { const d = document.getElementById('md'+i); if(d) d.classList.remove('active'); }
+  document.getElementById('mistakeCount').textContent = '0 / ' + MAX_MISTAKES;
+  document.getElementById('successOverlay').classList.remove('show');
+  document.getElementById('lockedBanner').classList.remove('show');
+  document.body.classList.remove('locked');
+  setMode('search');
+}
+
+// ===== INSTRUCTIONS TOGGLE =====
+function toggleInstructions() {
+  document.getElementById('instructions').classList.toggle('open');
+}
+
+// ===== INIT =====
+renderAnnotationsList();
+</script>
+</body>
+</html>

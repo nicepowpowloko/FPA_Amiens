@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartes Définitions de la veille informationnelle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #1b2033;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 48px;
+      max-width: 900px;
+      line-height: 1.3;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      max-width: 960px;
+      width: 100%;
+    }
+
+    .flip-card {
+      perspective: 1200px;
+      height: 420px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 36px;
+      text-align: center;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    .card-afnor .flip-card-front  { background-color: #7b70e8; }
+    .card-afnor .flip-card-back   { background-color: #e8e5f8; }
+
+    .card-reac .flip-card-front   { background-color: #e8306a; }
+    .card-reac .flip-card-back    { background-color: #f5e0ea; }
+
+    .flip-card-front .card-label {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #ffffff;
+      margin-bottom: 28px;
+    }
+
+    .flip-card-front .card-reference {
+      font-weight: 600;
+      font-size: 0.93rem;
+      color: #ffffff;
+      line-height: 1.7;
+    }
+
+    .card-afnor .flip-card-back p {
+      font-size: 0.88rem;
+      color: #2a2665;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .card-reac .flip-card-back p {
+      font-size: 0.88rem;
+      color: #7a1030;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .flip-card-back p:last-child { margin-bottom: 0; }
+
+    .flip-hint {
+      margin-top: 32px;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 680px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .flip-card  { height: 500px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cartes Définitions de la veille informationnelle</h1>
+
+  <div class="cards-grid">
+
+    <!-- Carte 1 : AFNOR -->
+    <div class="flip-card card-afnor"
+         role="button" tabindex="0"
+         aria-label="Carte AFNOR — cliquer pour retourner">
+      <div class="flip-card-inner">
+
+        <div class="flip-card-front">
+          <div class="card-label">Définition 1 — AFNOR, norme XP X 50–53</div>
+          <div class="card-reference">
+            Référence : AFNOR, Norme expérimentale XP X 50–53 —
+            Management de l'information et veille, Association
+            Française de Normalisation, Paris.
+          </div>
+        </div>
+
+        <div class="flip-card-back">
+          <p>L'AFNOR définit la veille comme une « activité continue en grande partie itérative visant à une surveillance active de l'environnement technologique, commercial, etc., pour en anticiper les évolutions ». <em>Univ-rennes2</em></p>
+          <p>Dans le contexte de la formation professionnelle, cette définition s'applique à la surveillance permanente par le formateur de son environnement sectoriel, pédagogique et réglementaire, afin d'adapter ses contenus et ses pratiques aux évolutions du marché du travail et aux besoins des apprenants adultes.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Carte 2 : REAC TP FPA -->
+    <div class="flip-card card-reac"
+         role="button" tabindex="0"
+         aria-label="Carte REAC TP FPA — cliquer pour retourner">
+      <div class="flip-card-inner">
+
+        <div class="flip-card-front">
+          <div class="card-label">REAC TP FPA</div>
+          <div class="card-reference">
+            Référence : Ministère du Travail, du Plein Emploi et de
+            l'Insertion, Référentiel du Titre Professionnel Formateur
+            Professionnel d'Adultes, RNCP n° 37275, enregistré le
+            25 janvier 2023. Consultable sur France Compétences :<br/>
+            https://www.francecompetences.fr/recherche/rncp/37275/
+          </div>
+        </div>
+
+        <div class="flip-card-back">
+          <p>Le référentiel du Titre Professionnel Formateur Professionnel d'Adultes inclut parmi les compétences attendues la capacité à « appliquer une veille professionnelle et pédagogique dans le contexte de la formation professionnelle d'adultes ».</p>
+          <p>Le formateur professionnel d'adultes y est défini comme un professionnel qui « accompagne les apprenants vers l'acquisition de compétences professionnelles, adapte et anime les formations en fonction de leurs besoins, et veille à leur progression et insertion professionnelle, en tenant compte des standards de qualité et des évolutions de son domaine »</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <p class="flip-hint">Cliquez sur une carte pour la retourner</p>
+
+  <script>
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('flipped'));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.classList.toggle('flipped');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

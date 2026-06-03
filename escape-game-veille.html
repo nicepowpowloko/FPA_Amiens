@@ -457,6 +457,28 @@ body{
 
 .confetti{position:fixed;pointer-events:none;z-index:600;}
 
+/* ===== ROOM 3 CLASSIFY ===== */
+.p3-item{
+  background:var(--dark);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  transition:border-color 0.2s;
+}
+.p3-item.classified-active{border-color:var(--amber);background:rgba(224,122,47,0.06);}
+.p3-item.classified-passive{border-color:var(--teal);background:rgba(31,122,140,0.06);}
+.p3-item.correct-final{border-color:var(--green)!important;background:var(--green-bg)!important;}
+.p3-item.wrong-final{border-color:var(--red)!important;background:var(--red-bg)!important;animation:shake 0.4s;}
+.p3-label{display:flex;align-items:flex-start;gap:10px;flex:1;font-size:13px;color:var(--text-muted);}
+.p3-btns{display:flex;gap:6px;flex-shrink:0;}
+.p3-btn{
+  padding:6px 12px;border-radius:7px;border:1.5px solid var(--border);
+  background:transparent;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  cursor:pointer;transition:all 0.18s;color:var(--text-dim);white-space:nowrap;
+}
+.p3-btn.p3-act:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-glow);}
+.p3-btn.p3-pas:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);}
+.p3-btn.selected-act{border-color:var(--amber);color:var(--amber);background:var(--amber-glow);}
+.p3-btn.selected-pas{border-color:var(--teal);color:var(--teal);background:var(--teal-bg);}
+
 @media(max-width:700px){
   .classify-zones{grid-template-columns:1fr;}
   .tool-grid{grid-template-columns:1fr;}
@@ -694,37 +716,67 @@ body{
 
     <div class="enigma-card">
       <div class="enigma-label">🔍 Énigme 3 — Classez ces 6 pratiques : Active ou Passive ?</div>
-      <div class="enigma-text">Cliquez sur chaque pratique pour l'assigner à la bonne catégorie. <strong>Puis saisissez les premières lettres des 3 pratiques ACTIVES</strong> (dans l'ordre A, C, E).</div>
+      <div class="enigma-text">Pour chaque pratique, cliquez sur <strong style="color:var(--amber);">⚡ ACTIVE</strong> ou <strong style="color:var(--teal);">🔄 PASSIVE</strong>. Quand les 6 sont classées, le code se remplit automatiquement.</div>
 
-      <div class="classify-zones">
-        <div class="classify-zone active-zone">
-          <div class="classify-zone-title">⚡ VEILLE ACTIVE</div>
-          <div class="classif-items" id="zoneActive">
-            <span style="font-size:11px;color:var(--text-dim);font-style:italic;">Cliquez les bonnes pratiques →</span>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;" id="practiceList3">
+
+        <div class="p3-item" data-id="A" data-correct="active">
+          <div class="p3-label"><span class="sort-num">A</span><span><strong>Assister</strong> à un salon professionnel pour recueillir des informations ciblées</span></div>
+          <div class="p3-btns">
+            <button class="p3-btn p3-act" onclick="classify3(this,'A','active')">⚡ Active</button>
+            <button class="p3-btn p3-pas" onclick="classify3(this,'A','passive')">🔄 Passive</button>
           </div>
         </div>
-        <div class="classify-zone passive-zone">
-          <div class="classify-zone-title">🔄 VEILLE PASSIVE</div>
-          <div class="classif-items" id="zonePassive">
-            <span style="font-size:11px;color:var(--text-dim);font-style:italic;">Cliquez les bonnes pratiques →</span>
+
+        <div class="p3-item" data-id="B" data-correct="passive">
+          <div class="p3-label"><span class="sort-num">B</span><span><strong>Recevoir</strong> une newsletter automatique de son domaine de spécialité</span></div>
+          <div class="p3-btns">
+            <button class="p3-btn p3-act" onclick="classify3(this,'B','active')">⚡ Active</button>
+            <button class="p3-btn p3-pas" onclick="classify3(this,'B','passive')">🔄 Passive</button>
           </div>
         </div>
+
+        <div class="p3-item" data-id="C" data-correct="active">
+          <div class="p3-label"><span class="sort-num">C</span><span><strong>Consulter</strong> délibérément les sites officiels (Légifrance, France Compétences)</span></div>
+          <div class="p3-btns">
+            <button class="p3-btn p3-act" onclick="classify3(this,'C','active')">⚡ Active</button>
+            <button class="p3-btn p3-pas" onclick="classify3(this,'C','passive')">🔄 Passive</button>
+          </div>
+        </div>
+
+        <div class="p3-item" data-id="D" data-correct="passive">
+          <div class="p3-label"><span class="sort-num">D</span><span><strong>Déclencher</strong> une alerte Google sur des mots-clés prédéfinis</span></div>
+          <div class="p3-btns">
+            <button class="p3-btn p3-act" onclick="classify3(this,'D','active')">⚡ Active</button>
+            <button class="p3-btn p3-pas" onclick="classify3(this,'D','passive')">🔄 Passive</button>
+          </div>
+        </div>
+
+        <div class="p3-item" data-id="E" data-correct="active">
+          <div class="p3-label"><span class="sort-num">E</span><span><strong>Enquêter</strong> auprès de collègues formateurs pour recueillir des retours d'expérience</span></div>
+          <div class="p3-btns">
+            <button class="p3-btn p3-act" onclick="classify3(this,'E','active')">⚡ Active</button>
+            <button class="p3-btn p3-pas" onclick="classify3(this,'E','passive')">🔄 Passive</button>
+          </div>
+        </div>
+
+        <div class="p3-item" data-id="F" data-correct="passive">
+          <div class="p3-label"><span class="sort-num">F</span><span><strong>Suivre</strong> automatiquement un flux RSS de revues pédagogiques</span></div>
+          <div class="p3-btns">
+            <button class="p3-btn p3-act" onclick="classify3(this,'F','active')">⚡ Active</button>
+            <button class="p3-btn p3-pas" onclick="classify3(this,'F','passive')">🔄 Passive</button>
+          </div>
+        </div>
+
       </div>
 
-      <div class="sort-list" id="practiceList">
-        <div class="sort-item" data-id="A" data-type="active"><span class="sort-num">A</span><span><strong>Assister</strong> à un salon professionnel pour recueillir des informations ciblées</span></div>
-        <div class="sort-item" data-id="B" data-type="passive"><span class="sort-num">B</span><span><strong>Recevoir</strong> une newsletter automatique de son domaine de spécialité</span></div>
-        <div class="sort-item" data-id="C" data-type="active"><span class="sort-num">C</span><span><strong>Consulter</strong> délibérément les sites officiels (Légifrance, France Compétences) pour une mise à jour réglementaire</span></div>
-        <div class="sort-item" data-id="D" data-type="passive"><span class="sort-num">D</span><span><strong>Déclencher</strong> une alerte Google sur des mots-clés prédéfinis de sa spécialité</span></div>
-        <div class="sort-item" data-id="E" data-type="active"><span class="sort-num">E</span><span><strong>Enquêter</strong> auprès de collègues formateurs pour recueillir des retours d'expérience</span></div>
-        <div class="sort-item" data-id="F" data-type="passive"><span class="sort-num">F</span><span><strong>Suivre</strong> automatiquement un flux RSS de revues pédagogiques</span></div>
-      </div>
+      <div id="r3status" style="font-family:'Fira Code',monospace;font-size:12px;color:var(--text-dim);margin-bottom:14px;min-height:18px;"></div>
 
       <div class="password-zone">
-        <div class="pwd-label">🔐 Code — Premières lettres des 3 pratiques ACTIVES (ordre A→C→E) :</div>
+        <div class="pwd-label">🔐 Code — se remplit automatiquement quand les 6 sont classées :</div>
         <div class="pwd-row">
-          <input class="pwd-input" id="pwd3" type="text" maxlength="3" placeholder="_ _ _" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
-          <button class="btn-check" onclick="checkRoom3()">VALIDER</button>
+          <input class="pwd-input" id="pwd3" type="text" maxlength="3" placeholder="_ _ _" autocomplete="off" readonly style="cursor:default;">
+          <button class="btn-check" onclick="checkRoom3()" id="btnCheck3" disabled style="opacity:0.4;">VALIDER</button>
         </div>
         <div class="pwd-feedback" id="fb3"></div>
       </div>
@@ -1222,6 +1274,71 @@ function checkRoom2() {
   }
 }
 
+// ===== ROOM 3 : classify mechanic =====
+const r3answers = {}; // id → 'active'|'passive'
+
+function classify3(btn, id, type) {
+  // Reset both buttons for this row
+  const item = btn.closest('.p3-item');
+  item.querySelectorAll('.p3-btn').forEach(b => b.classList.remove('selected-act','selected-pas'));
+  item.classList.remove('classified-active','classified-passive');
+
+  // Mark selected button
+  btn.classList.add(type === 'active' ? 'selected-act' : 'selected-pas');
+  item.classList.add(type === 'active' ? 'classified-active' : 'classified-passive');
+
+  r3answers[id] = type;
+
+  // Count classified
+  const total = 6;
+  const done = Object.keys(r3answers).length;
+  const statusEl = document.getElementById('r3status');
+  statusEl.textContent = `${done} / ${total} pratiques classées${done < total ? ' — continuez…' : ' ✓ Vérification en cours…'}`;
+
+  if (done === total) {
+    // Auto-check and build code
+    let code = '';
+    let allCorrect = true;
+    ['A','B','C','D','E','F'].forEach(lid => {
+      const itemEl = document.querySelector(`.p3-item[data-id="${lid}"]`);
+      const correct = itemEl.dataset.correct;
+      const chosen = r3answers[lid];
+      if (chosen === correct) {
+        itemEl.classList.add('correct-final');
+      } else {
+        itemEl.classList.add('wrong-final');
+        allCorrect = false;
+      }
+      if (correct === 'active') code += lid;
+    });
+
+    if (allCorrect) {
+      document.getElementById('pwd3').value = code; // = ACE
+      document.getElementById('pwd3').classList.add('correct');
+      document.getElementById('btnCheck3').disabled = false;
+      document.getElementById('btnCheck3').style.opacity = '1';
+      statusEl.style.color = 'var(--green)';
+      statusEl.textContent = '✅ Classement parfait ! Code révélé → VALIDEZ.';
+      setTimeout(() => checkRoom3(), 600);
+    } else {
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = '❌ Certaines pratiques sont mal classées. Corrigez les cases rouges.';
+      errors++;
+      // Reset wrong ones after 1.5s so user can retry
+      setTimeout(() => {
+        document.querySelectorAll('.p3-item.wrong-final').forEach(el => {
+          const lid = el.dataset.id;
+          el.classList.remove('wrong-final','classified-active','classified-passive');
+          el.querySelectorAll('.p3-btn').forEach(b => b.classList.remove('selected-act','selected-pas'));
+          delete r3answers[lid];
+        });
+        statusEl.textContent = Object.keys(r3answers).length + ' / 6 pratiques classées — corrigez les erreurs.';
+        statusEl.style.color = 'var(--text-dim)';
+      }, 1600);
+    }
+  }
+}
+
 // ===== ROOM 3 CHECK =====
 function checkRoom3() {
   const v = document.getElementById('pwd3').value.trim().toUpperCase();
@@ -1234,7 +1351,7 @@ function checkRoom3() {
   } else {
     inp.classList.add('wrong'); errors++;
     document.getElementById('fb3').className = 'pwd-feedback err';
-    document.getElementById('fb3').textContent = '❌ Code incorrect. Active = cherche délibérément. Passive = reçoit automatiquement.';
+    document.getElementById('fb3').textContent = '❌ Erreur. Active = cherche délibérément. Passive = reçoit automatiquement.';
     setTimeout(() => inp.classList.remove('wrong'), 600);
   }
 }

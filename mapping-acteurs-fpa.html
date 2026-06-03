@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapping Acteurs Institutionnels | FPA | Real Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --slate:#3D5A80;--slate-dark:#1C3A5C;--slate-mid:#4E6F99;
+  --slate-light:#8BAABF;--slate-pale:#C8D9E8;--slate-ghost:#EEF3F8;
+  --amber:#E07A2F;--amber-light:#F0A060;--amber-pale:#FBF0E4;
+  --bg:#F4F6F9;--bg-card:#FFFFFF;
+  --text:#1C2B3A;--text-muted:#4A5D70;--text-dim:#8A9EAF;
+  --border:#D0DCE8;--border-soft:#E8EFF5;
+  --green:#2D7D52;--green-bg:#E8F5EE;--green-light:#A8D5BB;
+  --red:#B84040;--red-bg:#FAEAEA;
+  --purple:#6B5EA8;--purple-bg:#F0EEF8;
+  --teal:#1F7A8C;--teal-bg:#E5F4F7;
+  --orange:#C8612A;--orange-bg:#FBF0E8;
+  --sidebar-w:280px;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(28,42,58,0.08);
+  --shadow-md:0 6px 28px rgba(28,42,58,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;font-size:15px;line-height:1.75;}
+
+/* ===== SIDEBAR ===== */
+#sidebar{
+  width:var(--sidebar-w);min-height:100vh;background:#fff;
+  position:fixed;top:0;left:0;display:flex;flex-direction:column;
+  border-right:1px solid var(--border);z-index:100;overflow-y:auto;
+  box-shadow:2px 0 16px rgba(28,42,58,0.06);
+}
+.sb-brand{padding:18px 20px 14px;border-bottom:1px solid var(--border-soft);background:var(--slate-dark);}
+.sb-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.12em;color:#fff;text-transform:uppercase;}
+.sb-tag{display:inline-block;margin-top:6px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.sb-act{display:inline-block;margin-top:4px;background:rgba(224,122,47,0.25);color:var(--amber-light);font-size:10px;font-weight:700;font-family:'Syne',sans-serif;padding:2px 9px;border-radius:20px;}
+
+.sb-score{padding:16px 20px;border-bottom:1px solid var(--border-soft);background:var(--slate-ghost);}
+.sb-score-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--slate-dark);margin-bottom:10px;}
+.score-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.score-num{font-family:'Fira Code',monospace;font-size:22px;font-weight:500;color:var(--slate-dark);}
+.score-lbl{font-size:11px;color:var(--text-dim);text-align:right;line-height:1.3;}
+.bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--slate),var(--green));border-radius:3px;transition:width 0.5s ease;width:0%;}
+.err-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.err-dot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+.err-dot.active{background:var(--red);}
+.err-label{font-size:11px;color:var(--text-dim);margin-right:3px;}
+.err-count{font-family:'Fira Code',monospace;font-size:10px;color:var(--text-dim);margin-left:4px;}
+
+.locked-banner{display:none;margin:0 20px 0;background:var(--red-bg);border:1px solid rgba(184,64,64,0.25);border-radius:8px;padding:9px 13px;font-size:11.5px;color:var(--red);font-weight:700;font-family:'Syne',sans-serif;text-align:center;line-height:1.4;}
+.locked-banner.show{display:block;}
+
+.sb-legend{padding:12px 20px;border-bottom:1px solid var(--border-soft);}
+.sb-legend-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-dim);margin-bottom:8px;}
+.leg-item{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:12px;color:var(--text-muted);}
+.leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+
+.sb-actions{padding:12px 20px;border-bottom:1px solid var(--border-soft);display:flex;flex-direction:column;gap:8px;}
+.btn-reveal{display:flex;align-items:center;gap:7px;background:var(--amber-pale);color:var(--amber);border:1px solid rgba(224,122,47,0.25);border-radius:8px;padding:9px 13px;font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-reveal:hover{background:#F5DFC4;}
+.btn-reset{display:flex;align-items:center;gap:7px;background:var(--red-bg);color:var(--red);border:1px solid rgba(184,64,64,0.2);border-radius:8px;padding:9px 13px;font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-reset:hover{background:#F5D0D0;}
+.sb-footer{padding:12px 20px;margin-top:auto;}
+.back-link{display:flex;align-items:center;gap:7px;color:var(--text-dim);text-decoration:none;font-size:12px;transition:color 0.2s;}
+.back-link:hover{color:var(--slate-dark);}
+
+/* ===== MAIN ===== */
+#main{margin-left:var(--sidebar-w);flex:1;padding:36px 40px 80px;max-width:1100px;}
+
+.act-header{margin-bottom:24px;padding:24px 28px;background:#fff;border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.act-header::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--slate-dark),var(--amber-light));}
+.ah-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;padding:4px 11px;border-radius:20px;letter-spacing:0.04em;}
+.badge-fpa{background:var(--slate-ghost);color:var(--slate-dark);border:1px solid var(--slate-pale);}
+.badge-cp{background:var(--purple-bg);color:var(--purple);border:1px solid rgba(107,94,168,0.2);}
+.badge-act{background:var(--amber-pale);color:var(--amber);border:1px solid rgba(224,122,47,0.2);}
+.ah-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;color:var(--text);line-height:1.3;margin-bottom:6px;}
+.ah-h1 em{color:var(--slate-dark);font-style:normal;}
+.ah-desc{font-size:13px;color:var(--text-muted);line-height:1.6;}
+
+/* INSTRUCTIONS */
+.instr{background:var(--slate-ghost);border:1px solid var(--slate-pale);border-radius:12px;padding:14px 18px;margin-bottom:24px;}
+.instr-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.instr-lbl{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--slate-dark);display:flex;align-items:center;gap:7px;}
+.instr-chev{color:var(--text-dim);font-size:13px;transition:transform 0.2s;}
+.instr.open .instr-chev{transform:rotate(180deg);}
+.instr-body{display:none;margin-top:10px;}
+.instr.open .instr-body{display:block;}
+.instr-steps{display:flex;flex-direction:column;gap:7px;}
+.instr-step{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--text-muted);}
+.instr-num{font-family:'Fira Code',monospace;font-size:10.5px;color:#fff;background:var(--slate);width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+
+/* ===== LAYOUT MAPPING ===== */
+.mapping-layout{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:start;}
+
+/* ACTORS PANEL */
+.actors-panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow);position:sticky;top:20px;}
+.actors-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-dim);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.actors-remaining{font-family:'Fira Code',monospace;font-size:11px;color:var(--slate-dark);background:var(--slate-ghost);padding:2px 8px;border-radius:10px;}
+.actors-list{display:flex;flex-direction:column;gap:7px;}
+.actor-card{
+  background:var(--slate-ghost);border:1.5px solid var(--slate-pale);
+  border-radius:9px;padding:9px 12px;cursor:pointer;
+  transition:all 0.18s;user-select:none;position:relative;
+  font-size:12.5px;font-weight:500;color:var(--slate-dark);
+  font-family:'DM Sans',sans-serif;line-height:1.3;
+}
+.actor-card:hover{background:var(--slate-pale);border-color:var(--slate-light);transform:translateX(2px);}
+.actor-card.selected{background:var(--amber-pale);border-color:var(--amber);color:var(--amber);}
+.actor-card.placed{opacity:0.35;cursor:default;pointer-events:none;text-decoration:line-through;}
+.actor-card.placed.correct{opacity:0.5;}
+.actor-icon{font-size:14px;margin-right:6px;}
+.actor-info-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:13px;cursor:pointer;color:var(--text-dim);opacity:0.6;transition:opacity 0.2s;padding:2px 4px;}
+.actor-info-btn:hover{opacity:1;color:var(--slate);}
+
+/* CATEGORIES */
+.categories{display:flex;flex-direction:column;gap:14px;}
+.cat-block{background:#fff;border:2px solid var(--border);border-radius:14px;padding:16px;transition:all 0.2s;min-height:120px;}
+.cat-block.drag-over{border-color:var(--amber);background:var(--amber-pale);}
+.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.cat-emoji{font-size:20px;flex-shrink:0;}
+.cat-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);}
+.cat-count{font-family:'Fira Code',monospace;font-size:10px;background:var(--slate-ghost);color:var(--slate-dark);padding:2px 8px;border-radius:10px;margin-left:auto;}
+.cat-drop-hint{font-size:12px;color:var(--text-dim);font-style:italic;padding:8px 12px;border:1.5px dashed var(--border);border-radius:8px;text-align:center;}
+.cat-tags{display:flex;flex-wrap:wrap;gap:7px;min-height:36px;}
+.placed-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:8px;font-size:12px;font-weight:500;
+  border:1.5px solid transparent;cursor:pointer;transition:all 0.2s;
+  font-family:'DM Sans',sans-serif;line-height:1.2;
+}
+.placed-tag.correct{background:var(--green-bg);border-color:var(--green-light);color:var(--green);}
+.placed-tag.wrong{background:var(--red-bg);border-color:#E8A0A0;color:var(--red);animation:wrongShake 0.4s ease;}
+.placed-tag.wrong-flash{background:var(--red-bg);border-color:#E8A0A0;color:var(--red);}
+.placed-tag .remove-btn{font-size:11px;opacity:0.6;cursor:pointer;margin-left:2px;}
+.placed-tag .remove-btn:hover{opacity:1;}
+
+@keyframes wrongShake{0%,100%{transform:translateX(0);}25%{transform:translateX(-4px);}75%{transform:translateX(4px)};}
+
+/* cat color themes */
+.cat-block[data-cat="finance"] .cat-name{color:#1F7A8C;}
+.cat-block[data-cat="finance"] .cat-count{background:var(--teal-bg);color:var(--teal);}
+.cat-block[data-cat="certif"] .cat-name{color:var(--green);}
+.cat-block[data-cat="certif"] .cat-count{background:var(--green-bg);color:var(--green);}
+.cat-block[data-cat="repres"] .cat-name{color:var(--purple);}
+.cat-block[data-cat="repres"] .cat-count{background:var(--purple-bg);color:var(--purple);}
+.cat-block[data-cat="controle"] .cat-name{color:var(--amber);}
+.cat-block[data-cat="controle"] .cat-count{background:var(--amber-pale);color:var(--amber);}
+
+/* ===== TOOLTIP INFO ===== */
+#infoPopup{
+  position:fixed;background:#fff;border:1px solid var(--border);
+  border-radius:12px;box-shadow:var(--shadow-md);padding:14px 16px;
+  z-index:400;display:none;max-width:280px;
+  border-top:3px solid var(--slate);
+}
+#infoPopup.show{display:block;}
+.ip-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:6px;}
+.ip-role{font-size:12.5px;color:var(--text-muted);line-height:1.5;margin-bottom:8px;}
+.ip-veille{font-size:12px;background:var(--amber-pale);border-left:3px solid var(--amber);padding:7px 10px;border-radius:0 6px 6px 0;color:var(--text-muted);line-height:1.45;}
+.ip-veille strong{color:var(--amber);}
+.ip-close{position:absolute;top:8px;right:10px;background:none;border:none;font-size:16px;cursor:pointer;color:var(--text-dim);}
+
+/* ===== CHOOSE CAT POPUP ===== */
+#chooseCat{
+  position:fixed;background:#fff;border:1px solid var(--border);
+  border-radius:14px;box-shadow:var(--shadow-md);padding:16px;
+  z-index:300;display:none;min-width:250px;max-width:300px;
+}
+#chooseCat.show{display:block;}
+.cc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:12.5px;color:var(--text);margin-bottom:4px;}
+.cc-actor{font-size:12px;color:var(--text-muted);margin-bottom:12px;padding:6px 10px;background:var(--slate-ghost);border-radius:6px;font-weight:500;}
+.cc-options{display:flex;flex-direction:column;gap:7px;}
+.cc-opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;border:1.5px solid var(--border);cursor:pointer;transition:all 0.18s;font-size:12.5px;font-weight:500;color:var(--text-muted);}
+.cc-opt:hover{border-color:var(--slate-light);background:var(--slate-ghost);color:var(--text);}
+.cc-opt-emoji{font-size:16px;}
+.cc-cancel{margin-top:8px;width:100%;padding:7px;border:none;background:none;color:var(--text-dim);cursor:pointer;font-family:'Syne',sans-serif;font-size:11.5px;font-weight:600;border-radius:8px;transition:background 0.15s;}
+.cc-cancel:hover{background:var(--bg);}
+
+/* ===== TOAST ===== */
+#toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#fff;border-radius:12px;padding:11px 18px;
+  box-shadow:0 8px 32px rgba(28,42,58,0.18);display:flex;align-items:center;gap:10px;
+  font-size:13px;color:var(--text-muted);z-index:1000;opacity:0;
+  transition:all 0.3s ease;min-width:240px;max-width:460px;border:1px solid var(--border);pointer-events:none;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.correct{border-left:4px solid var(--green);}
+#toast.wrong{border-left:4px solid var(--red);}
+#toast.info{border-left:4px solid var(--amber);}
+.toast-icon{font-size:17px;flex-shrink:0;}
+.toast-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
+.toast-title.correct{color:var(--green);}
+.toast-title.wrong{color:var(--red);}
+.toast-title.info{color:var(--amber);}
+.toast-msg{font-size:12px;color:var(--text-muted);margin-top:1px;line-height:1.4;}
+
+/* ===== SUCCESS ===== */
+#successOverlay{
+  position:fixed;inset:0;background:rgba(28,42,58,0.72);
+  z-index:500;display:none;align-items:center;justify-content:center;padding:24px;
+}
+#successOverlay.show{display:flex;}
+.success-card{
+  background:#fff;border-radius:20px;padding:38px 44px;text-align:center;
+  max-width:460px;box-shadow:0 20px 60px rgba(28,42,58,0.28);position:relative;overflow:hidden;
+}
+.success-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--green),var(--slate));}
+.success-emoji{font-size:50px;margin-bottom:14px;display:block;}
+.success-title{font-family:'Syne',sans-serif;font-weight:800;font-size:21px;color:var(--text);margin-bottom:7px;}
+.success-sub{font-size:13.5px;color:var(--text-muted);line-height:1.6;margin-bottom:18px;}
+.success-score{font-family:'Fira Code',monospace;font-size:30px;color:var(--green);font-weight:500;margin-bottom:4px;}
+.success-sc-lbl{font-size:11.5px;color:var(--text-dim);margin-bottom:22px;}
+.success-btn{background:var(--slate-dark);color:#fff;border:none;border-radius:10px;padding:11px 26px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin:4px;transition:background 0.2s;}
+.success-btn:hover{background:var(--slate);}
+.success-btn-sec{background:var(--green-bg);color:var(--green);border:1px solid var(--green-light);border-radius:10px;padding:11px 26px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin:4px;transition:all 0.2s;}
+.success-btn-sec:hover{background:#D0ECDC;}
+
+.confetti{position:fixed;pointer-events:none;z-index:600;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--slate-pale);border-radius:3px;}
+
+@media(max-width:900px){
+  #sidebar{display:none;}
+  #main{margin-left:0;padding:20px 16px 60px;}
+  .mapping-layout{grid-template-columns:1fr;}
+  .actors-panel{position:static;}
+  .actors-list{flex-direction:row;flex-wrap:wrap;}
+  .actor-card{flex:1;min-width:140px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">Real Conseil</div>
+    <span class="sb-tag">FPA — RNCP 35030</span><br>
+    <span class="sb-act">🗺️ Mapping acteurs</span>
+  </div>
+
+  <div class="sb-score">
+    <div class="sb-score-title">Progression</div>
+    <div class="score-row">
+      <span class="score-num"><span id="scoreNum">0</span><span style="font-size:15px;color:var(--text-dim)"> / 15</span></span>
+      <span class="score-lbl">acteurs<br>positionnés</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="progressBar"></div></div>
+    <div class="err-row">
+      <span class="err-label">Erreurs :</span>
+      <span class="err-dot" id="ed1"></span>
+      <span class="err-dot" id="ed2"></span>
+      <span class="err-dot" id="ed3"></span>
+      <span class="err-dot" id="ed4"></span>
+      <span class="err-dot" id="ed5"></span>
+      <span class="err-count" id="errCount">0 / 5</span>
+    </div>
+  </div>
+
+  <div class="locked-banner" id="lockedBanner">🔒 5 erreurs — Activité bloquée !<br>Cliquez sur Recommencer.</div>
+
+  <div class="sb-legend">
+    <div class="sb-legend-title">Légende</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--teal-bg);border:1px solid var(--teal);"></div><span>💰 Financement & accès</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green-bg);border:1px solid var(--green-light);"></div><span>🎓 Certification & qualité</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--purple-bg);border:1px solid rgba(107,94,168,0.3);"></div><span>🤝 Représentation</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--amber-pale);border:1px solid rgba(224,122,47,0.3);"></div><span>🔍 Contrôle & régulation</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green-bg);border:1px solid var(--green-light);"></div><span>✅ Bonne réponse</span></div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--red-bg);border:1px solid #E8A0A0;"></div><span>❌ Mauvaise réponse</span></div>
+  </div>
+
+  <div class="sb-actions">
+    <button class="btn-reveal" onclick="revealAll()">👁️ Révéler le mapping</button>
+    <button class="btn-reset" onclick="resetActivity()">🔄 Recommencer</button>
+  </div>
+
+  <div class="sb-footer">
+    <a href="index.html" class="back-link">← Retour à l'accueil</a>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<main id="main">
+
+  <div class="act-header">
+    <div class="ah-badges">
+      <span class="badge badge-fpa">FPA — RNCP 35030</span>
+      <span class="badge badge-cp">CP N°12</span>
+      <span class="badge badge-act">🗺️ Mapping interactif</span>
+    </div>
+    <h1 class="ah-h1">Les <em>acteurs institutionnels</em><br>de la formation professionnelle</h1>
+    <p class="ah-desc">Cliquez sur un acteur dans la liste, puis choisissez la catégorie à laquelle il appartient. Positionnez les 15 acteurs dans le bon domaine !</p>
+  </div>
+
+  <div class="instr open" id="instr">
+    <div class="instr-toggle" onclick="toggleInstr()">
+      <span class="instr-lbl">📋 Comment jouer ?</span>
+      <span class="instr-chev">▾</span>
+    </div>
+    <div class="instr-body">
+      <div class="instr-steps">
+        <div class="instr-step"><span class="instr-num">1</span><span><strong>Cliquez sur un acteur</strong> dans la colonne de gauche pour le sélectionner (fond orange).</span></div>
+        <div class="instr-step"><span class="instr-num">2</span><span>Un menu apparaît — <strong>choisissez la catégorie</strong> où vous pensez qu'il appartient.</span></div>
+        <div class="instr-step"><span class="instr-num">3</span><span><strong>Bonne réponse ✅</strong> → vert dans la catégorie. <strong>Mauvaise ❌</strong> → rouge, compteur d'erreurs. Blocage à 5 erreurs.</span></div>
+        <div class="instr-step"><span class="instr-num">4</span><span>Cliquez sur <strong>ℹ️</strong> à droite d'un acteur pour voir sa fiche rapide (rôle + lien veille FPA).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mapping-layout">
+
+    <!-- ACTORS -->
+    <div class="actors-panel">
+      <div class="actors-title">
+        Acteurs
+        <span class="actors-remaining" id="actRemaining">15 restants</span>
+      </div>
+      <div class="actors-list" id="actorsList"></div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="categories">
+
+      <div class="cat-block" data-cat="finance">
+        <div class="cat-header">
+          <span class="cat-emoji">💰</span>
+          <span class="cat-name">Financement &amp; accès à la formation</span>
+          <span class="cat-count" id="count-finance">0 / 6</span>
+        </div>
+        <div class="cat-tags" id="tags-finance">
+          <span class="cat-drop-hint">Cliquez un acteur puis choisissez cette catégorie…</span>
+        </div>
+      </div>
+
+      <div class="cat-block" data-cat="certif">
+        <div class="cat-header">
+          <span class="cat-emoji">🎓</span>
+          <span class="cat-name">Certification &amp; qualité</span>
+          <span class="cat-count" id="count-certif">0 / 4</span>
+        </div>
+        <div class="cat-tags" id="tags-certif">
+          <span class="cat-drop-hint">Cliquez un acteur puis choisissez cette catégorie…</span>
+        </div>
+      </div>
+
+      <div class="cat-block" data-cat="repres">
+        <div class="cat-header">
+          <span class="cat-emoji">🤝</span>
+          <span class="cat-name">Représentation &amp; dialogue social</span>
+          <span class="cat-count" id="count-repres">0 / 4</span>
+        </div>
+        <div class="cat-tags" id="tags-repres">
+          <span class="cat-drop-hint">Cliquez un acteur puis choisissez cette catégorie…</span>
+        </div>
+      </div>
+
+      <div class="cat-block" data-cat="controle">
+        <div class="cat-header">
+          <span class="cat-emoji">🔍</span>
+          <span class="cat-name">Contrôle &amp; régulation</span>
+          <span class="cat-count" id="count-controle">0 / 1</span>
+        </div>
+        <div class="cat-tags" id="tags-controle">
+          <span class="cat-drop-hint">Cliquez un acteur puis choisissez cette catégorie…</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== INFO POPUP ===== -->
+<div id="infoPopup">
+  <button class="ip-close" onclick="closeInfo()">✕</button>
+  <div class="ip-name" id="ipName"></div>
+  <div class="ip-role" id="ipRole"></div>
+  <div class="ip-veille" id="ipVeille"></div>
+</div>
+
+<!-- ===== CHOOSE CAT POPUP ===== -->
+<div id="chooseCat">
+  <div class="cc-title">Placer dans :</div>
+  <div class="cc-actor" id="ccActorName"></div>
+  <div class="cc-options">
+    <div class="cc-opt" onclick="placeActor('finance')"><span class="cc-opt-emoji">💰</span>Financement &amp; accès</div>
+    <div class="cc-opt" onclick="placeActor('certif')"><span class="cc-opt-emoji">🎓</span>Certification &amp; qualité</div>
+    <div class="cc-opt" onclick="placeActor('repres')"><span class="cc-opt-emoji">🤝</span>Représentation &amp; dialogue</div>
+    <div class="cc-opt" onclick="placeActor('controle')"><span class="cc-opt-emoji">🔍</span>Contrôle &amp; régulation</div>
+  </div>
+  <button class="cc-cancel" onclick="cancelChoice()">Annuler</button>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast">
+  <span class="toast-icon" id="toastIcon"></span>
+  <div>
+    <div class="toast-title" id="toastTitle"></div>
+    <div class="toast-msg" id="toastMsg"></div>
+  </div>
+</div>
+
+<!-- ===== SUCCESS ===== -->
+<div id="successOverlay">
+  <div class="success-card">
+    <span class="success-emoji">🎉</span>
+    <div class="success-title">Mapping complété !</div>
+    <p class="success-sub">Vous avez positionné les 15 acteurs institutionnels de la formation professionnelle. Vous maîtrisez le paysage de la veille FPA !</p>
+    <div class="success-score" id="successScore">15 / 15</div>
+    <div class="success-sc-lbl" id="successErr"></div>
+    <button class="success-btn" onclick="closeSuccess()">Voir le mapping</button>
+    <button class="success-btn-sec" onclick="resetActivity()">Recommencer</button>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const ACTORS = [
+  {
+    id:'france-travail', label:'France Travail', icon:'🏢',
+    cat:'finance',
+    fullName:'France Travail (ex Pôle Emploi)',
+    role:"Opérateur du service public de l'emploi. Finance les formations des demandeurs d'emploi (AIF), oriente vers les OF, gère les AFPR/POEI.",
+    veille:"<strong>Veille :</strong> Suivre les évolutions des dispositifs d'aide à la formation (AIF, AFPR, POEI) et les publics prioritaires."
+  },
+  {
+    id:'opco', label:'OPCO', icon:'💼',
+    cat:'finance',
+    fullName:'OPCO (Opérateurs de Compétences)',
+    role:"Financent la formation des salariés des entreprises adhérentes (plan de développement, alternance). Ex : AKTO, ATLAS, CONSTRUCTYS, AFDAS…",
+    veille:"<strong>Veille :</strong> Identifier les OPCO de sa branche pour connaître les financements disponibles et les priorités sectorielles."
+  },
+  {
+    id:'conseil-regional', label:'Conseil Régional', icon:'🏛️',
+    cat:'finance',
+    fullName:'Conseil Régional (ex : Hauts-de-France)',
+    role:"Cofinance les formations des demandeurs d'emploi et des jeunes. Pilote le PRFP (Plan Régional de Formation Professionnelle).",
+    veille:"<strong>Veille :</strong> Surveiller les appels à projets régionaux et les publics prioritaires financés par la Région."
+  },
+  {
+    id:'cpf', label:'CPF / Mon Compte Formation', icon:'📱',
+    cat:'finance',
+    fullName:'CPF — Mon Compte Formation (Caisse des Dépôts)',
+    role:"Dispositif permettant à chaque actif d'utiliser ses droits à la formation (en euros). Les OF doivent être certifiés Qualiopi pour y figurer.",
+    veille:"<strong>Veille :</strong> Suivre les évolutions des règles d'éligibilité CPF et les nouvelles offres de formation concurrentes."
+  },
+  {
+    id:'cdc', label:'Caisse des Dépôts', icon:'🏦',
+    cat:'finance',
+    fullName:'Caisse des Dépôts et Consignations (CDC)',
+    role:"Gère la plateforme Mon Compte Formation et les droits CPF de 36 millions d'actifs. Régule l'accès au catalogue CPF.",
+    veille:"<strong>Veille :</strong> Surveiller les évolutions de la plateforme et les nouvelles règles de référencement des formations CPF."
+  },
+  {
+    id:'entreprise', label:'Entreprise commanditaire', icon:'🏭',
+    cat:'finance',
+    fullName:"Entreprise commanditaire / Employeur",
+    role:"Finance tout ou partie des formations via le plan de développement des compétences. Définit les besoins en compétences de ses salariés.",
+    veille:"<strong>Veille :</strong> Comprendre les besoins des entreprises de son secteur pour adapter ses offres de formation."
+  },
+  {
+    id:'france-competences', label:'France Compétences', icon:'⚖️',
+    cat:'certif',
+    fullName:'France Compétences',
+    role:"Régule le système de formation professionnelle et d'apprentissage. Gère les RNCP et RS, fixe les niveaux de prise en charge CPF, contrôle les OPCO.",
+    veille:"<strong>Veille :</strong> Surveiller les décisions de France Compétences sur les certifications, les niveaux de prise en charge et la qualité."
+  },
+  {
+    id:'rncp', label:'RNCP / RS', icon:'📜',
+    cat:'certif',
+    fullName:'RNCP & RS — Répertoires nationaux',
+    role:"RNCP : répertoire des certifications professionnelles (Titres, BTS, LP…). RS : répertoire des certifications et habilitations. Gérés par France Compétences.",
+    veille:"<strong>Veille :</strong> Surveiller les nouvelles inscriptions, révisions et expirations des certifications de sa spécialité."
+  },
+  {
+    id:'qualiopi', label:'Organismes certificateurs (Qualiopi)', icon:'🏅',
+    cat:'certif',
+    fullName:'Organismes certificateurs Qualiopi (AFNOR, Bureau Veritas, LNE…)',
+    role:"Auditent les OF selon le référentiel Qualiopi (7 critères, 32 indicateurs). La certification est obligatoire pour accéder aux fonds publics et mutualisés.",
+    veille:"<strong>Veille :</strong> Suivre les évolutions du référentiel Qualiopi et les nouvelles exigences qualité pour rester conforme."
+  },
+  {
+    id:'of', label:"Organisme de formation (OF)", icon:'🏫',
+    cat:'certif',
+    fullName:"Organisme de Formation (OF) — dont Real Conseil",
+    role:"Conçoit et réalise des actions de formation. Doit être déclaré (NDA), certifié Qualiopi pour les fonds publics, et déposer son bilan pédagogique annuel.",
+    veille:"<strong>Veille :</strong> Se tenir informé des évolutions réglementaires, des pratiques pédagogiques et de la concurrence."
+  },
+  {
+    id:'medef', label:'Syndicats patronaux (MEDEF, CPME)', icon:'💡',
+    cat:'repres',
+    fullName:'Syndicats patronaux — MEDEF, CPME, U2P',
+    role:"Représentent les employeurs dans le dialogue social. Co-construisent les accords de branche sur la formation, l'alternance et les classifications.",
+    veille:"<strong>Veille :</strong> Suivre les positions patronales sur les évolutions de la formation professionnelle et les besoins en compétences."
+  },
+  {
+    id:'syndicats', label:'Syndicats salariés (CGT, CFDT…)', icon:'🤝',
+    cat:'repres',
+    fullName:'Syndicats de salariés — CGT, CFDT, FO, CFTC, CFE-CGC',
+    role:"Négocient les accords de branche sur la formation, le plan de développement des compétences et l'accès au CPF. Siègent à France Compétences.",
+    veille:"<strong>Veille :</strong> Suivre les accords de branche négociés qui impactent les conditions de formation des salariés."
+  },
+  {
+    id:'formateur', label:'Formateur indépendant', icon:'🧑‍🏫',
+    cat:'repres',
+    fullName:'Formateur indépendant / Consultant formateur',
+    role:"Conçoit et anime des formations en sous-traitance ou en propre. Peut être auto-entrepreneur ou en société. Acteur clé du réseau pédagogique.",
+    veille:"<strong>Veille :</strong> Se tenir informé des évolutions de sa spécialité, des outils pédagogiques et du marché de la formation."
+  },
+  {
+    id:'apprenant', label:'Apprenant / Stagiaire', icon:'🎓',
+    cat:'repres',
+    fullName:"Apprenant / Stagiaire / Alternant",
+    role:"Bénéficiaire final de la formation. Ses besoins, retours et évaluations orientent l'ingénierie pédagogique. Acteur du système qualité.",
+    veille:"<strong>Veille :</strong> L'apprenant est au cœur — ses besoins évolutifs poussent le formateur à actualiser en permanence ses pratiques."
+  },
+  {
+    id:'dreets', label:'DREETS', icon:'🔎',
+    cat:'controle',
+    fullName:'DREETS — Direction Régionale de l\'Économie, de l\'Emploi, du Travail et des Solidarités',
+    role:"Contrôle les OF (enregistrement NDA, conformité réglementaire, bilan pédagogique et financier). Habilite les organismes à certifier.",
+    veille:"<strong>Veille :</strong> Surveiller les contrôles DREETS et les évolutions du cadre réglementaire de la formation professionnelle."
+  }
+];
+
+const CATS = {
+  finance:  { label:'💰 Financement & accès', total:6 },
+  certif:   { label:'🎓 Certification & qualité', total:4 },
+  repres:   { label:'🤝 Représentation', total:4 },
+  controle: { label:'🔍 Contrôle & régulation', total:1 }
+};
+
+// ===== STATE =====
+const MAX_ERR = 5;
+let errors = 0;
+let locked = false;
+let placed = {}; // id → {cat, correct}
+let correctCount = 0;
+let selectedActor = null;
+let toastTimer = null;
+
+// ===== INIT =====
+function init() {
+  const list = document.getElementById('actorsList');
+  list.innerHTML = '';
+  ACTORS.forEach(a => {
+    const el = document.createElement('div');
+    el.className = 'actor-card';
+    el.id = 'actor-' + a.id;
+    el.innerHTML = `<span class="actor-icon">${a.icon}</span>${a.label}<button class="actor-info-btn" onclick="showInfo(event,'${a.id}')">ℹ️</button>`;
+    el.addEventListener('click', (e) => {
+      if (e.target.classList.contains('actor-info-btn')) return;
+      selectActor(a.id, el);
+    });
+    list.appendChild(el);
+  });
+  updateUI();
+}
+
+// ===== SELECT ACTOR =====
+function selectActor(id, el) {
+  if (locked) return;
+  if (placed[id]) return;
+
+  // Deselect previous
+  document.querySelectorAll('.actor-card.selected').forEach(c => c.classList.remove('selected'));
+
+  selectedActor = id;
+  el.classList.add('selected');
+
+  // Show choose cat popup near actor
+  const popup = document.getElementById('chooseCat');
+  const a = ACTORS.find(x => x.id === id);
+  document.getElementById('ccActorName').textContent = a.icon + ' ' + a.label;
+
+  const rect = el.getBoundingClientRect();
+  let top = rect.bottom + 6;
+  let left = rect.right + 10;
+  if (left + 310 > window.innerWidth) left = Math.max(8, rect.left - 310);
+  if (top + 260 > window.innerHeight) top = rect.top - 260;
+
+  popup.style.top = Math.max(8, top) + 'px';
+  popup.style.left = Math.max(8, left) + 'px';
+  popup.classList.add('show');
+}
+
+function cancelChoice() {
+  selectedActor = null;
+  document.querySelectorAll('.actor-card.selected').forEach(c => c.classList.remove('selected'));
+  document.getElementById('chooseCat').classList.remove('show');
+}
+
+// ===== PLACE ACTOR =====
+function placeActor(chosenCat) {
+  if (!selectedActor || locked) return;
+  document.getElementById('chooseCat').classList.remove('show');
+
+  const a = ACTORS.find(x => x.id === selectedActor);
+  const correct = a.cat === chosenCat;
+
+  placed[selectedActor] = { cat: chosenCat, correct };
+
+  // Mark actor card as placed
+  const card = document.getElementById('actor-' + selectedActor);
+  if (card) card.classList.add('placed');
+
+  // Add tag to category
+  addTag(a, chosenCat, correct);
+
+  if (correct) {
+    correctCount++;
+    showToast('correct', '✅ Bonne réponse !', `« ${a.label} » est bien dans ${CATS[chosenCat].label}`);
+    if (correctCount === ACTORS.length) setTimeout(showSuccess, 700);
+  } else {
+    errors++;
+    updateErrors();
+    showToast('wrong', '❌ Mauvaise catégorie !', `« ${a.label} » appartient à ${CATS[a.cat].label}`);
+    // Flash the tag red then remove after 1.5s
+    setTimeout(() => {
+      removeTag(selectedActor, chosenCat);
+      delete placed[selectedActor];
+      const c2 = document.getElementById('actor-' + selectedActor);
+      if (c2) c2.classList.remove('placed');
+      if (errors >= MAX_ERR) lockActivity();
+    }, 1500);
+  }
+
+  selectedActor = null;
+  document.querySelectorAll('.actor-card.selected').forEach(c => c.classList.remove('selected'));
+  updateUI();
+}
+
+function addTag(actor, cat, correct) {
+  const container = document.getElementById('tags-' + cat);
+  // Remove hint if present
+  const hint = container.querySelector('.cat-drop-hint');
+  if (hint) hint.remove();
+
+  const tag = document.createElement('span');
+  tag.className = 'placed-tag ' + (correct ? 'correct' : 'wrong');
+  tag.id = 'tag-' + actor.id + '-' + cat;
+  tag.innerHTML = `${actor.icon} ${actor.label}`;
+  if (correct) {
+    // add remove button to undo
+    const rm = document.createElement('span');
+    rm.className = 'remove-btn';
+    rm.textContent = '✕';
+    rm.title = 'Retirer';
+    rm.onclick = (e) => { e.stopPropagation(); removeCorrect(actor.id, cat); };
+    tag.appendChild(rm);
+  }
+  container.appendChild(tag);
+  updateCatCount(cat);
+}
+
+function removeTag(actorId, cat) {
+  const tag = document.getElementById('tag-' + actorId + '-' + cat);
+  if (tag) tag.remove();
+  const container = document.getElementById('tags-' + cat);
+  if (container.children.length === 0) {
+    container.innerHTML = '<span class="cat-drop-hint">Cliquez un acteur puis choisissez cette catégorie…</span>';
+  }
+  updateCatCount(cat);
+}
+
+function removeCorrect(actorId, cat) {
+  if (locked) return;
+  delete placed[actorId];
+  correctCount--;
+  removeTag(actorId, cat);
+  const card = document.getElementById('actor-' + actorId);
+  if (card) card.classList.remove('placed');
+  updateUI();
+}
+
+// ===== UI =====
+function updateUI() {
+  const remaining = ACTORS.length - Object.keys(placed).length;
+  document.getElementById('actRemaining').textContent = remaining + ' restant' + (remaining > 1 ? 's' : '');
+  document.getElementById('scoreNum').textContent = correctCount;
+  document.getElementById('progressBar').style.width = (correctCount / ACTORS.length * 100) + '%';
+  Object.keys(CATS).forEach(cat => updateCatCount(cat));
+}
+
+function updateCatCount(cat) {
+  const correct = Object.entries(placed).filter(([id, v]) => v.cat === cat && v.correct).length;
+  const el = document.getElementById('count-' + cat);
+  if (el) el.textContent = correct + ' / ' + CATS[cat].total;
+}
+
+function updateErrors() {
+  document.getElementById('errCount').textContent = errors + ' / ' + MAX_ERR;
+  for (let i = 1; i <= MAX_ERR; i++) {
+    const d = document.getElementById('ed' + i);
+    if (d) d.classList.toggle('active', i <= errors);
+  }
+}
+
+function lockActivity() {
+  locked = true;
+  document.getElementById('lockedBanner').classList.add('show');
+  showToast('wrong', '🔒 Activité bloquée !', '5 erreurs atteintes. Cliquez sur "Recommencer".');
+}
+
+// ===== INFO POPUP =====
+function showInfo(e, id) {
+  e.stopPropagation();
+  const a = ACTORS.find(x => x.id === id);
+  document.getElementById('ipName').textContent = a.icon + ' ' + a.fullName;
+  document.getElementById('ipRole').textContent = a.role;
+  document.getElementById('ipVeille').innerHTML = a.veille;
+
+  const popup = document.getElementById('infoPopup');
+  const btn = e.target;
+  const rect = btn.getBoundingClientRect();
+  let top = rect.bottom + 8;
+  let left = rect.left - 140;
+  if (left < 8) left = 8;
+  if (top + 250 > window.innerHeight) top = rect.top - 255;
+
+  popup.style.top = Math.max(8, top) + 'px';
+  popup.style.left = left + 'px';
+  popup.classList.add('show');
+}
+
+function closeInfo() {
+  document.getElementById('infoPopup').classList.remove('show');
+}
+
+// Close popups on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#infoPopup') && !e.target.classList.contains('actor-info-btn'))
+    closeInfo();
+  if (!e.target.closest('#chooseCat') && !e.target.closest('.actor-card'))
+    cancelChoice();
+});
+
+// ===== REVEAL =====
+function revealAll() {
+  if (!confirm('Révéler le mapping complet ? Tous les acteurs seront positionnés correctement.')) return;
+  ACTORS.forEach(a => {
+    if (!placed[a.id] || !placed[a.id].correct) {
+      if (placed[a.id]) removeTag(a.id, placed[a.id].cat);
+      placed[a.id] = { cat: a.cat, correct: true };
+      const card = document.getElementById('actor-' + a.id);
+      if (card) card.classList.add('placed');
+      addTag(a, a.cat, true);
+    }
+  });
+  correctCount = ACTORS.length;
+  updateUI();
+  showToast('info', '👁️ Mapping révélé', 'Voici le positionnement correct des 15 acteurs.');
+}
+
+// ===== TOAST =====
+function showToast(type, title, msg) {
+  const t = document.getElementById('toast');
+  t.className = 'show ' + type;
+  document.getElementById('toastIcon').textContent = type === 'correct' ? '✅' : type === 'wrong' ? '❌' : 'ℹ️';
+  const ti = document.getElementById('toastTitle');
+  ti.className = 'toast-title ' + type;
+  ti.textContent = title;
+  document.getElementById('toastMsg').textContent = msg;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 3500);
+}
+
+// ===== SUCCESS =====
+function showSuccess() {
+  document.getElementById('successScore').textContent = correctCount + ' / ' + ACTORS.length;
+  document.getElementById('successErr').textContent =
+    errors === 0 ? '🏆 Zéro erreur — Parfait !' : `Avec ${errors} erreur${errors > 1 ? 's' : ''}`;
+  document.getElementById('successOverlay').classList.add('show');
+  launchConfetti();
+}
+function closeSuccess() { document.getElementById('successOverlay').classList.remove('show'); }
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const cols = ['#3D5A80','#E07A2F','#2D7D52','#6B5EA8','#1F7A8C'];
+  for (let i = 0; i < 55; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti';
+    const sz = Math.random() * 10 + 6;
+    el.style.cssText = `width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};left:${Math.random()*100}vw;top:-20px;border-radius:${Math.random()>.5?'50%':'2px'};opacity:${Math.random()*.7+.3};animation:fall ${Math.random()*2+1.5}s linear ${Math.random()*1.5}s forwards;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+  if (!document.getElementById('cStyle')) {
+    const s = document.createElement('style');
+    s.id = 'cStyle';
+    s.textContent = `@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0;}}`;
+    document.head.appendChild(s);
+  }
+}
+
+// ===== RESET =====
+function resetActivity() {
+  if (!confirm('Recommencer ? Votre progression sera réinitialisée.')) return;
+  errors = 0; locked = false; placed = {}; correctCount = 0; selectedActor = null;
+  document.getElementById('lockedBanner').classList.remove('show');
+  document.getElementById('successOverlay').classList.remove('show');
+  Object.keys(CATS).forEach(cat => {
+    document.getElementById('tags-' + cat).innerHTML = '<span class="cat-drop-hint">Cliquez un acteur puis choisissez cette catégorie…</span>';
+  });
+  updateErrors();
+  init();
+}
+
+// ===== INSTR TOGGLE =====
+function toggleInstr() { document.getElementById('instr').classList.toggle('open'); }
+
+// ===== START =====
+init();
+</script>
+</body>
+</html>

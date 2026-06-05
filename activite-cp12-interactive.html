@@ -187,16 +187,10 @@ body.locked .fiche-wrapper { pointer-events:none !important; }
 /* ===== INTERACTIVE SPANS ===== */
 /* Keyword spans (key phrases to find) */
 .kw {
-  cursor:pointer;
-  border-bottom:2px dashed transparent;
+  cursor:default;
   border-radius:3px;
   padding:1px 2px;
-  transition:all 0.15s;
   position:relative;
-}
-.kw:hover {
-  background:var(--slate-pale);
-  border-bottom-color:var(--slate-mid);
 }
 .kw.found {
   background:var(--green-bg);
@@ -211,15 +205,9 @@ body.locked .fiche-wrapper { pointer-events:none !important; }
 
 /* Decoy spans */
 .decoy {
-  cursor:pointer;
-  border-bottom:2px dashed transparent;
+  cursor:default;
   border-radius:3px;
   padding:1px 2px;
-  transition:all 0.15s;
-}
-.decoy:hover {
-  background:var(--slate-pale);
-  border-bottom-color:var(--slate-mid);
 }
 .decoy.wrong-flash {
   background:var(--red-bg) !important;
@@ -243,16 +231,14 @@ body.locked .fiche-wrapper { pointer-events:none !important; }
   cursor:default;
 }
 
-/* All fiche text is clickable */
-.fiche-p, .fiche-ul li { cursor:pointer; border-radius:4px; transition:background 0.12s; }
-.fiche-p:hover, .fiche-ul li:hover { background:rgba(61,90,128,0.05); }
+/* All fiche text is clickable — aucun hover visible pour ne pas trahir les zones */
+.fiche-p, .fiche-ul li { cursor:default; border-radius:4px; }
 
 /* Annotation mode body class */
 body.annot-mode { cursor:text; }
 body.annot-mode .fiche-p,
 body.annot-mode .fiche-ul li { cursor:text; }
-body.annot-mode .fiche-p:hover,
-body.annot-mode .fiche-ul li:hover { background:rgba(224,122,47,0.05); }
+/* pas de hover en mode annoter non plus */
 
 /* ===== TOAST ===== */
 #toast {

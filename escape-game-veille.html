@@ -3,252 +3,295 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEILLE_OS — Escape Game FPA</title>
+<title>CELLULE C3I — Escape Game Veille FPA</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #030810;
-  --panel: #060F20;
-  --panel2: #0A1628;
-  --cyan: #00D4FF;
-  --cyan-dim: #0099BB;
-  --amber: #FFB700;
-  --green: #00E676;
-  --red: #FF1744;
-  --purple: #B040FF;
-  --border: rgba(0,212,255,0.25);
-  --text: #C8E0F0;
-  --text-dim: #5A7A99;
+  --bg:#030810;--panel:#060F20;--panel2:#0A1628;
+  --cyan:#00D4FF;--amber:#FFB700;--green:#00E676;--red:#FF1744;
+  --border:rgba(0,212,255,.25);--text:#C8E0F0;--dim:#5A7A99;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow:hidden}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:9999}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 4px);pointer-events:none;z-index:9999}
 
 /* HUD */
-#hud{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(3,8,16,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;backdrop-filter:blur(8px)}
-#hud-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:14px;color:var(--cyan);letter-spacing:3px;flex-shrink:0}
-#hud-mission{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);flex-shrink:0}
-#hud-threat{flex:1;max-width:200px}
-#hud-threat-label{font-size:9px;color:var(--red);letter-spacing:2px;margin-bottom:3px}
-#hud-threat-bar{height:6px;background:rgba(255,23,68,.15);border:1px solid rgba(255,23,68,.4);border-radius:3px;overflow:hidden}
-#hud-threat-fill{height:100%;width:100%;background:linear-gradient(90deg,#FF1744,#FF6D00);transition:width .8s ease;border-radius:3px}
-#hud-xp{flex:1;max-width:180px}
-#hud-xp-label{font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:3px}
-#hud-xp-bar-wrap{display:flex;align-items:center;gap:6px}
-#hud-xp-bar{flex:1;height:6px;background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);border-radius:3px;overflow:hidden}
-#hud-xp-fill{height:100%;width:0%;background:linear-gradient(90deg,#00E676,#00BCD4);transition:width .6s ease}
-#hud-level{font-family:'Orbitron',monospace;font-size:10px;color:var(--green);white-space:nowrap}
-#hud-timer{margin-left:auto;font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:2px;flex-shrink:0}
-#hud-timer.warning{color:var(--amber);animation:pulse .5s infinite alternate}
+#hud{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(3,8,16,.96);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:14px;z-index:200}
+#hud-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:13px;color:var(--cyan);letter-spacing:3px}
+#hud-mis{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim)}
+#hud-threat{flex:1;max-width:180px}
+.hud-bar-label{font-size:9px;letter-spacing:2px;margin-bottom:3px}
+.hud-bar{height:5px;border-radius:3px;overflow:hidden;border:1px solid}
+#hud-threat .hud-bar-label{color:var(--red)}
+#hud-threat .hud-bar{background:rgba(255,23,68,.1);border-color:rgba(255,23,68,.3)}
+#hud-threat-fill{height:100%;width:100%;background:linear-gradient(90deg,#FF1744,#FF6D00);transition:width .8s}
+#hud-xp{flex:1;max-width:160px}
+#hud-xp .hud-bar-label{color:var(--green)}
+#hud-xp .hud-bar{background:rgba(0,230,118,.08);border-color:rgba(0,230,118,.25)}
+#hud-xp-fill{height:100%;width:0%;background:linear-gradient(90deg,#00E676,#00BCD4);transition:width .5s}
+#hud-lvl{font-family:'Orbitron',monospace;font-size:10px;color:var(--green);margin-left:6px;white-space:nowrap}
+#hud-timer{margin-left:auto;font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--cyan);letter-spacing:2px}
+#hud-timer.warn{color:var(--amber);animation:pulse .5s infinite alternate}
 #hud-timer.danger{color:var(--red);animation:pulse .3s infinite alternate}
-@keyframes pulse{from{opacity:1}to{opacity:.4}}
+@keyframes pulse{from{opacity:1}to{opacity:.3}}
+#penalty-flash{position:fixed;inset:0;background:rgba(255,23,68,.28);opacity:0;pointer-events:none;z-index:9990;transition:opacity .1s}
+#penalty-flash.on{opacity:1}
 
-#penalty-flash{position:fixed;inset:0;background:rgba(255,23,68,.25);opacity:0;pointer-events:none;z-index:9998;transition:opacity .1s}
-#penalty-flash.show{opacity:1}
-
-#main{position:fixed;top:56px;left:0;right:0;bottom:0;overflow-y:auto;padding:24px 16px}
+/* MAIN SCROLL AREA */
+#main{position:fixed;top:52px;left:0;right:0;bottom:0;overflow-y:auto;padding:20px 16px}
 .screen{display:none;max-width:860px;margin:0 auto}
 .screen.active{display:block}
 
-/* INTRO */
-#intro-screen{text-align:center;padding:40px 20px}
-#intro-screen h1{font-family:'Orbitron',monospace;font-size:clamp(24px,5vw,48px);font-weight:900;color:var(--cyan);letter-spacing:4px;text-shadow:0 0 30px rgba(0,212,255,.5);margin-bottom:8px}
-.sub{font-family:'Share Tech Mono',monospace;color:var(--amber);font-size:14px;letter-spacing:3px;margin-bottom:32px}
-.terminal-box{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:24px;text-align:left;margin:24px auto;max-width:600px}
-.terminal-box p{font-family:'Share Tech Mono',monospace;font-size:13px;line-height:1.8;color:var(--text)}
-.terminal-box .prompt{color:var(--green)}
-.terminal-box .cmd{color:var(--cyan)}
+/* ── INTRO ── */
+#intro-screen{text-align:center;padding:20px}
+#intro-img{width:100%;max-width:700px;border:1px solid var(--border);border-radius:4px;margin-bottom:20px}
+.terminal-box{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:20px;text-align:left;margin:20px auto;max-width:620px}
+.terminal-box p{font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.9;color:var(--text)}
+.terminal-box .pr{color:var(--green)}
+.terminal-box .cy{color:var(--cyan)}
+.terminal-box .rd{color:var(--red)}
 
 /* BUTTONS */
-.btn-primary{display:inline-block;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:3px;padding:14px 36px;background:transparent;border:2px solid var(--cyan);color:var(--cyan);cursor:pointer;border-radius:2px;transition:all .2s;text-transform:uppercase;margin-top:16px}
-.btn-primary:hover{background:rgba(0,212,255,.15);box-shadow:0 0 20px rgba(0,212,255,.4);transform:translateY(-1px)}
-.btn-primary.amber{border-color:var(--amber);color:var(--amber)}
-.btn-primary.amber:hover{background:rgba(255,183,0,.15);box-shadow:0 0 20px rgba(255,183,0,.4)}
-.btn-primary.green{border-color:var(--green);color:var(--green)}
-.btn-primary.green:hover{background:rgba(0,230,118,.15);box-shadow:0 0 20px rgba(0,230,118,.4)}
-.validate-btn{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;padding:12px 28px;background:transparent;border:2px solid var(--cyan);color:var(--cyan);cursor:pointer;border-radius:3px;transition:all .2s;text-transform:uppercase;margin-top:8px}
-.validate-btn:hover{background:rgba(0,212,255,.15);box-shadow:0 0 16px rgba(0,212,255,.3)}
-.validate-btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
-.validate-btn.amber{border-color:var(--amber);color:var(--amber)}
-.validate-btn.amber:hover{background:rgba(255,183,0,.1)}
+.btn{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;padding:12px 32px;background:transparent;border:2px solid var(--cyan);color:var(--cyan);cursor:pointer;border-radius:2px;transition:all .2s;text-transform:uppercase;margin-top:14px;display:inline-block}
+.btn:hover{background:rgba(0,212,255,.12);box-shadow:0 0 18px rgba(0,212,255,.3)}
+.btn.amber{border-color:var(--amber);color:var(--amber)}
+.btn.amber:hover{background:rgba(255,183,0,.1)}
+.btn.green{border-color:var(--green);color:var(--green)}
+.btn.green:hover{background:rgba(0,230,118,.1)}
+.btn:disabled{opacity:.3;pointer-events:none}
 
-/* OVERLAYS */
-#briefing-overlay{position:fixed;inset:0;background:rgba(3,8,16,.97);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
-#briefing-overlay.active{display:flex}
-#briefing-num{font-family:'Orbitron',monospace;font-size:11px;color:var(--text-dim);letter-spacing:4px;margin-bottom:8px}
-#briefing-title{font-family:'Orbitron',monospace;font-size:clamp(20px,4vw,36px);font-weight:900;color:var(--cyan);margin-bottom:24px;text-shadow:0 0 20px rgba(0,212,255,.4)}
-#briefing-desc{max-width:540px;font-size:15px;line-height:1.7;color:var(--text);margin-bottom:32px}
-#briefing-obj{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:16px 24px;max-width:480px;text-align:left;margin-bottom:32px}
-#briefing-obj .obj-title{font-size:10px;letter-spacing:3px;color:var(--amber);margin-bottom:10px}
-#briefing-obj ul{list-style:none;font-family:'Share Tech Mono',monospace;font-size:13px;line-height:2}
-#briefing-obj ul li::before{content:'▸ ';color:var(--cyan)}
+/* ── BOOK OVERLAY ── */
+#book-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+#book-overlay.active{display:flex}
+#book{background:#0a1020;border:1px solid var(--cyan);border-radius:6px;width:100%;max-width:780px;max-height:calc(100vh - 80px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 40px rgba(0,212,255,.15)}
+#book-header{background:rgba(0,212,255,.08);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px}
+#book-title{font-family:'Orbitron',monospace;font-size:13px;color:var(--cyan);flex:1}
+#book-close{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--dim);cursor:pointer;padding:4px 10px;border:1px solid var(--border);border-radius:2px}
+#book-close:hover{color:var(--red);border-color:var(--red)}
+#book-content{flex:1;overflow-y:auto;padding:24px}
+#book-content h2{font-family:'Orbitron',monospace;font-size:14px;color:var(--amber);margin-bottom:16px;letter-spacing:2px;border-bottom:1px solid var(--border);padding-bottom:8px}
+#book-content h3{font-family:'Orbitron',monospace;font-size:11px;color:var(--cyan);margin:16px 0 8px;letter-spacing:1px}
+#book-content p{font-size:13px;line-height:1.7;color:var(--text);margin-bottom:10px}
+#book-content ul{margin:0 0 12px 18px}
+#book-content ul li{font-size:13px;line-height:1.7;color:var(--text);margin-bottom:4px}
+#book-content .highlight{background:rgba(0,212,255,.08);border-left:3px solid var(--cyan);padding:10px 14px;border-radius:0 4px 4px 0;margin:12px 0;font-size:13px;line-height:1.6}
+#book-content .qualiopi{background:rgba(255,183,0,.06);border-left:3px solid var(--amber);padding:10px 14px;border-radius:0 4px 4px 0;margin:12px 0;font-size:13px;line-height:1.6}
+#book-content .warn-box{background:rgba(255,23,68,.06);border:1px solid rgba(255,23,68,.3);border-radius:4px;padding:10px 14px;margin:12px 0;font-size:13px;line-height:1.6;color:#ffaaaa}
+#book-content table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+#book-content th{background:rgba(0,212,255,.1);color:var(--cyan);padding:8px 10px;text-align:left;font-family:'Share Tech Mono',monospace;letter-spacing:1px}
+#book-content td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--text);vertical-align:top}
+#book-content tr:hover td{background:rgba(255,255,255,.02)}
+#book-nav{border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.3)}
+#book-page-info{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim)}
+#book-prev,#book-next{font-family:'Share Tech Mono',monospace;font-size:11px;padding:6px 14px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;border-radius:2px;transition:.2s}
+#book-prev:hover,#book-next:hover{border-color:var(--cyan);color:var(--cyan)}
+#book-prev:disabled,#book-next:disabled{opacity:.3;pointer-events:none}
+#book-start-btn{background:rgba(0,212,255,.1);border-color:var(--cyan);color:var(--cyan)}
 
-#clear-overlay{position:fixed;inset:0;background:rgba(3,8,16,.97);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
-#clear-overlay.active{display:flex}
-#clear-stars{font-size:32px;margin-bottom:16px;letter-spacing:8px}
-#clear-title{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--green);margin-bottom:8px;text-shadow:0 0 20px rgba(0,230,118,.5)}
-#clear-xp{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--amber);margin-bottom:8px}
-#clear-time{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text-dim);margin-bottom:32px}
+/* ── BRIEFING & CLEAR ── */
+#briefing-overlay,#clear-overlay{position:fixed;inset:0;background:rgba(3,8,16,.96);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+#briefing-overlay.active,#clear-overlay.active{display:flex}
+.ov-num{font-family:'Orbitron',monospace;font-size:10px;color:var(--dim);letter-spacing:4px;margin-bottom:8px}
+.ov-title{font-family:'Orbitron',monospace;font-size:clamp(18px,4vw,32px);font-weight:900;color:var(--cyan);margin-bottom:20px;text-shadow:0 0 20px rgba(0,212,255,.4)}
+.ov-desc{max-width:520px;font-size:14px;line-height:1.7;color:var(--text);margin-bottom:24px}
+.ov-obj{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:14px 20px;max-width:460px;text-align:left;margin-bottom:24px}
+.ov-obj-title{font-size:9px;letter-spacing:3px;color:var(--amber);margin-bottom:8px}
+.ov-obj ul{list-style:none;font-family:'Share Tech Mono',monospace;font-size:12px;line-height:2}
+.ov-obj ul li::before{content:'▸ ';color:var(--cyan)}
+#clear-stars{font-size:30px;letter-spacing:8px;margin-bottom:14px}
+#clear-title{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--green);text-shadow:0 0 20px rgba(0,230,118,.4);margin-bottom:8px}
+#clear-xp{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--amber);margin-bottom:6px}
+#clear-info{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--dim);margin-bottom:28px}
 
-/* LOCKDOWN */
-#lockdown-overlay{position:fixed;inset:0;background:rgba(255,23,68,.08);z-index:400;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid rgba(255,23,68,.4);pointer-events:none}
+/* ── LOCKDOWN ── */
+#lockdown-overlay{position:fixed;inset:0;background:rgba(255,23,68,.07);z-index:400;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid rgba(255,23,68,.4)}
 #lockdown-overlay.active{display:flex;pointer-events:all}
-#lockdown-timer{font-family:'Orbitron',monospace;font-size:64px;font-weight:900;color:var(--red);text-shadow:0 0 30px rgba(255,23,68,.5)}
+#lock-timer{font-family:'Orbitron',monospace;font-size:64px;font-weight:900;color:var(--red);text-shadow:0 0 30px rgba(255,23,68,.5)}
 
-/* MISSION LAYOUT */
-.mission-header{border-left:3px solid var(--cyan);padding-left:16px;margin-bottom:24px}
-.mission-header .m-num{font-size:10px;letter-spacing:3px;color:var(--text-dim);font-family:'Share Tech Mono',monospace}
-.mission-header h2{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--cyan);margin:4px 0}
-.mission-header .m-sub{font-size:13px;color:var(--text-dim)}
-
-.step-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:24px;margin-bottom:20px}
-.step-panel.locked{opacity:.4;pointer-events:none}
-.step-panel.done{border-color:rgba(0,230,118,.4);background:rgba(0,230,118,.04)}
-.step-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.step-badge{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:var(--bg);background:var(--cyan);padding:3px 8px;border-radius:2px;letter-spacing:1px}
-.step-badge.done{background:var(--green)}
-.step-title{font-size:14px;font-weight:600;color:var(--text)}
-.step-inst{font-size:13px;color:var(--text-dim);margin-bottom:16px;font-family:'Share Tech Mono',monospace;line-height:1.6}
-.errors-bar{display:flex;gap:6px;margin-bottom:12px}
-.err-dot{width:10px;height:10px;border-radius:50%;background:var(--red);opacity:.3;transition:.2s}
-.err-dot.active{opacity:1;box-shadow:0 0 8px var(--red)}
-.step-locked-msg{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--red);text-align:center;padding:12px;background:rgba(255,23,68,.08);border:1px solid rgba(255,23,68,.3);border-radius:4px;margin-bottom:12px;display:none}
-
-/* FEEDBACK */
-.feedback{font-family:'Share Tech Mono',monospace;font-size:13px;margin-top:10px;padding:10px;border-radius:3px}
-.feedback.ok{color:var(--green);background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.3)}
-.feedback.err{color:var(--red);background:rgba(255,23,68,.08);border:1px solid rgba(255,23,68,.3)}
-
-/* CARDS */
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px}
-.card-item{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:14px;cursor:pointer;transition:all .2s;user-select:none}
-.card-item:hover{border-color:var(--cyan);transform:translateY(-2px)}
-.card-item.selected{border-color:var(--cyan);background:rgba(0,212,255,.1)}
-.card-item.correct{border-color:var(--green);background:rgba(0,230,118,.1)}
-.card-item.wrong{border-color:var(--red);background:rgba(255,23,68,.1);animation:shake .4s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-
-/* MATCH */
-.match-container{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.match-col{display:flex;flex-direction:column;gap:8px}
-.match-item{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:12px;cursor:pointer;transition:all .2s;font-size:13px;line-height:1.4}
-.match-item:hover{border-color:var(--cyan)}
-.match-item.selected{border-color:var(--cyan);background:rgba(0,212,255,.1)}
-.match-item.matched-ok{border-color:var(--green);background:rgba(0,230,118,.08);pointer-events:none}
-.match-item.matched-err{border-color:var(--red);background:rgba(255,23,68,.08)}
-
-/* SORT */
-.sort-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.sort-item{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:grab;user-select:none;transition:border-color .2s}
-.sort-item:hover{border-color:var(--cyan)}
-.sort-item.dragging{opacity:.5;border-color:var(--amber)}
-.sort-item.correct{border-color:var(--green)}
-.sort-item.wrong{border-color:var(--red)}
-.sort-handle{color:var(--text-dim);font-size:16px}
-
-/* CLASSIFY */
-.classify-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.classify-row{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.classify-row.correct{border-color:var(--green)}
-.classify-row.wrong{border-color:var(--red);animation:shake .4s}
-.classify-label{flex:1;min-width:180px;font-size:13px}
-.classify-btns{display:flex;gap:6px;flex-wrap:wrap}
-.c-btn{font-family:'Share Tech Mono',monospace;font-size:11px;padding:5px 10px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;border-radius:3px;transition:all .15s}
-.c-btn:hover{border-color:var(--cyan);color:var(--cyan)}
-.c-btn.sel-0{border-color:var(--cyan);color:var(--cyan)}
-.c-btn.sel-1{border-color:var(--amber);color:var(--amber)}
-.c-btn.sel-2{border-color:var(--green);color:var(--green)}
-.c-btn.sel-3{border-color:var(--purple);color:var(--purple)}
-
-/* TF */
-.tf-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.tf-row{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.tf-row.correct{border-color:var(--green)}
-.tf-row.wrong{border-color:var(--red);animation:shake .4s}
-.tf-q{flex:1;min-width:200px;font-size:13px}
-.tf-btns{display:flex;gap:8px}
-.tf-btn{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;padding:6px 14px;border:1px solid var(--border);background:transparent;cursor:pointer;border-radius:3px;transition:all .15s}
-.tf-btn.v{color:var(--green);border-color:rgba(0,230,118,.4)}
-.tf-btn.v:hover,.tf-btn.v.sel{background:rgba(0,230,118,.15);border-color:var(--green)}
-.tf-btn.f{color:var(--red);border-color:rgba(255,23,68,.4)}
-.tf-btn.f:hover,.tf-btn.f.sel{background:rgba(255,23,68,.15);border-color:var(--red)}
-
-/* QUIZ */
-.quiz-q{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:12px}
-.quiz-q .q-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:6px}
-.quiz-q .q-text{font-size:14px;margin-bottom:12px;line-height:1.5}
-.quiz-opts{display:flex;flex-direction:column;gap:6px}
-.quiz-opt{background:transparent;border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:3px;cursor:pointer;text-align:left;font-size:13px;transition:all .15s}
-.quiz-opt:hover{border-color:var(--cyan)}
-.quiz-opt.correct{border-color:var(--green);background:rgba(0,230,118,.1);pointer-events:none}
-.quiz-opt.wrong{border-color:var(--red);background:rgba(255,23,68,.1);pointer-events:none}
-
-/* BOSS */
-.boss-hp-wrap{margin:16px auto;max-width:400px}
-.boss-hp-label{font-family:'Orbitron',monospace;font-size:10px;color:var(--red);letter-spacing:3px;margin-bottom:6px}
-.boss-hp-bar{height:16px;background:rgba(255,23,68,.15);border:1px solid rgba(255,23,68,.5);border-radius:8px;overflow:hidden}
-.boss-hp-fill{height:100%;width:100%;background:linear-gradient(90deg,#FF1744,#FF6D00);transition:width .6s ease}
-.boss-phase-title{font-family:'Orbitron',monospace;font-size:18px;color:var(--amber);margin:20px 0 8px}
-.boss-phase-sub{font-size:13px;color:var(--text-dim);margin-bottom:20px}
-
-/* PROGRESS DOTS */
-.progress-dots{display:flex;gap:6px;margin-bottom:20px;justify-content:center}
+/* ── PROGRESS ── */
+.progress-dots{display:flex;gap:6px;margin-bottom:18px;justify-content:center}
 .pdot{width:8px;height:8px;border-radius:50%;background:var(--panel2);border:1px solid var(--border);transition:.3s}
 .pdot.done{background:var(--green);border-color:var(--green);box-shadow:0 0 6px var(--green)}
 .pdot.active{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 6px var(--cyan)}
 
+/* ── MISSION SCREEN ── */
+.m-header{border-left:3px solid var(--cyan);padding-left:14px;margin-bottom:20px}
+.m-num{font-size:9px;letter-spacing:3px;color:var(--dim);font-family:'Share Tech Mono',monospace}
+.m-header h2{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--cyan);margin:4px 0}
+.m-sub{font-size:12px;color:var(--dim)}
+.course-banner{background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:4px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--dim)}
+.course-banner span{color:var(--cyan)}
+
+/* STEP PANEL */
+.step{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:20px;margin-bottom:16px}
+.step.locked{opacity:.4;pointer-events:none}
+.step.done{border-color:rgba(0,230,118,.35);background:rgba(0,230,118,.03)}
+.step-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.step-badge{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;color:var(--bg);background:var(--cyan);padding:3px 7px;border-radius:2px}
+.step-badge.done{background:var(--green)}
+.step-ttl{font-size:13px;font-weight:600}
+.step-inst{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--dim);margin-bottom:12px;line-height:1.6}
+.errs{display:flex;gap:5px;margin-bottom:10px}
+.edot{width:9px;height:9px;border-radius:50%;background:var(--red);opacity:.25;transition:.2s}
+.edot.on{opacity:1;box-shadow:0 0 6px var(--red)}
+.lock-msg{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red);padding:8px;background:rgba(255,23,68,.07);border:1px solid rgba(255,23,68,.25);border-radius:3px;margin-bottom:10px;display:none}
+.step-content{}
+
+/* FEEDBACK */
+.fb{font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;border-radius:3px;margin-top:10px}
+.fb.ok{color:var(--green);background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.25)}
+.fb.err{color:var(--red);background:rgba(255,23,68,.07);border:1px solid rgba(255,23,68,.25)}
+
+/* VALIDATE */
+.vbtn{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;padding:10px 24px;background:transparent;border:2px solid var(--cyan);color:var(--cyan);cursor:pointer;border-radius:3px;transition:all .2s;text-transform:uppercase;margin-top:8px}
+.vbtn:hover{background:rgba(0,212,255,.12);box-shadow:0 0 14px rgba(0,212,255,.25)}
+.vbtn:disabled{opacity:.3;pointer-events:none}
+.vbtn.amber{border-color:var(--amber);color:var(--amber)}
+.vbtn.amber:hover{background:rgba(255,183,0,.08)}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:12px;cursor:pointer;transition:all .18s;user-select:none}
+.card:hover{border-color:var(--dim)}
+.card.sel{border-color:var(--cyan);background:rgba(0,212,255,.07)}
+.card.correct{border-color:var(--green)!important;background:rgba(0,230,118,.08)!important}
+.card.wrong{border-color:var(--red)!important;background:rgba(255,23,68,.08)!important;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* MATCH */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.match-col{display:flex;flex-direction:column;gap:7px}
+.match-item{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:10px;cursor:pointer;font-size:12px;line-height:1.4;transition:all .15s}
+.match-item:hover{border-color:var(--dim)}
+.match-item.sel{border-color:var(--cyan);background:rgba(0,212,255,.07)}
+.match-item.ok{border-color:var(--green);background:rgba(0,230,118,.07);pointer-events:none;cursor:default}
+.match-item.err{border-color:var(--red);animation:shake .4s}
+
+/* CLASSIFY */
+.classify-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.c-row{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:9px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.c-row.correct{border-color:var(--green)}
+.c-row.wrong{border-color:var(--red);animation:shake .4s}
+.c-label{flex:1;min-width:160px;font-size:12px}
+.c-btns{display:flex;gap:5px;flex-wrap:wrap}
+.c-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 9px;border:1px solid var(--border);background:transparent;color:var(--dim);cursor:pointer;border-radius:3px;transition:all .13s}
+.c-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.c-btn.sel{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.07)}
+
+/* TF */
+.tf-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.tf-row{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tf-row.correct{border-color:var(--green)}
+.tf-row.wrong{border-color:var(--red);animation:shake .4s}
+.tf-q{flex:1;min-width:180px;font-size:12px}
+.tf-btns{display:flex;gap:7px}
+.tf-btn{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;padding:5px 12px;border:1px solid var(--border);background:transparent;cursor:pointer;border-radius:3px;transition:.15s}
+.tf-btn.v{color:var(--cyan);border-color:rgba(0,212,255,.35)}
+.tf-btn.f{color:var(--amber);border-color:rgba(255,183,0,.35)}
+.tf-btn.v:hover,.tf-btn.v.sel{background:rgba(0,212,255,.12);border-color:var(--cyan)}
+.tf-btn.f:hover,.tf-btn.f.sel{background:rgba(255,183,0,.1);border-color:var(--amber)}
+.tf-btn.correct{border-color:var(--green)!important;color:var(--green)!important}
+.tf-btn.wrong{border-color:var(--red)!important;color:var(--red)!important}
+.tf-expl{width:100%;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-top:4px;display:none}
+
+/* SORT */
+.sort-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.sort-item{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:grab;user-select:none;transition:.15s}
+.sort-item:hover{border-color:var(--dim)}
+.sort-item.dragging{opacity:.45;border-color:var(--amber)}
+.sort-item.correct{border-color:var(--green)}
+.sort-item.wrong{border-color:var(--red)}
+.sort-handle{color:var(--dim);font-size:14px}
+
+/* QUIZ */
+.quiz-q{background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:10px}
+.q-num{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:5px}
+.q-text{font-size:13px;margin-bottom:10px;line-height:1.5}
+.q-opts{display:flex;flex-direction:column;gap:5px}
+.q-opt{background:transparent;border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:3px;cursor:pointer;text-align:left;font-size:12px;transition:.13s}
+.q-opt:hover{border-color:var(--dim)}
+.q-opt.sel{border-color:var(--cyan)}
+.q-opt.correct{border-color:var(--green)!important;background:rgba(0,230,118,.08)!important;pointer-events:none}
+.q-opt.wrong{border-color:var(--red)!important;background:rgba(255,23,68,.08)!important;pointer-events:none}
+
+/* BOSS */
+.boss-hp-wrap{margin:12px auto;max-width:380px;text-align:center}
+.boss-hp-label{font-family:'Orbitron',monospace;font-size:9px;color:var(--red);letter-spacing:3px;margin-bottom:5px}
+.boss-hp-bar{height:14px;background:rgba(255,23,68,.12);border:1px solid rgba(255,23,68,.4);border-radius:7px;overflow:hidden}
+.boss-hp-fill{height:100%;width:100%;background:linear-gradient(90deg,#FF1744,#FF6D00);transition:width .6s}
+.boss-phase-title{font-family:'Orbitron',monospace;font-size:16px;color:var(--amber);margin:18px 0 6px}
+.boss-phase-sub{font-size:12px;color:var(--dim);margin-bottom:16px}
+
 /* FINAL */
-#final-screen{text-align:center;padding:40px 20px}
-#final-screen h1{font-family:'Orbitron',monospace;font-size:clamp(28px,6vw,56px);font-weight:900;color:var(--green);text-shadow:0 0 40px rgba(0,230,118,.5);margin-bottom:16px;letter-spacing:4px}
-.final-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;max-width:600px;margin:32px auto}
-.final-stat{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:20px;text-align:center}
-.final-stat .fs-val{font-family:'Orbitron',monospace;font-size:24px;font-weight:700;color:var(--cyan);margin-bottom:4px}
-.final-stat .fs-label{font-size:11px;color:var(--text-dim);letter-spacing:1px}
-.achievements{max-width:600px;margin:24px auto}
-.ach-title{font-size:10px;color:var(--amber);letter-spacing:3px;margin-bottom:12px}
-.ach-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.ach-badge{background:var(--panel2);border:1px solid var(--amber);border-radius:4px;padding:8px 14px;font-size:12px;color:var(--amber)}
+#final-screen{text-align:center;padding:30px 20px}
+#final-screen h1{font-family:'Orbitron',monospace;font-size:clamp(24px,6vw,52px);font-weight:900;color:var(--green);text-shadow:0 0 40px rgba(0,230,118,.5);margin-bottom:12px;letter-spacing:4px}
+.final-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;max-width:580px;margin:24px auto}
+.final-stat{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:18px}
+.fs-val{font-family:'Orbitron',monospace;font-size:22px;font-weight:700;color:var(--cyan);margin-bottom:4px}
+.fs-lbl{font-size:10px;color:var(--dim);letter-spacing:1px}
+.ach-wrap{max-width:580px;margin:20px auto}
+.ach-title{font-size:9px;color:var(--amber);letter-spacing:3px;margin-bottom:10px}
+.ach-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.ach-badge{background:var(--panel2);border:1px solid var(--amber);border-radius:4px;padding:6px 12px;font-size:11px;color:var(--amber)}
 </style>
 </head>
 <body>
 
 <!-- HUD -->
 <div id="hud">
-  <div id="hud-logo">VEILLE_OS</div>
-  <div id="hud-mission">MISSION <span id="hud-m">—</span>/8</div>
+  <div id="hud-logo">CELLULE C3I</div>
+  <div id="hud-mis">MISSION <span id="hud-m">—</span>/5</div>
   <div id="hud-threat">
-    <div id="hud-threat-label">▼ THREAT LEVEL</div>
-    <div id="hud-threat-bar"><div id="hud-threat-fill"></div></div>
+    <div class="hud-bar-label">▼ MENACE SYSTÈME</div>
+    <div class="hud-bar"><div id="hud-threat-fill"></div></div>
   </div>
   <div id="hud-xp">
-    <div id="hud-xp-label">⬆ AGENT XP</div>
-    <div id="hud-xp-bar-wrap">
-      <div id="hud-xp-bar"><div id="hud-xp-fill"></div></div>
-      <div id="hud-level">LVL 1</div>
+    <div class="hud-bar-label">⬆ XP AGENT</div>
+    <div style="display:flex;align-items:center;gap:5px">
+      <div class="hud-bar" style="flex:1"><div id="hud-xp-fill"></div></div>
+      <div id="hud-lvl">LVL 1</div>
     </div>
   </div>
   <div id="hud-timer">90:00</div>
 </div>
-
 <div id="penalty-flash"></div>
 
 <!-- LOCKDOWN -->
 <div id="lockdown-overlay">
-  <div style="font-family:'Orbitron',monospace;font-size:13px;color:var(--red);letter-spacing:3px;margin-bottom:16px">⚠ SYSTÈME VERROUILLÉ ⚠</div>
-  <div id="lockdown-timer">60</div>
-  <div style="font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--red);margin-top:12px;letter-spacing:2px">Trop d'erreurs détectées — Patientez...</div>
+  <div style="font-family:'Orbitron',monospace;font-size:11px;color:var(--red);letter-spacing:3px;margin-bottom:14px">⚠ SYSTÈME VERROUILLÉ ⚠</div>
+  <div id="lock-timer">60</div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--red);margin-top:10px">Trop d'erreurs — Patientez...</div>
 </div>
 
 <!-- BRIEFING -->
 <div id="briefing-overlay">
-  <div id="briefing-num">MISSION 01 / 08</div>
-  <div id="briefing-title">TITRE</div>
-  <div id="briefing-desc">DESC</div>
-  <div id="briefing-obj">
-    <div class="obj-title">OBJECTIFS</div>
-    <ul id="briefing-obj-list"></ul>
+  <div class="ov-num" id="br-num">MISSION 01 / 05</div>
+  <div class="ov-title" id="br-title"></div>
+  <div class="ov-desc" id="br-desc"></div>
+  <div class="ov-obj">
+    <div class="ov-obj-title">OBJECTIFS</div>
+    <ul id="br-obj"></ul>
   </div>
-  <button class="btn-primary" onclick="startMission()">▶ LANCER LA MISSION</button>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button class="btn amber" onclick="openBook()">📖 CONSULTER LE COURS</button>
+    <button class="btn" onclick="startMission()">▶ COMMENCER LES ÉNIGMES</button>
+  </div>
+</div>
+
+<!-- BOOK OVERLAY -->
+<div id="book-overlay">
+  <div id="book">
+    <div id="book-header">
+      <div id="book-title">📖 DOSSIER CLASSIFIÉ</div>
+      <div id="book-close" onclick="closeBook()">✕ FERMER</div>
+    </div>
+    <div id="book-content"></div>
+    <div id="book-nav">
+      <button id="book-prev" onclick="bookPage(-1)">◀ Précédent</button>
+      <div id="book-page-info">Page 1 / 1</div>
+      <button id="book-next" onclick="bookPage(1)">Suivant ▶</button>
+    </div>
+  </div>
 </div>
 
 <!-- CLEAR -->
@@ -256,34 +299,34 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <div id="clear-stars"></div>
   <div id="clear-title">MISSION ACCOMPLIE</div>
   <div id="clear-xp"></div>
-  <div id="clear-time"></div>
-  <button class="btn-primary green" onclick="nextMission()">▶ MISSION SUIVANTE</button>
+  <div id="clear-info"></div>
+  <button class="btn green" onclick="nextMission()">▶ MISSION SUIVANTE</button>
 </div>
 
 <!-- MAIN -->
 <div id="main">
-  <div class="progress-dots" id="progress-dots" style="display:none">
-    <div class="pdot" id="pd1"></div><div class="pdot" id="pd2"></div><div class="pdot" id="pd3"></div>
-    <div class="pdot" id="pd4"></div><div class="pdot" id="pd5"></div><div class="pdot" id="pd6"></div>
-    <div class="pdot" id="pd7"></div><div class="pdot" id="pd8"></div>
+  <div class="progress-dots" id="pdots" style="display:none">
+    <div class="pdot" id="pd1"></div><div class="pdot" id="pd2"></div>
+    <div class="pdot" id="pd3"></div><div class="pdot" id="pd4"></div>
+    <div class="pdot" id="pd5"></div>
   </div>
 
   <!-- INTRO -->
   <div id="intro-screen" class="screen active">
-    <h1>VEILLE_OS</h1>
-    <div class="sub">// SYSTÈME DE VEILLE PROFESSIONNELLE — CP12 //</div>
+    <img src="c3i-intro.png" id="intro-img" alt="CELLULE C3I — Alerte Interception Interne" onerror="this.style.display='none'">
     <div class="terminal-box">
-      <p><span class="prompt">$</span> <span class="cmd">sys.boot --agent FPA_FORMATEUR</span></p>
-      <p><span class="prompt">&gt;</span> Initialisation du système de veille...</p>
-      <p><span class="prompt">&gt;</span> <span style="color:var(--red)">ALERTE : </span>Réseau de formation compromis.</p>
-      <p><span class="prompt">&gt;</span> Des acteurs mal informés diffusent des données obsolètes.</p>
-      <p><span class="prompt">&gt;</span> Mission : maîtriser la <span style="color:var(--cyan)">CP12</span> — Veille professionnelle FPA.</p>
-      <p><span class="prompt">&gt;</span> 8 modules · 90 minutes · Chaque erreur = −3 min</p>
-      <p><span class="prompt">&gt;</span> <span style="color:var(--green)">AGENT, le système vous attend.</span></p>
+      <p><span class="pr">$</span> <span class="cy">sys.boot --cellule C3I --protocole VEILLE</span></p>
+      <p><span class="pr">&gt;</span> <span class="rd">ALERTE CRITIQUE :</span> Ransomware Crypto-V détecté.</p>
+      <p><span class="pr">&gt;</span> Ingénierie pédagogique et parcours chiffrés.</p>
+      <p><span class="pr">&gt;</span> Solution : reconstituer la base de connaissances <span class="cy">CP12 — Veille</span>.</p>
+      <p><span class="pr">&gt;</span> 5 modules verrouillés · 90 minutes · Chaque erreur = <span class="rd">−3 min</span></p>
+      <p><span class="pr">&gt;</span> <span style="color:var(--green)">AGENT, connectez-vous au premier terminal.</span></p>
     </div>
-    <button class="btn-primary" onclick="beginGame()">▶ DÉMARRER L'OPÉRATION</button>
-    <div style="margin-top:24px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim)">
-      ⚠ Chaque erreur = −3 min · 3 erreurs dans une étape = verrouillage 60s · Temps total : 90 minutes
+    <img src="c3i-start.png" style="width:100%;max-width:500px;border:1px solid var(--border);border-radius:4px;margin:10px auto;display:block" alt="Accès Terminal" onerror="this.style.display='none'">
+    <br>
+    <button class="btn" onclick="beginGame()">▶ DÉMARRER L'OPÉRATION</button>
+    <div style="margin-top:18px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim)">
+      ⚠ Chaque erreur = −3 min · 3 erreurs par étape = verrouillage 60s · Consultez le cours avant chaque mission
     </div>
   </div>
 
@@ -291,954 +334,917 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
   <!-- FINAL -->
   <div id="final-screen" class="screen">
-    <h1>ACCESS GRANTED</h1>
-    <div style="font-family:'Share Tech Mono',monospace;color:var(--text-dim);margin-bottom:8px">Système de veille déverrouillé — CP12 maîtrisée</div>
+    <h1>SYSTÈME RESTAURÉ</h1>
+    <div style="font-family:'Share Tech Mono',monospace;color:var(--dim);margin-bottom:8px">Base de connaissances CP12 reconstituée — Opération réussie</div>
+    <img src="c3i-mission.png" style="width:100%;max-width:400px;border:1px solid var(--border);border-radius:4px;margin:14px auto;display:block" alt="" onerror="this.style.display='none'">
     <div class="final-stats" id="final-stats"></div>
-    <div class="achievements">
+    <div class="ach-wrap">
       <div class="ach-title">BADGES OBTENUS</div>
       <div class="ach-grid" id="ach-grid"></div>
     </div>
-    <button class="btn-primary" onclick="location.reload()" style="margin-top:24px">↺ NOUVELLE PARTIE</button>
+    <button class="btn" onclick="location.reload()" style="margin-top:20px">↺ NOUVELLE PARTIE</button>
   </div>
 </div>
 
 <script>
-// ═══ GAME STATE ═══════════════════════════════════════════════
-let timeLeft = 90 * 60;
-let timerInterval = null;
-let currentMission = 0;
-let xp = 0;
-let totalErrors = 0;
-let stepErrors = {};
-let missionStartTime = null;
-let locked = false;
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let timeLeft = 90*60, timerInt = null, curMis = 0;
+let xp = 0, totalErr = 0, stepErr = {}, locked = false;
+let misStart = null;
 
-const MISSIONS_COUNT = 8;
+const XP = [200, 250, 200, 150, 300];
 const MISSIONS = [
-  {num:1,title:'TYPES DE VEILLE',icon:'📡',desc:'Identifier les 4 types de veille professionnelle du formateur FPA et les distinguer par leurs objets d\'observation.',objectives:['Associer chaque définition au bon type de veille','Classer 12 situations réelles dans les 4 catégories'],xp:150},
-  {num:2,title:'SOURCES & MÉTHODE CRAAP',icon:'🔍',desc:'Évaluer la fiabilité des sources d\'information selon la méthode CRAAP — critère essentiel de toute veille professionnelle.',objectives:['Identifier les sources fiables parmi 8 propositions','Appliquer les critères CRAAP à des situations concrètes'],xp:180},
-  {num:3,title:'VEILLE ACTIVE / PASSIVE',icon:'⚡',desc:'Distinguer les pratiques de veille active (intentionnelle) des pratiques passives (automatisées).',objectives:['Classifier 10 pratiques en active ou passive','Répondre à 5 affirmations vrai/faux'],xp:160},
-  {num:4,title:'OUTILS NUMÉRIQUES',icon:'🛠️',desc:'Maîtriser les outils de veille numérique : agrégateurs, alertes, réseaux sociaux professionnels, curation.',objectives:['Identifier les 5 outils de veille parmi 10 propositions','Associer chaque outil à sa fonction principale'],xp:170},
-  {num:5,title:'ACTEURS INSTITUTIONNELS',icon:'🏛️',desc:'Connaître les acteurs qui alimentent la veille du formateur FPA : organismes, réseaux, instances.',objectives:['Sélectionner les 5 acteurs clés parmi 9 propositions','Associer chaque acteur à son rôle dans la veille'],xp:175},
-  {num:6,title:'DÉMARCHE DE VEILLE',icon:'🔄',desc:'Reconstituer la démarche formalisée de veille en 6 étapes et savoir associer les actions concrètes à chaque étape.',objectives:['Remettre les 6 étapes dans l\'ordre chronologique','Associer 6 actions aux étapes correspondantes'],xp:190},
-  {num:7,title:'QUIZ SYNTHÈSE',icon:'📋',desc:'Vérifier la maîtrise globale de la CP12 — 12 questions sur l\'ensemble des notions. Score minimum : 8/12.',objectives:['Répondre à 12 questions (toutes notions confondues)','Obtenir au moins 8 bonnes réponses'],xp:200},
-  {num:8,title:'BOSS FINAL — LE DIRECTEUR',icon:'💀',desc:'Le Directeur de la formation conteste vos compétences. 3 phases de combat pour prouver votre maîtrise complète.',objectives:['Phase 1 : 5 questions en rafale (20s par question)','Phase 2 : Repérer 4 erreurs dans un rapport','Phase 3 : Reconstituer le code d\'accès final DICTAP'],xp:300}
+  {num:1,title:'INDICATEURS QUALIOPI',icon:'🏅',
+   desc:'Maîtriser les indicateurs du Référentiel National Qualité liés à la veille professionnelle du formateur FPA.',
+   obj:['Identifier les 4 indicateurs Qualiopi liés à la veille','Associer chaque indicateur à ses preuves de traçabilité','Quiz de validation sur les exigences Qualiopi'],xp:200},
+  {num:2,title:'LES 10 TYPES DE VEILLE',icon:'📡',
+   desc:'Maîtriser les 10 types de veille informationnelle du formateur FPA : définitions, objectifs, outils, exemples.',
+   obj:['Associer chaque type de veille à sa définition','Classifier des situations réelles dans les 10 types','Associer outils et sources aux types de veille'],xp:250},
+  {num:3,title:'VEILLE ACTIVE & PASSIVE',icon:'⚡',
+   desc:'Distinguer les deux méthodes de veille — passive (informelle) et active (structurée, exigée par le REAC et Qualiopi).',
+   obj:['Classifier 10 pratiques : active ou passive','Répondre à 5 affirmations vrai/faux sur les méthodes'],xp:200},
+  {num:4,title:'MÉTHODOLOGIE EN 7 ÉTAPES',icon:'🔄',
+   desc:'Reconstituer le cycle méthodologique de mise en place d\'une veille professionnelle en 7 étapes.',
+   obj:['Remettre les 7 étapes dans le bon ordre'],xp:150},
+  {num:5,title:'MISSION FINALE — L\'EXAMEN FPA',icon:'💀',
+   desc:'Le jury vous attend. Prouvez votre maîtrise complète de la CP12 : dossier de veille, format, preuves attendues.',
+   obj:['Quiz final 8 questions sur la CP12','Reconstituer les 4 parties du Dossier de Veille','Code d\'accès final'],xp:300}
 ];
 
-// ═══ TIMER ═══════════════════════════════════════════════════
-function startTimer() {
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerDisplay();
-    if (timeLeft <= 0) { timeLeft = 0; updateTimerDisplay(); gameOver(); }
-  }, 1000);
+// ═══════════════════════════════════════════════════════
+// BOOK PAGES PER MISSION
+// ═══════════════════════════════════════════════════════
+const BOOK_PAGES = [
+  // Mission 1 — Qualiopi
+  [
+    `<h2>🏅 QUALIOPI & LA VEILLE — CADRE GÉNÉRAL</h2>
+    <p>La certification <strong>Qualiopi</strong>, obligatoire depuis le 1er janvier 2022 pour accéder aux fonds publics et mutualisés (CPF, OPCO, France Travail), repose sur le <strong>Référentiel National Qualité (RNQ)</strong> : 7 critères, 32 indicateurs.</p>
+    <div class="highlight">La veille est concernée par <strong>4 indicateurs</strong> du RNQ : 11, 27, 30 et 32.</div>
+    <h3>LES 4 INDICATEURS LIÉS À LA VEILLE</h3>
+    <table><tr><th>Indicateur</th><th>Critère</th><th>Lien avec la veille</th></tr>
+    <tr><td><strong style="color:var(--amber)">Ind. 11</strong></td><td>Critère 3 — Contenus adaptés</td><td>Ressources pédagogiques actualisées — preuve de veille documentaire continue</td></tr>
+    <tr><td><strong style="color:var(--amber)">Ind. 27</strong></td><td>Critère 6 — Amélioration continue</td><td>Appréciations des parties prenantes — veille interne (évaluations, retours)</td></tr>
+    <tr><td><strong style="color:var(--amber)">Ind. 30</strong></td><td>Critère 7 — Développement compétences</td><td>Maintien des compétences des formateurs — preuve de veille pro et pédagogique</td></tr>
+    <tr><td><strong style="color:var(--amber)">Ind. 32</strong></td><td>Critère 7 — Développement compétences</td><td>Veille légale et réglementaire — l'indicateur le plus direct, obligatoire</td></tr>
+    </table>`,
+
+    `<h2>🏅 PREUVES DE TRAÇABILITÉ ATTENDUES</h2>
+    <p>Lors d'un audit Qualiopi, l'auditeur peut demander des <strong>preuves tangibles</strong> de la mise en place de la veille. Il ne suffit pas de "faire" de la veille — il faut pouvoir la <strong>prouver</strong>.</p>
+    <h3>PREUVES VALIDES POUR UN AUDITEUR</h3>
+    <ul>
+      <li>📋 <strong>Journal de veille</strong> daté (hebdomadaire ou mensuel)</li>
+      <li>📋 Alertes <strong>Légifrance</strong> reçues et archivées</li>
+      <li>📋 Notes de <strong>synthèse thématiques</strong> avec sources</li>
+      <li>📋 Captures d'écran des <strong>fiches RNCP consultées</strong></li>
+      <li>📋 Emails d'alertes Google datés</li>
+      <li>📋 Dates de <strong>mise à jour des supports</strong> de formation</li>
+    </ul>
+    <div class="warn-box">⚠ Une veille passive (lecture informelle) sans trace écrite ne satisfait ni l'Indicateur 32 ni l'Indicateur 30 de Qualiopi.</div>
+    <div class="qualiopi">🏅 INDICATEUR 32 — Le plus direct : l'OF doit prouver qu'une veille réglementaire formalisée et documentée est en place.</div>`,
+
+    `<h2>🏅 CONVERGENCE REAC / QUALIOPI</h2>
+    <p>Le REAC FPA (Compétence 12) et les indicateurs Qualiopi se renforcent mutuellement. Un même dossier de veille bien construit répond aux deux référentiels.</p>
+    <table><tr><th>Exigence</th><th>REAC FPA (CP12)</th><th>Qualiopi (RNQ)</th></tr>
+    <tr><td>Obligation</td><td>Compétence obligatoire — Bloc 4</td><td>Ind. 30 et 32 obligatoires</td></tr>
+    <tr><td>Évaluation</td><td>Dossier 10–15 pages — jury</td><td>Audit terrain COFRAC</td></tr>
+    <tr><td>Traçabilité</td><td>Dossier Technique remis au jury</td><td>Journal, synthèses, preuves MAJ</td></tr>
+    <tr><td>Types de veille</td><td>Pédagogique, sectorielle, métier, réglementaire</td><td>Légale/réglementaire + pédagogique</td></tr>
+    </table>
+    <div class="highlight">📌 La veille n'est pas un choix professionnel : c'est une <strong>obligation certifiante et certificatrice</strong>.</div>`
+  ],
+
+  // Mission 2 — 10 types
+  [
+    `<h2>📡 LES 10 TYPES DE VEILLE — PARTIE 1</h2>
+    <h3>TYPE 1 — VEILLE DOCUMENTAIRE</h3>
+    <p><strong>Définition :</strong> Surveillance systématique de la production de documents écrits (articles, rapports, publications officielles, ouvrages, thèses).</p>
+    <p><strong>Outils :</strong> CAIRN, ERIC, Google Scholar, Légifrance, France Compétences.</p>
+    <p><strong>Exemple :</strong> Un formateur en gestion surveille les nouvelles parutions du Plan Comptable Général.</p>
+    <h3>TYPE 2 — VEILLE RÉGLEMENTAIRE ET JURIDIQUE</h3>
+    <p><strong>Définition :</strong> Surveillance de l'évolution des lois, décrets, arrêtés, normes applicables au secteur.</p>
+    <p><strong>Outils :</strong> Légifrance, Journal Officiel, DARES, Ministère du Travail, Centre Inffo.</p>
+    <p><strong>Exemple :</strong> Surveiller les modifications du Code du Travail relatives au CPF, OPCO, Qualiopi.</p>
+    <div class="qualiopi">🏅 Correspond directement à l'Indicateur 32 de Qualiopi (Critère 7).</div>
+    <h3>TYPE 3 — VEILLE TECHNOLOGIQUE</h3>
+    <p><strong>Définition :</strong> Surveillance des innovations technologiques, outils numériques et nouvelles solutions applicables à la formation.</p>
+    <p><strong>Outils :</strong> Blogs spécialisés, TechCrunch, newsletters EdTech (eLearning Industry).</p>
+    <p><strong>Exemple :</strong> Un formateur intègre l'IA générative dans ses supports après 6 mois de veille.</p>`,
+
+    `<h2>📡 LES 10 TYPES DE VEILLE — PARTIE 2</h2>
+    <h3>TYPE 4 — VEILLE CONCURRENTIELLE</h3>
+    <p><strong>Définition :</strong> Surveillance des activités des organismes de formation concurrents (offres, prix, modalités, positionnement).</p>
+    <p><strong>Outils :</strong> Sites web concurrents, avis Google, LinkedIn, Mon Compte Formation.</p>
+    <p><strong>Exemple :</strong> Un OF compare régulièrement ses tarifs avec les concurrents sur Mon Compte Formation.</p>
+    <h3>TYPE 5 — VEILLE SECTORIELLE</h3>
+    <p><strong>Définition :</strong> Surveillance globale d'un secteur d'activité pour identifier les tendances économiques et sociales.</p>
+    <p><strong>Outils :</strong> INSEE, DARES, rapports de branches, observatoires des métiers.</p>
+    <div class="highlight">📋 La cartographie locale (Partie 3 du Dossier de Veille) s'appuie directement sur la veille sectorielle.</div>
+    <h3>TYPE 6 — VEILLE MÉTIER</h3>
+    <p><strong>Définition :</strong> Surveillance des évolutions d'un métier spécifique (compétences attendues, certifications).</p>
+    <p><strong>Outils :</strong> Fiches ROME (France Travail), fiches RNCP (France Compétences), CQP des branches.</p>
+    <p><strong>Exemple :</strong> Un formateur en comptabilité consulte régulièrement les fiches RNCP.</p>
+    <div class="qualiopi">🏅 Contribue à l'Indicateur 11 (ressources actualisées) et à l'Indicateur 5 (adéquation aux besoins).</div>`,
+
+    `<h2>📡 LES 10 TYPES DE VEILLE — PARTIE 3</h2>
+    <h3>TYPE 7 — VEILLE STRATÉGIQUE</h3>
+    <p><strong>Définition :</strong> Surveillance globale de l'environnement externe pour éclairer les décisions stratégiques (analyse PESTEL).</p>
+    <p><strong>Outils :</strong> Rapports INSEE, Bpifrance, presse généraliste et spécialisée.</p>
+    <h3>TYPE 8 — VEILLE COMMERCIALE ET MARKETING</h3>
+    <p><strong>Définition :</strong> Surveillance des tendances de consommation, besoins clients et pratiques commerciales du secteur.</p>
+    <p><strong>Outils :</strong> LinkedIn, enquêtes de satisfaction, CRM, études de marché.</p>
+    <h3>TYPE 9 — VEILLE INNOVATION (PÉDAGOGIQUE)</h3>
+    <p><strong>Définition :</strong> Surveillance des innovations pédagogiques susceptibles d'améliorer les pratiques de formation.</p>
+    <p><strong>Outils :</strong> FFFOD, revues EdTech, colloques AIPU, Educpros.</p>
+    <p><strong>Exemple :</strong> Après avoir observé la montée du microlearning, un formateur restructure ses modules en capsules de 5–10 min.</p>
+    <div class="highlight">📋 La veille pédagogique est au cœur de la Compétence 12. Le Dossier Thématique peut porter sur une innovation pédagogique.</div>
+    <h3>TYPE 10 — VEILLE E-RÉPUTATION ET RÉSEAUX SOCIAUX</h3>
+    <p><strong>Définition :</strong> Surveillance de ce qui est dit sur internet à propos d'un organisme, d'une marque ou d'un formateur.</p>
+    <p><strong>Outils :</strong> Google Alerts, Mention, Talkwalker, LinkedIn, X (ex-Twitter).</p>`,
+
+    `<h2>📡 RÉCAPITULATIF — LES 10 TYPES</h2>
+    <table><tr><th>#</th><th>Type</th><th>Objet principal</th></tr>
+    <tr><td>1</td><td>Documentaire</td><td>Publications écrites, articles, rapports</td></tr>
+    <tr><td>2</td><td>Réglementaire / Juridique</td><td>Lois, décrets, normes — <em>Ind. 32</em></td></tr>
+    <tr><td>3</td><td>Technologique</td><td>Outils numériques, innovations tech</td></tr>
+    <tr><td>4</td><td>Concurrentielle</td><td>Offres, prix, positionnement des OF concurrents</td></tr>
+    <tr><td>5</td><td>Sectorielle</td><td>Tendances économiques d'un secteur</td></tr>
+    <tr><td>6</td><td>Métier</td><td>Compétences, RNCP, fiches ROME — <em>Ind. 11</em></td></tr>
+    <tr><td>7</td><td>Stratégique</td><td>Environnement externe, PESTEL</td></tr>
+    <tr><td>8</td><td>Commerciale / Marketing</td><td>Clients, marchés, tendances commerciales</td></tr>
+    <tr><td>9</td><td>Innovation pédagogique</td><td>Nouvelles méthodes (AFEST, microlearning…)</td></tr>
+    <tr><td>10</td><td>E-réputation / Réseaux</td><td>Image en ligne, mentions web</td></tr>
+    </table>
+    <div class="highlight">✅ Le REAC FPA attend au minimum 4 types : <strong>pédagogique, réglementaire, sectorielle et métier</strong>.</div>`
+  ],
+
+  // Mission 3 — Méthodes
+  [
+    `<h2>⚡ VEILLE PASSIVE — Définition et limites</h2>
+    <p>La <strong>veille passive</strong> (aussi appelée veille indirecte ou <em>pull</em>) désigne une surveillance non systématique. Le professionnel reçoit ou consulte des informations au fil de ses activités, sans protocole structuré.</p>
+    <h3>EXEMPLES DE PRATIQUES PASSIVES</h3>
+    <ul>
+      <li>Lecture de newsletters reçues par abonnement</li>
+      <li>Consultation informelle du fil LinkedIn</li>
+      <li>Écoute de podcasts professionnels en déplacement</li>
+      <li>Reception automatique d'une newsletter OPCO</li>
+      <li>Alertes Google configurées mais non analysées</li>
+    </ul>
+    <h3>AVANTAGES / INCONVÉNIENTS</h3>
+    <p>✔ Peu chronophage · Découverte fortuite · Culture professionnelle générale</p>
+    <p>✘ Manque de rigueur · Non traçable · Biais de sélection</p>
+    <div class="warn-box">⚠ La veille passive seule ne suffit PAS pour valider la CP12 du REAC FPA ni pour satisfaire les Indicateurs 30 et 32 de Qualiopi. Elle n'est pas traçable, pas documentée, pas structurée.</div>`,
+
+    `<h2>⚡ VEILLE ACTIVE — La méthode exigée</h2>
+    <p>La <strong>veille active</strong> (veille directe ou <em>push</em>) est une démarche délibérée, structurée et systématique. C'est la méthode exigée par le REAC FPA et par Qualiopi.</p>
+    <h3>LE CYCLE EN 5 ÉTAPES (veille active)</h3>
+    <ul>
+      <li><strong>1.</strong> Définir les thèmes à surveiller (mots-clés, domaines)</li>
+      <li><strong>2.</strong> Sélectionner et hiérarchiser les sources fiables</li>
+      <li><strong>3.</strong> Collecter automatiquement (alertes, agrégateurs RSS)</li>
+      <li><strong>4.</strong> Analyser et valider les informations collectées</li>
+      <li><strong>5.</strong> Produire une synthèse et diffuser / mettre à jour ses supports</li>
+    </ul>
+    <h3>OUTILS DE VEILLE ACTIVE</h3>
+    <table><tr><th>Outil</th><th>Usage</th></tr>
+    <tr><td>Google Alerts</td><td>Alertes automatiques sur mots-clés définis</td></tr>
+    <tr><td>Feedly / Inoreader</td><td>Agrégation de flux RSS organisés par thèmes</td></tr>
+    <tr><td>Netvibes</td><td>Tableau de bord personnalisé multi-sources</td></tr>
+    <tr><td>Scoop.it</td><td>Curation et publication de contenus thématiques</td></tr>
+    <tr><td>Légifrance / France Compétences</td><td>Recherche documentaire structurée</td></tr>
+    </table>
+    <div class="highlight">✅ Veille passive = utile pour la culture générale, mais insuffisante seule.<br>Veille active = obligatoire pour valider la CP12 et les indicateurs Qualiopi.<br>En pratique : <strong>combiner les deux</strong>. La passive alerte ; l'active approfondit et documente.</div>`
+  ],
+
+  // Mission 4 — 7 étapes
+  [
+    `<h2>🔄 MÉTHODOLOGIE EN 7 ÉTAPES</h2>
+    <p>La mise en place d'une veille professionnelle efficace suit un <strong>cycle méthodologique en 7 étapes</strong>. Ce cycle répond simultanément aux attentes du REAC FPA (CP12) et aux indicateurs Qualiopi 30 et 32.</p>
+    <table><tr><th>#</th><th>Étape</th><th>Description</th></tr>
+    <tr><td>1</td><td><strong style="color:var(--cyan)">DÉFINIR</strong></td><td>Définir les objectifs SMART de veille (pourquoi, quoi surveiller)</td></tr>
+    <tr><td>2</td><td><strong style="color:var(--cyan)">IDENTIFIER</strong></td><td>Identifier les besoins d'information — thèmes à surveiller</td></tr>
+    <tr><td>3</td><td><strong style="color:var(--cyan)">SÉLECTIONNER</strong></td><td>Sélectionner les sources fiables (institutionnelles, académiques…)</td></tr>
+    <tr><td>4</td><td><strong style="color:var(--cyan)">COLLECTER</strong></td><td>Collecter les informations (automatique + manuelle)</td></tr>
+    <tr><td>5</td><td><strong style="color:var(--cyan)">ANALYSER</strong></td><td>Analyser et valider les informations (fiabilité, pertinence)</td></tr>
+    <tr><td>6</td><td><strong style="color:var(--cyan)">DIFFUSER</strong></td><td>Diffuser les résultats (équipe, apprenants, jury, auditeur)</td></tr>
+    <tr><td>7</td><td><strong style="color:var(--cyan)">METTRE À JOUR</strong></td><td>Réviser le système de veille tous les 6 mois — amélioration continue</td></tr>
+    </table>
+    <div class="qualiopi">🏅 Ce cycle permet de répondre aux 4 parties du Dossier de Veille FPA et aux indicateurs 27, 30 et 32 de Qualiopi.</div>`,
+
+    `<h2>🔄 LES 7 ÉTAPES EN DÉTAIL</h2>
+    <h3>ÉTAPE 1 — DÉFINIR les objectifs</h3>
+    <p>Objectifs SMART. Couvrir au minimum : veille pédagogique, réglementaire et sectorielle/métier.</p>
+    <h3>ÉTAPE 2 — IDENTIFIER les besoins</h3>
+    <p>Lister les thèmes à surveiller, en lien avec CP12 et indicateurs Qualiopi.</p>
+    <h3>ÉTAPE 3 — SÉLECTIONNER les sources</h3>
+    <p>Institutionnelles (Légifrance, France Compétences, DARES), académiques (CAIRN), professionnelles (Centre Inffo, FFFOD).</p>
+    <h3>ÉTAPES 4 à 7</h3>
+    <ul>
+      <li><strong>Collecter :</strong> Alertes Google, flux RSS Feedly, newsletters institutionnelles</li>
+      <li><strong>Analyser :</strong> Qui est l'auteur ? Source vérifiable ? Information récente ? Utilisable ?</li>
+      <li><strong>Diffuser :</strong> Note mensuelle, mise à jour supports, dossier technique FPA</li>
+      <li><strong>Mettre à jour :</strong> Révision semestrielle — Indicateur 27 Qualiopi (amélioration continue)</li>
+    </ul>
+    <div class="highlight">📌 Un <strong>journal de veille hebdomadaire</strong> est l'outil minimal pour répondre aux deux référentiels (jury FPA + auditeur Qualiopi).</div>`
+  ],
+
+  // Mission 5 — Examen
+  [
+    `<h2>💀 LE DOSSIER DE VEILLE — STRUCTURE OBLIGATOIRE</h2>
+    <p>Pour valider la <strong>Compétence 12</strong>, chaque candidat au Titre FPA doit rédiger un <strong>dossier de veille de 10 à 15 pages</strong> (hors page de garde, sommaire et annexes). C'est le Chapitre 4 du <strong>Dossier Technique (DT)</strong>.</p>
+    <h3>LES 4 PARTIES OBLIGATOIRES</h3>
+    <table><tr><th>#</th><th>Partie</th><th>Contenu attendu</th></tr>
+    <tr><td>1</td><td><strong>Dispositif de veille</strong></td><td>Démarche globale, types pratiqués, fréquence, organisation de la collecte</td></tr>
+    <tr><td>2</td><td><strong>Outils de veille</strong></td><td>Outils numériques (Google Alerts, Feedly…), sources institutionnelles, traçabilité (journal)</td></tr>
+    <tr><td>3</td><td><strong>Cartographie locale</strong></td><td>Acteurs locaux de la formation et du secteur (OPCO, France Travail, CCI, partenaires…)</td></tr>
+    <tr><td>4</td><td><strong>Dossier thématique</strong></td><td>Synthèse approfondie d'un sujet issu de la veille, en lien avec la spécialité pédagogique</td></tr>
+    </table>
+    <div class="warn-box">⚠ Un dossier absent, incomplet ou non tracé entraîne l'invalidation du Bloc 4 — le Titre ne peut pas être délivré.</div>`,
+
+    `<h2>💀 FORMAT ET ÉVALUATION</h2>
+    <h3>FORMAT OBLIGATOIRE</h3>
+    <ul>
+      <li>Police : <strong>Arial 11</strong> — Interligne : <strong>1,15</strong></li>
+      <li>10 à 15 pages (hors page de garde, sommaire, annexes)</li>
+      <li>Remis au jury le jour de l'examen</li>
+    </ul>
+    <h3>ÉVALUATION PAR LE JURY</h3>
+    <p>Le dossier est évalué lors du <strong>Questionnement à partir de Productions (QPP)</strong> — 1h35 au total.</p>
+    <p>Le jury évalue : pertinence, régularité, traçabilité, valorisation dans la pratique professionnelle.</p>
+    <div class="qualiopi">🏅 Un même dossier de veille bien construit répond simultanément au jury FPA ET aux exigences Qualiopi (indicateurs 11, 27, 30, 32).</div>
+    <h3>CRITÈRES DE PERFORMANCE (REAC)</h3>
+    <p>La veille produite est <strong>pertinente, régulière, traçable</strong> et <strong>valorisée dans la pratique professionnelle</strong>.</p>
+    <div class="highlight">📌 La clé : un <strong>journal de veille régulièrement mis à jour</strong> est la preuve universelle pour le jury FPA et pour un auditeur Qualiopi.</div>`
+  ]
+];
+
+// ═══════════════════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════════════════
+function startTimer(){
+  timerInt=setInterval(()=>{
+    timeLeft--;updateTimer();
+    if(timeLeft<=0){timeLeft=0;updateTimer();gameOver();}
+  },1000);
+}
+function updateTimer(){
+  const m=Math.floor(timeLeft/60),s=timeLeft%60;
+  const el=document.getElementById('hud-timer');
+  el.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  el.className=timeLeft<300?'danger':timeLeft<900?'warn':'';
+}
+function applyPenalty(){
+  timeLeft=Math.max(0,timeLeft-180);totalErr++;
+  const f=document.getElementById('penalty-flash');f.classList.add('on');
+  setTimeout(()=>f.classList.remove('on'),400);
+  updateTimer();
 }
 
-function updateTimerDisplay() {
-  const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-  const el = document.getElementById('hud-timer');
-  el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-  el.className = timeLeft < 300 ? 'danger' : timeLeft < 900 ? 'warning' : '';
-}
-
-function applyPenalty() {
-  timeLeft = Math.max(0, timeLeft - 180);
-  totalErrors++;
-  const fl = document.getElementById('penalty-flash');
-  fl.classList.add('show');
-  setTimeout(() => fl.classList.remove('show'), 400);
-  updateTimerDisplay();
-}
-
-// ═══ HUD ══════════════════════════════════════════════════════
-function updateHUD() {
-  document.getElementById('hud-m').textContent = currentMission + 1;
-  const threat = Math.max(0, 100 - currentMission * 12.5);
-  document.getElementById('hud-threat-fill').style.width = threat + '%';
-  const maxXP = MISSIONS.reduce((a,m) => a + m.xp, 0);
-  document.getElementById('hud-xp-fill').style.width = Math.min(100, (xp/maxXP)*100) + '%';
-  document.getElementById('hud-level').textContent = 'LVL ' + (Math.floor(currentMission/2)+1);
-  for (let i = 1; i <= 8; i++) {
-    const d = document.getElementById('pd'+i);
-    d.className = i < currentMission+1 ? 'pdot done' : i === currentMission+1 ? 'pdot active' : 'pdot';
+// ═══════════════════════════════════════════════════════
+// HUD
+// ═══════════════════════════════════════════════════════
+function updateHUD(){
+  document.getElementById('hud-m').textContent=curMis+1;
+  document.getElementById('hud-threat-fill').style.width=Math.max(0,100-curMis*20)+'%';
+  const maxXP=XP.reduce((a,b)=>a+b,0);
+  document.getElementById('hud-xp-fill').style.width=Math.min(100,(xp/maxXP)*100)+'%';
+  document.getElementById('hud-lvl').textContent='LVL '+(Math.floor(curMis/2)+1);
+  for(let i=1;i<=5;i++){
+    const d=document.getElementById('pd'+i);
+    d.className=i<curMis+1?'pdot done':i===curMis+1?'pdot active':'pdot';
   }
 }
 
-// ═══ GAME FLOW ════════════════════════════════════════════════
-function beginGame() {
+// ═══════════════════════════════════════════════════════
+// FLOW
+// ═══════════════════════════════════════════════════════
+function beginGame(){
   document.getElementById('intro-screen').classList.remove('active');
-  document.getElementById('progress-dots').style.display = 'flex';
-  startTimer();
-  showBriefing(0);
+  document.getElementById('pdots').style.display='flex';
+  startTimer();showBriefing(0);
 }
-
-function showBriefing(idx) {
-  currentMission = idx;
-  updateHUD();
-  missionStartTime = Date.now();
-  stepErrors = {};
-  const m = MISSIONS[idx];
-  document.getElementById('briefing-num').textContent = 'MISSION ' + String(m.num).padStart(2,'0') + ' / 08';
-  document.getElementById('briefing-title').textContent = m.icon + ' ' + m.title;
-  document.getElementById('briefing-desc').textContent = m.desc;
-  document.getElementById('briefing-obj-list').innerHTML = m.objectives.map(o => '<li>'+o+'</li>').join('');
+function showBriefing(idx){
+  curMis=idx;updateHUD();misStart=Date.now();stepErr={};
+  const m=MISSIONS[idx];
+  document.getElementById('br-num').textContent='MISSION '+String(m.num).padStart(2,'0')+' / 05';
+  document.getElementById('br-title').textContent=m.icon+' '+m.title;
+  document.getElementById('br-desc').textContent=m.desc;
+  document.getElementById('br-obj').innerHTML=m.obj.map(o=>'<li>'+o+'</li>').join('');
   document.getElementById('briefing-overlay').classList.add('active');
 }
-
-function startMission() {
+function startMission(){
   document.getElementById('briefing-overlay').classList.remove('active');
   document.getElementById('game-screen').classList.add('active');
-  renderMission(currentMission);
+  renderMission(curMis);
 }
-
-function showClear(errCount) {
-  const elapsed = Math.round((Date.now() - missionStartTime) / 1000);
-  xp += MISSIONS[currentMission].xp;
-  const stars = errCount === 0 ? '⭐⭐⭐' : errCount <= 2 ? '⭐⭐' : '⭐';
-  document.getElementById('clear-stars').textContent = stars;
-  document.getElementById('clear-title').textContent = 'MISSION ' + MISSIONS[currentMission].num + ' ACCOMPLIE';
-  document.getElementById('clear-xp').textContent = '+' + MISSIONS[currentMission].xp + ' XP gagné';
-  document.getElementById('clear-time').textContent = 'Temps : ' + Math.floor(elapsed/60) + 'min ' + (elapsed%60) + 's · Erreurs : ' + errCount;
-  document.getElementById('clear-overlay').classList.add('active');
-  updateHUD();
+function showClear(errs){
+  const elapsed=Math.round((Date.now()-misStart)/1000);
+  xp+=MISSIONS[curMis].xp;
+  const stars=errs===0?'⭐⭐⭐':errs<=2?'⭐⭐':'⭐';
+  document.getElementById('clear-stars').textContent=stars;
+  document.getElementById('clear-title').textContent='MISSION '+MISSIONS[curMis].num+' ACCOMPLIE';
+  document.getElementById('clear-xp').textContent='+'+MISSIONS[curMis].xp+' XP gagné';
+  document.getElementById('clear-info').textContent='Temps : '+Math.floor(elapsed/60)+'min '+(elapsed%60)+'s · Erreurs : '+errs;
+  document.getElementById('clear-overlay').classList.add('active');updateHUD();
+  if(curMis===4){document.querySelector('#clear-overlay .btn').textContent='▶ VOIR LE RÉSULTAT';}
 }
-
-function nextMission() {
+function nextMission(){
   document.getElementById('clear-overlay').classList.remove('active');
-  document.getElementById('game-screen').innerHTML = '';
-  if (currentMission + 1 >= MISSIONS_COUNT) showFinal();
-  else showBriefing(currentMission + 1);
+  document.getElementById('game-screen').innerHTML='';
+  if(curMis+1>=5)showFinal();else showBriefing(curMis+1);
 }
-
-function gameOver() {
-  clearInterval(timerInterval);
-  document.getElementById('game-screen').innerHTML = '<div style="text-align:center;padding:60px 20px"><div style="font-family:Orbitron,monospace;font-size:48px;color:var(--red);text-shadow:0 0 30px rgba(255,23,68,.5)">GAME OVER</div><div style="font-family:Share Tech Mono,monospace;color:var(--text-dim);margin:16px 0">Temps écoulé — Opération abandonnée</div><button class="btn-primary" onclick="location.reload()">↺ RECOMMENCER</button></div>';
+function gameOver(){
+  clearInterval(timerInt);
+  document.getElementById('game-screen').innerHTML='<div style="text-align:center;padding:60px 20px"><div style="font-family:Orbitron,monospace;font-size:48px;color:var(--red);text-shadow:0 0 30px rgba(255,23,68,.5)">TEMPS ÉCOULÉ</div><div style="margin:16px 0;font-family:Share Tech Mono,monospace;color:var(--dim)">Opération abandonnée — Crypto-V a gagné.</div><button class="btn" onclick="location.reload()">↺ RECOMMENCER</button></div>';
 }
-
-function showFinal() {
-  clearInterval(timerInterval);
+function showFinal(){
+  clearInterval(timerInt);
   document.getElementById('game-screen').classList.remove('active');
   document.getElementById('final-screen').classList.add('active');
-  const elapsed = 90*60 - timeLeft;
-  const m = Math.floor(elapsed/60), s = elapsed%60;
-  document.getElementById('final-stats').innerHTML = `
-    <div class="final-stat"><div class="fs-val">${xp}</div><div class="fs-label">XP TOTAL</div></div>
-    <div class="final-stat"><div class="fs-val">${m}:${String(s).padStart(2,'0')}</div><div class="fs-label">DURÉE</div></div>
-    <div class="final-stat"><div class="fs-val">${totalErrors}</div><div class="fs-label">ERREURS</div></div>
-    <div class="final-stat"><div class="fs-val">8/8</div><div class="fs-label">MISSIONS</div></div>`;
-  const badges = ['🎓 CP12 Expert','🔍 Maître de la Veille'];
-  if (totalErrors === 0) badges.push('🏆 Sans faute');
-  if (elapsed < 60*60) badges.push('⚡ Speedrun');
-  if (totalErrors <= 5) badges.push('🛡️ Agent d\'élite');
-  document.getElementById('ach-grid').innerHTML = badges.map(b => `<div class="ach-badge">${b}</div>`).join('');
+  const e=90*60-timeLeft,m=Math.floor(e/60),s=e%60;
+  document.getElementById('final-stats').innerHTML=`
+    <div class="final-stat"><div class="fs-val">${xp}</div><div class="fs-lbl">XP TOTAL</div></div>
+    <div class="final-stat"><div class="fs-val">${m}:${String(s).padStart(2,'0')}</div><div class="fs-lbl">DURÉE</div></div>
+    <div class="final-stat"><div class="fs-val">${totalErr}</div><div class="fs-lbl">ERREURS</div></div>
+    <div class="final-stat"><div class="fs-val">5/5</div><div class="fs-lbl">MISSIONS</div></div>`;
+  const b=['🎓 CP12 Maîtrisée','🔍 Expert Veille'];
+  if(totalErr===0)b.push('🏆 Zéro faute');if(timeLeft>30*60)b.push('⚡ Speedrun');
+  document.getElementById('ach-grid').innerHTML=b.map(x=>`<div class="ach-badge">${x}</div>`).join('');
 }
 
-// ═══ LOCKDOWN ════════════════════════════════════════════════
-function triggerLockdown() {
-  if (locked) return;
-  locked = true;
-  let t = 60;
-  const overlay = document.getElementById('lockdown-overlay');
-  overlay.classList.add('active');
-  document.getElementById('lockdown-timer').textContent = t;
-  const ld = setInterval(() => {
-    t--;
-    document.getElementById('lockdown-timer').textContent = t;
-    if (t <= 0) { clearInterval(ld); overlay.classList.remove('active'); locked = false; }
-  }, 1000);
+// ═══════════════════════════════════════════════════════
+// LOCKDOWN
+// ═══════════════════════════════════════════════════════
+function triggerLockdown(){
+  if(locked)return;locked=true;
+  let t=60;const ov=document.getElementById('lockdown-overlay');
+  ov.classList.add('active');document.getElementById('lock-timer').textContent=t;
+  const ld=setInterval(()=>{t--;document.getElementById('lock-timer').textContent=t;
+    if(t<=0){clearInterval(ld);ov.classList.remove('active');locked=false;}},1000);
 }
-
-function markStepError(id) {
-  if (!stepErrors[id]) stepErrors[id] = 0;
-  stepErrors[id]++;
-  const dot = document.getElementById('ed-'+id+'-'+Math.min(stepErrors[id],3));
-  if (dot) dot.classList.add('active');
+function markErr(id){
+  if(!stepErr[id])stepErr[id]=0;stepErr[id]++;
+  const d=document.getElementById('ed-'+id+'-'+Math.min(stepErr[id],3));
+  if(d)d.classList.add('on');
   applyPenalty();
-  if (stepErrors[id] >= 3) {
-    const msg = document.getElementById('locked-'+id);
-    if (msg) msg.style.display = 'block';
-    triggerLockdown();
-  }
+  if(stepErr[id]>=3){const m=document.getElementById('lm-'+id);if(m)m.style.display='block';triggerLockdown();}
 }
-
-function markStepDone(id) {
-  const p = document.getElementById('step-'+id);
-  if (p) p.classList.add('done');
-  const b = document.getElementById('badge-'+id);
-  if (b) { b.textContent = '✓'; b.classList.add('done'); }
+function stepDone(id){
+  const p=document.getElementById('sp-'+id);if(p)p.classList.add('done');
+  const b=document.getElementById('sb-'+id);if(b){b.textContent='✓';b.classList.add('done');}
 }
+function unlockStep(id){const p=document.getElementById('sp-'+id);if(p)p.classList.remove('locked');}
 
-function unlockStep(id) {
-  const p = document.getElementById('step-'+id);
-  if (p) p.classList.remove('locked');
+// ═══════════════════════════════════════════════════════
+// BOOK
+// ═══════════════════════════════════════════════════════
+let bookPages=[], bookIdx=0;
+function openBook(){
+  bookPages=BOOK_PAGES[curMis]||[];bookIdx=0;
+  renderBookPage();
+  document.getElementById('book-overlay').classList.add('active');
 }
-
-// ═══ RENDER ═══════════════════════════════════════════════════
-function renderMission(idx) {
-  const gs = document.getElementById('game-screen');
-  gs.innerHTML = '';
-  [m1,m2,m3,m4,m5,m6,m7,m8][idx](gs);
+function closeBook(){document.getElementById('book-overlay').classList.remove('active');}
+function renderBookPage(){
+  if(!bookPages.length)return;
+  document.getElementById('book-content').innerHTML=bookPages[bookIdx];
+  document.getElementById('book-page-info').textContent='Page '+(bookIdx+1)+' / '+bookPages.length;
+  document.getElementById('book-prev').disabled=bookIdx===0;
+  document.getElementById('book-next').disabled=bookIdx===bookPages.length-1;
 }
+function bookPage(dir){bookIdx=Math.max(0,Math.min(bookPages.length-1,bookIdx+dir));renderBookPage();}
 
-function mkStep(id, badge, title, inst) {
-  const d = document.createElement('div');
-  d.className = 'step-panel';
-  d.id = 'step-'+id;
-  d.innerHTML = `
-    <div class="step-header">
-      <span class="step-badge" id="badge-${id}">${badge}</span>
-      <span class="step-title">${title}</span>
-    </div>
-    <div class="step-inst">${inst}</div>
-    <div class="errors-bar">
-      <div class="err-dot" id="ed-${id}-1"></div>
-      <div class="err-dot" id="ed-${id}-2"></div>
-      <div class="err-dot" id="ed-${id}-3"></div>
-    </div>
-    <div class="step-locked-msg" id="locked-${id}">⚠ Trop d'erreurs — Patientez le déverrouillage</div>
-    <div id="content-${id}"></div>`;
+// ═══════════════════════════════════════════════════════
+// MISSION RENDERER
+// ═══════════════════════════════════════════════════════
+function renderMission(idx){
+  const gs=document.getElementById('game-screen');gs.innerHTML='';
+  [m1,m2,m3,m4,m5][idx](gs);
+}
+function mkStep(id,badge,title,inst){
+  const d=document.createElement('div');d.className='step';d.id='sp-'+id;
+  d.innerHTML=`<div class="step-hdr"><span class="step-badge" id="sb-${id}">${badge}</span><span class="step-ttl">${title}</span></div>
+  <div class="step-inst">${inst}</div>
+  <div class="errs"><div class="edot" id="ed-${id}-1"></div><div class="edot" id="ed-${id}-2"></div><div class="edot" id="ed-${id}-3"></div></div>
+  <div class="lock-msg" id="lm-${id}">⚠ Trop d'erreurs — Attendez le déverrouillage</div>
+  <div class="step-content" id="sc-${id}"></div>`;
   return d;
 }
+function mHdr(container,num,title,sub){
+  const img=document.createElement('img');img.src='c3i-mission.png';img.style.cssText='width:100%;max-width:700px;border:1px solid var(--border);border-radius:4px;margin-bottom:14px;display:block';img.onerror=()=>img.remove();container.appendChild(img);
+  const h=document.createElement('div');h.className='m-header';
+  h.innerHTML=`<div class="m-num">MISSION ${String(num).padStart(2,'0')}</div><h2>${title}</h2><div class="m-sub">${sub}</div>`;
+  container.appendChild(h);
+  const banner=document.createElement('div');banner.className='course-banner';
+  banner.innerHTML=`📖 Avant de commencer — <span onclick="openBook()" style="cursor:pointer;text-decoration:underline">Consulter le cours de cette mission</span>`;
+  container.appendChild(banner);
+}
 
-// ═══ MISSION 1 ════════════════════════════════════════════════
-const TYPE_DEFS = [
-  {type:'Technologique',def:'Surveiller les évolutions des outils, plateformes, logiciels et équipements liés à la formation.'},
-  {type:'Concurrentielle',def:'Observer les offres, pratiques et positionnements des autres organismes de formation.'},
-  {type:'Pédagogique',def:'Suivre les nouvelles approches, méthodes et dispositifs d\'apprentissage.'},
-  {type:'Réglementaire',def:'Traquer les évolutions législatives, réglementaires et certificationnelles du secteur.'}
+// ═══════════════════════════════════════════════════════
+// MISSION 1 — QUALIOPI
+// ═══════════════════════════════════════════════════════
+const QUALIOPI_IND = [
+  {ind:'Indicateur 11',crit:'Critère 3',lien:'Ressources pédagogiques actualisées — preuve de veille documentaire'},
+  {ind:'Indicateur 27',crit:'Critère 6',lien:'Amélioration continue — veille interne (évaluations, retours employeurs)'},
+  {ind:'Indicateur 30',crit:'Critère 7',lien:'Maintien des compétences des formateurs — preuve de veille pro'},
+  {ind:'Indicateur 32',crit:'Critère 7',lien:'Veille légale et réglementaire — l\'indicateur le plus direct'}
 ];
-const SITUATIONS = [
-  {text:'Lire la mise à jour de la réglementation QUALIOPI',correct:3},
-  {text:'Découvrir un nouvel outil d\'e-learning (LMS)',correct:0},
-  {text:'Analyser le catalogue d\'un OF concurrent',correct:1},
-  {text:'Se former à une nouvelle méthode de classe inversée',correct:2},
-  {text:'Surveiller les modifications du RNCP FPA',correct:3},
-  {text:'Tester Kahoot pour la formation',correct:0},
-  {text:'Comparer les tarifs des concurrents',correct:1},
-  {text:'Lire une étude sur l\'apprentissage par la simulation',correct:2},
-  {text:'Vérifier les évolutions de la loi Avenir professionnel',correct:3},
-  {text:'Découvrir un outil de réalité virtuelle pour la formation',correct:0},
-  {text:'Observer la communication d\'un OF rival',correct:1},
-  {text:'Assister à un webinaire sur la neuroscience appliquée',correct:2}
+const PREUVES = [
+  {text:'Journal de veille daté hebdomadaire',valid:true},
+  {text:'Alertes Légifrance archivées',valid:true},
+  {text:'Notes de synthèse thématiques avec sources',valid:true},
+  {text:'Publication informelle sur Facebook',valid:false},
+  {text:'Captures d\'écran fiches RNCP consultées',valid:true},
+  {text:'Email personnel sans date ni source',valid:false},
+  {text:'Dates de mise à jour des supports de formation',valid:true},
+  {text:'Conversation orale avec un collègue',valid:false}
 ];
-const TYPES = ['Technologique','Concurrentielle','Pédagogique','Réglementaire'];
-const TYPES_SHORT = ['T','C','P','R'];
+const QZ1 = [
+  {q:'Quel indicateur Qualiopi est le plus directement lié à la veille réglementaire ?',opts:['Indicateur 5','Indicateur 27','Indicateur 30','Indicateur 32'],correct:3},
+  {q:'Combien d\'indicateurs du RNQ concernent directement la veille ?',opts:['2','3','4','5'],correct:2},
+  {q:'Une veille passive seule (lecture informelle) suffit-elle pour satisfaire l\'Indicateur 32 ?',opts:['Oui, si elle est régulière','Non, elle doit être tracée et structurée','Seulement pour les petits OF','Oui si l\'auditeur est d\'accord'],correct:1},
+  {q:'L\'Indicateur 11 de Qualiopi concerne :',opts:['La veille réglementaire','Le maintien des compétences des formateurs','Les ressources pédagogiques actualisées','L\'amélioration continue'],correct:2}
+];
 
-let m1s1done=false, m1s2done=false, m1s1ok={}, m1s2sel={};
+let m1s1ok={},m1s1done=false,m1s2sel={},m1s2done=false,m1s3ans={},m1s3done=false;
 
-function m1(container) {
-  m1s1done=false; m1s2done=false; m1s1ok={}; m1s2sel={};
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 01</div><h2>📡 TYPES DE VEILLE</h2><div class="m-sub">Identifier et distinguer les 4 types de veille du formateur FPA</div>';
-  container.appendChild(hdr);
+function m1(container){
+  m1s1ok={};m1s1done=false;m1s2sel={};m1s2done=false;m1s3ans={};m1s3done=false;
+  mHdr(container,1,'🏅 INDICATEURS QUALIOPI','Identifier les indicateurs RNQ liés à la veille et leurs preuves de traçabilité');
 
-  const s1=mkStep('m1s1','ÉTAPE 1','Associer les définitions','▸ Pour chaque définition, cliquez sur le type de veille correspondant.');
+  // STEP 1 — Associer indicateur → lien veille
+  const s1=mkStep('q1s1','ÉTAPE 1','Associer indicateur → lien avec la veille','▸ Pour chaque indicateur, cliquez sur son lien correct avec la veille.');
   container.appendChild(s1);
-  const shuffled=[...TYPE_DEFS].sort(()=>Math.random()-.5);
-  window._m1shuf=shuffled;
-  const c1=document.getElementById('content-m1s1');
-  c1.innerHTML='<div style="display:flex;flex-direction:column;gap:12px" id="m1defs"></div>';
-  shuffled.forEach((item,i)=>{
-    const row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:wrap';
-    row.innerHTML=`<div style="flex:1;min-width:220px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:12px;font-size:13px">${item.def}</div>
-    ${TYPES.map((t,ti)=>`<button class="c-btn sel-${ti}" id="m1s1b-${i}-${ti}" onclick="m1s1pick(${i},'${item.type}','${t}',${ti})">${t}</button>`).join('')}`;
-    document.getElementById('m1defs').appendChild(row);
+  const shuf=[...QUALIOPI_IND].sort(()=>Math.random()-.5);
+  window._q1shuf=shuf;
+  const links=[...QUALIOPI_IND].map(i=>i.lien).sort(()=>Math.random()-.5);
+  document.getElementById('sc-q1s1').innerHTML=`<div style="display:flex;flex-direction:column;gap:10px" id="q1s1-rows"></div>`;
+  shuf.forEach((item,i)=>{
+    const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px;flex-wrap:wrap';
+    row.innerHTML=`<div style="min-width:140px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);padding:8px;background:var(--panel2);border:1px solid var(--border);border-radius:3px">${item.ind}</div>
+    <div class="match-col" style="flex:1;display:flex;flex-direction:column;gap:5px" id="q1s1-opts-${i}"></div>`;
+    document.getElementById('q1s1-rows').appendChild(row);
+    links.forEach((lien,li)=>{
+      const btn=document.createElement('div');btn.className='match-item';btn.dataset.lien=lien;btn.dataset.row=i;
+      btn.textContent=lien;btn.onclick=()=>q1s1pick(i,lien,item.lien,btn);
+      document.getElementById('q1s1-opts-'+i).appendChild(btn);
+    });
   });
 
-  const s2=mkStep('m1s2','ÉTAPE 2','Classifier 12 situations','▸ Pour chaque situation, cliquez sur le type correspondant : T · C · P · R puis validez.');
-  s2.classList.add('locked');
-  container.appendChild(s2);
-  const c2=document.getElementById('content-m1s2');
-  c2.innerHTML=`<div class="classify-list" id="m1sits"></div><button class="validate-btn amber" onclick="m1s2validate()">▶ VALIDER</button><div id="m1s2fb" class="feedback" style="display:none"></div>`;
-  SITUATIONS.forEach((sit,i)=>{
-    const row=document.createElement('div');
-    row.className='classify-row';row.id='m1sit-'+i;
-    row.innerHTML=`<span class="classify-label">${sit.text}</span>
-    <div class="classify-btns">${TYPES_SHORT.map((t,ti)=>`<button class="c-btn sel-${ti}" id="m1sb-${i}-${ti}" onclick="m1s2pick(${i},${ti})">${t}</button>`).join('')}</div>`;
-    document.getElementById('m1sits').appendChild(row);
+  // STEP 2 — Preuves valides
+  const s2=mkStep('q1s2','ÉTAPE 2','Identifier les preuves valables','▸ Sélectionnez TOUTES les preuves valables pour un auditeur Qualiopi, puis validez.');
+  s2.classList.add('locked');container.appendChild(s2);
+  document.getElementById('sc-q1s2').innerHTML=`<div class="cards-grid" id="q1s2-grid"></div><button class="vbtn amber" onclick="q1s2validate()">▶ VALIDER</button><div id="q1s2-fb"></div>`;
+  PREUVES.forEach((p,i)=>{
+    const c=document.createElement('div');c.className='card';c.id='q1c-'+i;
+    c.innerHTML=`<div style="font-size:12px">${p.text}</div>`;
+    c.onclick=()=>{if(m1s2done||locked)return;c.classList.toggle('sel');c.classList.contains('sel')?m1s2sel[i]=true:delete m1s2sel[i];};
+    document.getElementById('q1s2-grid').appendChild(c);
+  });
+
+  // STEP 3 — Quiz
+  const s3=mkStep('q1s3','ÉTAPE 3','Quiz Qualiopi','▸ Répondez aux 4 questions sur les exigences Qualiopi.');
+  s3.classList.add('locked');container.appendChild(s3);
+  const sc3=document.getElementById('sc-q1s3');
+  QZ1.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='quiz-q';el.id='qq1-'+i;
+    el.innerHTML=`<div class="q-num">QUESTION ${i+1}/4</div><div class="q-text">${item.q}</div>
+    <div class="q-opts">${item.opts.map((o,oi)=>`<button class="q-opt" onclick="q1s3pick(${i},${oi})">${o}</button>`).join('')}</div>`;
+    sc3.appendChild(el);
   });
 }
 
-window.m1s1pick=function(rowIdx,correctType,chosen,chosenIdx){
-  if(m1s1done||locked)return;
-  const btns=[];
-  for(let ti=0;ti<4;ti++){const b=document.getElementById('m1s1b-'+rowIdx+'-'+ti);if(b)btns.push(b);}
-  btns.forEach(b=>b.disabled=true);
-  const btn=document.getElementById('m1s1b-'+rowIdx+'-'+chosenIdx);
-  if(window._m1shuf[rowIdx].type===chosen){
-    if(btn){btn.style.borderColor='var(--green)';btn.style.color='var(--green)';}
-    m1s1ok[rowIdx]=true;
-    if(Object.keys(m1s1ok).length===4&&Object.values(m1s1ok).every(v=>v)){
-      setTimeout(()=>{markStepDone('m1s1');m1s1done=true;unlockStep('m1s2');},400);
-    }
-  } else {
-    if(btn){btn.style.borderColor='var(--red)';btn.style.color='var(--red)';}
-    markStepError('m1s1');
-    setTimeout(()=>{btns.forEach(b=>{b.disabled=false;b.style.borderColor='';b.style.color='';});},1200);
-  }
+let q1s1count=0;
+window.q1s1pick=function(rowIdx,chosen,correct,btn){
+  if(m1s1done||locked||m1s1ok[rowIdx])return;
+  if(chosen===correct){btn.classList.add('ok');m1s1ok[rowIdx]=true;q1s1count++;
+    if(q1s1count===4){setTimeout(()=>{stepDone('q1s1');m1s1done=true;unlockStep('q1s2');},400);}
+  } else {btn.classList.add('err');markErr('q1s1');setTimeout(()=>btn.classList.remove('sel','err'),1000);}
 };
-
-window.m1s2pick=function(sitIdx,typeIdx){
+window.q1s2validate=function(){
   if(m1s2done||locked)return;
-  m1s2sel[sitIdx]=typeIdx;
-  for(let ti=0;ti<4;ti++){const b=document.getElementById('m1sb-'+sitIdx+'-'+ti);if(b)b.style.fontWeight=ti===typeIdx?'bold':'normal';b&&(b.style.background=ti===typeIdx?'rgba(255,183,0,.15)':'transparent');}
-};
-
-window.m1s2validate=function(){
-  if(m1s2done||locked)return;
-  if(Object.keys(m1s2sel).length<12){const fb=document.getElementById('m1s2fb');fb.className='feedback err';fb.style.display='block';fb.textContent='⚠ Classifiez toutes les situations.';return;}
-  let errs=0;
-  SITUATIONS.forEach((_,i)=>{
-    const row=document.getElementById('m1sit-'+i);
-    row.classList.remove('correct','wrong');
-    if(m1s2sel[i]===SITUATIONS[i].correct)row.classList.add('correct');
-    else{row.classList.add('wrong');errs++;}
+  const sel=Object.keys(m1s2sel).map(Number);
+  let err=0;
+  PREUVES.forEach((p,i)=>{
+    const c=document.getElementById('q1c-'+i);c.classList.remove('correct','wrong');
+    const shouldSel=p.valid;const isSel=m1s2sel[i]===true;
+    if(shouldSel&&!isSel){c.classList.add('wrong');err++;}
+    else if(!shouldSel&&isSel){c.classList.add('wrong');err++;}
+    else if(shouldSel&&isSel){c.classList.add('correct');}
   });
-  if(errs===0){markStepDone('m1s2');m1s2done=true;setTimeout(()=>showClear((stepErrors['m1s1']||0)+(stepErrors['m1s2']||0)),600);}
-  else{markStepError('m1s2');const fb=document.getElementById('m1s2fb');fb.className='feedback err';fb.style.display='block';fb.textContent=`⚠ ${errs} erreur(s) surlignée(s). Corrigez.`;setTimeout(()=>{SITUATIONS.forEach((_,i)=>document.getElementById('m1sit-'+i).classList.remove('correct','wrong'));},1500);}
+  const fb=document.getElementById('q1s2-fb');
+  if(err===0){fb.className='fb ok';fb.innerHTML='✓ Parfait — Toutes les preuves valables identifiées.';stepDone('q1s2');m1s2done=true;unlockStep('q1s3');}
+  else{fb.className='fb err';fb.innerHTML=`⚠ ${err} erreur(s). Corrigez.`;markErr('q1s2');setTimeout(()=>{PREUVES.forEach((_,i)=>document.getElementById('q1c-'+i).classList.remove('correct','wrong'));fb.innerHTML='';},1500);}
 };
-
-// ═══ MISSION 2 ════════════════════════════════════════════════
-const SOURCES = [
-  {name:'France Compétences (francecompetences.fr)',reliable:true,why:'Organisme officiel — Actuel, Pertinent, Autorité'},
-  {name:'Blog personnel sans date ni auteur',reliable:false,why:'Anonyme, non daté — Échoue Autorité et Actualité'},
-  {name:'DREETS — Direction régionale de l\'économie',reliable:true,why:'Institution officielle — Exactitude et Autorité vérifiables'},
-  {name:'Forum Reddit "formation pro"',reliable:false,why:'Aucun contrôle éditorial — Exactitude non vérifiable'},
-  {name:'Légifrance — Base officielle de la loi',reliable:true,why:'Source primaire officielle — Actuel, Exact, Autorité'},
-  {name:'Site de vente "formations certifiantes" sans SIRET',reliable:false,why:'Objectif commercial, identité douteuse — Échoue CRAAP'},
-  {name:'Réseau CARIF-OREF Hauts-de-France',reliable:true,why:'Réseau institutionnel régional — Pertinent, Autorité'},
-  {name:'Wikipedia — Article "Formation professionnelle"',reliable:false,why:'Modifiable par tous — Autorité non garantie pour usage pro'}
-];
-const CRAAP_ITEMS = [
-  {text:'L\'article de France Compétences date de 2024 — cela satisfait quel critère CRAAP ?',correct:0,opts:['Actualité','Pertinence','Autorité','Exactitude']},
-  {text:'Un auteur identifié avec ses qualifications sur DREETS.gouv.fr — quel critère ?',correct:2,opts:['Actualité','Pertinence','Autorité','Objectivité']},
-  {text:'Le contenu du CARIF-OREF porte sur les certifications régionales FPA — quel critère ?',correct:1,opts:['Actualité','Pertinence','Autorité','Exactitude']},
-  {text:'Les données de Légifrance sont vérifiables via les textes officiels — quel critère ?',correct:3,opts:['Actualité','Pertinence','Autorité','Exactitude']}
-];
-
-let m2s1ok={}, m2s1done=false, m2s2done=false, m2s2answers={};
-
-function m2(container) {
-  m2s1ok={}; m2s1done=false; m2s2done=false; m2s2answers={};
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 02</div><h2>🔍 SOURCES & MÉTHODE CRAAP</h2><div class="m-sub">Current · Relevant · Authority · Accuracy · Purpose</div>';
-  container.appendChild(hdr);
-
-  const s1=mkStep('m2s1','ÉTAPE 1','Sources fiables ou non ?','▸ Pour chaque source, cliquez sur ✓ FIABLE ou ✗ NON FIABLE.');
-  container.appendChild(s1);
-  const c1=document.getElementById('content-m2s1');
-  const shuffled=[...SOURCES].sort(()=>Math.random()-.5);
-  window._m2srcs=shuffled;
-  c1.innerHTML='<div style="display:flex;flex-direction:column;gap:8px" id="m2srcs"></div>';
-  shuffled.forEach((src,i)=>{
-    const row=document.createElement('div');
-    row.id='m2src-'+i;
-    row.style.cssText='display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px;background:var(--panel2);border:1px solid var(--border);border-radius:4px';
-    row.innerHTML=`<div style="flex:1;min-width:220px;font-size:13px">${src.name}</div>
-    <button class="tf-btn v" id="m2ok-${i}" onclick="m2s1pick(${i},true)">✓ FIABLE</button>
-    <button class="tf-btn f" id="m2no-${i}" onclick="m2s1pick(${i},false)">✗ NON FIABLE</button>
-    <div id="m2why-${i}" style="display:none;width:100%;font-family:'Share Tech Mono',monospace;font-size:11px;margin-top:4px"></div>`;
-    document.getElementById('m2srcs').appendChild(row);
-  });
-
-  const s2=mkStep('m2s2','ÉTAPE 2','Critères CRAAP','▸ Identifiez quel critère CRAAP est satisfait dans chaque situation.');
-  s2.classList.add('locked');
-  container.appendChild(s2);
-  const c2=document.getElementById('content-m2s2');
-  c2.innerHTML='<div id="m2craaps"></div>';
-  CRAAP_ITEMS.forEach((item,i)=>{
-    const el=document.createElement('div');
-    el.className='quiz-q';
-    el.innerHTML=`<div class="q-num">SITUATION ${i+1}</div><div class="q-text">${item.text}</div>
-    <div class="quiz-opts">${item.opts.map((o,oi)=>`<button class="quiz-opt" onclick="m2s2pick(${i},${oi},${item.correct})">${o}</button>`).join('')}</div>`;
-    document.getElementById('m2craaps').appendChild(el);
-  });
-}
-
-window.m2s1pick=function(idx,chosen){
-  if(locked||m2s1ok[idx]===true)return;
-  const src=window._m2srcs[idx];
-  document.getElementById('m2ok-'+idx).disabled=true;
-  document.getElementById('m2no-'+idx).disabled=true;
-  const why=document.getElementById('m2why-'+idx);
-  const row=document.getElementById('m2src-'+idx);
-  if(chosen===src.reliable){
-    row.style.borderColor='var(--green)';
-    why.style.display='block';why.style.color='var(--green)';why.textContent='✓ '+src.why;
-    m2s1ok[idx]=true;
-    if(Object.keys(m2s1ok).length===8&&Object.values(m2s1ok).every(v=>v)){
-      setTimeout(()=>{markStepDone('m2s1');m2s1done=true;unlockStep('m2s2');},400);
-    }
-  } else {
-    row.style.borderColor='var(--red)';
-    why.style.display='block';why.style.color='var(--red)';why.textContent='✗ '+src.why;
-    m2s1ok[idx]=false;
-    markStepError('m2s1');
-    setTimeout(()=>{
-      document.getElementById('m2ok-'+idx).disabled=false;
-      document.getElementById('m2no-'+idx).disabled=false;
-      row.style.borderColor='var(--border)';why.style.display='none';
-      delete m2s1ok[idx];
-    },1500);
-  }
-};
-
-window.m2s2pick=function(qi,chosen,correct){
-  if(m2s2done||locked||m2s2answers[qi]!==undefined)return;
-  const opts=document.querySelectorAll('#m2craaps .quiz-q:nth-child('+(qi+1)+') .quiz-opt');
+window.q1s3pick=function(qi,chosen){
+  if(m1s3done||locked||m1s3ans[qi]!==undefined)return;
+  const item=QZ1[qi];
+  const opts=document.querySelectorAll('#qq1-'+qi+' .q-opt');
   opts.forEach(o=>o.disabled=true);
-  opts[chosen].classList.add(chosen===correct?'correct':'wrong');
-  if(chosen!==correct){opts[correct].classList.add('correct');markStepError('m2s2');}
-  m2s2answers[qi]=chosen===correct;
-  if(Object.keys(m2s2answers).length===4){
-    m2s2done=true;markStepDone('m2s2');
-    setTimeout(()=>showClear(Object.values(m2s2answers).filter(v=>!v).length),600);
+  opts[chosen].classList.add(chosen===item.correct?'correct':'wrong');
+  if(chosen!==item.correct){opts[item.correct].classList.add('correct');markErr('q1s3');m1s3ans[qi]=false;}
+  else m1s3ans[qi]=true;
+  if(Object.keys(m1s3ans).length===4){
+    m1s3done=true;stepDone('q1s3');
+    setTimeout(()=>showClear(Object.values(m1s3ans).filter(v=>!v).length),600);
   }
 };
 
-// ═══ MISSION 3 ════════════════════════════════════════════════
-const PRACTICES = [
-  {text:'Mettre en place une alerte Google sur "formation professionnelle"',correct:'passive'},
+// ═══════════════════════════════════════════════════════
+// MISSION 2 — 10 TYPES DE VEILLE
+// ═══════════════════════════════════════════════════════
+const TYPES10 = [
+  {name:'Documentaire',def:'Surveillance systématique de la production de documents écrits (articles, rapports, publications officielles).'},
+  {name:'Réglementaire / Juridique',def:'Surveillance de l\'évolution des lois, décrets, arrêtés et normes applicables au secteur.'},
+  {name:'Technologique',def:'Surveillance des innovations technologiques et outils numériques applicables à la formation.'},
+  {name:'Concurrentielle',def:'Surveillance des activités des organismes de formation concurrents (offres, prix, modalités).'},
+  {name:'Sectorielle',def:'Surveillance globale d\'un secteur d\'activité pour identifier les tendances économiques et sociales.'},
+  {name:'Métier',def:'Surveillance des évolutions d\'un métier spécifique : compétences attendues, certifications.'},
+  {name:'Stratégique',def:'Surveillance de l\'environnement externe pour éclairer les décisions stratégiques (PESTEL).'},
+  {name:'Commerciale / Marketing',def:'Surveillance des tendances de consommation, besoins clients et pratiques commerciales.'},
+  {name:'Innovation pédagogique',def:'Surveillance des innovations pédagogiques (AFEST, microlearning, adaptative learning).'},
+  {name:'E-réputation / Réseaux',def:'Surveillance de ce qui est dit sur internet à propos d\'un organisme ou formateur.'}
+];
+const SITU10 = [
+  {text:'Surveiller les modifications du Code du Travail relatives au CPF',correct:1},
+  {text:'Tester Kahoot et des outils LMS pour ses formations',correct:2},
+  {text:'Analyser le catalogue et les tarifs d\'un OF concurrent',correct:3},
+  {text:'Suivre les publications ANDRH et APEC sur les métiers RH',correct:4},
+  {text:'Consulter les fiches RNCP sur France Compétences',correct:5},
+  {text:'Lire une étude de marché sur les tendances EdTech',correct:6},
+  {text:'Surveiller les avis Google et mentions LinkedIn de son OF',correct:9},
+  {text:'Assister à un colloque AIPU sur le microlearning',correct:8},
+  {text:'Lire de nouvelles parutions dans CAIRN sur la pédagogie',correct:0},
+  {text:'Étudier les offres d\'emploi pour identifier les compétences recherchées',correct:7}
+];
+
+let m2s1sel={},m2s1done=false,m2s2sel={},m2s2done=false,m2s3ok={},m2s3done=false;
+const TYPE_NAMES=['Documentaire','Réglementaire','Technologique','Concurrentielle','Sectorielle','Métier','Stratégique','Commerciale','Innovation péda.','E-réputation'];
+
+function m2(container){
+  m2s1sel={};m2s1done=false;m2s2sel={};m2s2done=false;m2s3ok={};m2s3done=false;
+  mHdr(container,2,'📡 LES 10 TYPES DE VEILLE','Maîtriser tous les types de veille professionnelle du formateur FPA');
+
+  // STEP 1 — Match type → définition (5 types à la fois × 2)
+  const s1=mkStep('m2s1','ÉTAPE 1','Associer type → définition (10 types)','▸ Cliquez sur un type (gauche) puis sur sa définition (droite). Associez les 10 types.');
+  container.appendChild(s1);
+  const shufT=[...TYPES10].sort(()=>Math.random()-.5);
+  const shufD=[...TYPES10].sort(()=>Math.random()-.5);
+  window._m2t=shufT;window._m2d=shufD;
+  document.getElementById('sc-m2s1').innerHTML=`<div class="match-wrap"><div class="match-col" id="m2t-col"></div><div class="match-col" id="m2d-col"></div></div>`;
+  shufT.forEach((t,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m2t-'+i;el.innerHTML=`<strong>${t.name}</strong>`;el.onclick=()=>m2match('t',i);document.getElementById('m2t-col').appendChild(el);});
+  shufD.forEach((d,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m2d-'+i;el.style.fontSize='11px';el.textContent=d.def;el.onclick=()=>m2match('d',i);document.getElementById('m2d-col').appendChild(el);});
+
+  // STEP 2 — Classify situations
+  const s2=mkStep('m2s2','ÉTAPE 2','Classifier 10 situations réelles','▸ Pour chaque situation, sélectionnez le type de veille correspondant.');
+  s2.classList.add('locked');container.appendChild(s2);
+  document.getElementById('sc-m2s2').innerHTML=`<div class="classify-list" id="m2s2-list"></div><button class="vbtn amber" onclick="m2s2validate()">▶ VALIDER</button><div id="m2s2-fb"></div>`;
+  SITU10.forEach((sit,i)=>{
+    const row=document.createElement('div');row.className='c-row';row.id='m2sit-'+i;
+    row.innerHTML=`<span class="c-label">${sit.text}</span>
+    <div class="c-btns">${TYPE_NAMES.map((t,ti)=>`<button class="c-btn" onclick="m2s2pick(${i},${ti})" id="m2sb-${i}-${ti}">${['Doc','Rég','Tech','Conc','Sect','Mét','Strat','Com','Innov','E-rép'][ti]}</button>`).join('')}</div>`;
+    document.getElementById('m2s2-list').appendChild(row);
+  });
+
+  // STEP 3 — match outil → type
+  const OUTILS_TYPES=[
+    {outil:'Légifrance',type:'Réglementaire / Juridique'},
+    {outil:'Fiches RNCP — France Compétences',type:'Métier'},
+    {outil:'Mon Compte Formation (offres concurrents)',type:'Concurrentielle'},
+    {outil:'CAIRN.info (revues académiques)',type:'Documentaire'},
+    {outil:'FFFOD — revues EdTech',type:'Innovation pédagogique'}
+  ];
+  const s3=mkStep('m2s3','ÉTAPE 3','Associer outil → type de veille','▸ Cliquez sur un outil (gauche) puis sur son type de veille (droite).');
+  s3.classList.add('locked');container.appendChild(s3);
+  const ots=[...OUTILS_TYPES].sort(()=>Math.random()-.5);
+  const tts=[...OUTILS_TYPES].sort(()=>Math.random()-.5);
+  window._m2ot=ots;window._m2tt=tts;
+  document.getElementById('sc-m2s3').innerHTML=`<div class="match-wrap"><div class="match-col" id="m2oc"></div><div class="match-col" id="m2tc"></div></div>`;
+  ots.forEach((o,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m2o-'+i;el.style.fontSize='12px';el.textContent=o.outil;el.onclick=()=>m2match3('o',i);document.getElementById('m2oc').appendChild(el);});
+  tts.forEach((t,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m2tt-'+i;el.style.fontSize='12px';el.textContent=t.type;el.onclick=()=>m2match3('t',i);document.getElementById('m2tc').appendChild(el);});
+}
+
+let m2selT=null,m2selD=null,m2matched={};
+window.m2match=function(type,idx){
+  if(m2s1done||locked)return;
+  if(type==='t'){if(m2selT!==null)document.getElementById('m2t-'+m2selT).classList.remove('sel');m2selT=idx;document.getElementById('m2t-'+idx).classList.add('sel');}
+  else{if(m2selD!==null)document.getElementById('m2d-'+m2selD).classList.remove('sel');m2selD=idx;document.getElementById('m2d-'+idx).classList.add('sel');}
+  if(m2selT!==null&&m2selD!==null){
+    const te=document.getElementById('m2t-'+m2selT),de=document.getElementById('m2d-'+m2selD);
+    if(window._m2t[m2selT].name===window._m2d[m2selD].name){
+      te.classList.remove('sel');de.classList.remove('sel');te.classList.add('ok');de.classList.add('ok');m2matched[m2selT]=true;
+    } else {
+      te.classList.add('err');de.classList.add('err');markErr('m2s1');
+      setTimeout(()=>{te.classList.remove('sel','err');de.classList.remove('sel','err');},900);
+    }
+    m2selT=null;m2selD=null;
+    if(Object.keys(m2matched).length===10){stepDone('m2s1');m2s1done=true;unlockStep('m2s2');}
+  }
+};
+window.m2s2pick=function(si,ti){
+  if(m2s2done||locked)return;
+  m2s2sel[si]=ti;
+  for(let t=0;t<10;t++){const b=document.getElementById('m2sb-'+si+'-'+t);if(b)b.className='c-btn'+(t===ti?' sel':'');}
+};
+window.m2s2validate=function(){
+  if(m2s2done||locked)return;
+  if(Object.keys(m2s2sel).length<10){const fb=document.getElementById('m2s2-fb');fb.className='fb err';fb.textContent='⚠ Classifiez toutes les situations.';return;}
+  let err=0;
+  SITU10.forEach((_,i)=>{const row=document.getElementById('m2sit-'+i);row.classList.remove('correct','wrong');
+    if(m2s2sel[i]===SITU10[i].correct)row.classList.add('correct');else{row.classList.add('wrong');err++;}
+  });
+  if(err===0){stepDone('m2s2');m2s2done=true;unlockStep('m2s3');const fb=document.getElementById('m2s2-fb');fb.className='fb ok';fb.textContent='✓ Toutes les situations correctement classifiées.';}
+  else{markErr('m2s2');const fb=document.getElementById('m2s2-fb');fb.className='fb err';fb.textContent=`⚠ ${err} erreur(s) surlignée(s). Corrigez.`;setTimeout(()=>{SITU10.forEach((_,i)=>document.getElementById('m2sit-'+i).classList.remove('correct','wrong'));},1600);}
+};
+
+let m2selO=null,m2selTT=null,m2matched3={};
+window.m2match3=function(type,idx){
+  if(m2s3done||locked)return;
+  if(type==='o'){if(m2selO!==null)document.getElementById('m2o-'+m2selO).classList.remove('sel');m2selO=idx;document.getElementById('m2o-'+idx).classList.add('sel');}
+  else{if(m2selTT!==null)document.getElementById('m2tt-'+m2selTT).classList.remove('sel');m2selTT=idx;document.getElementById('m2tt-'+idx).classList.add('sel');}
+  if(m2selO!==null&&m2selTT!==null){
+    const oe=document.getElementById('m2o-'+m2selO),te=document.getElementById('m2tt-'+m2selTT);
+    if(window._m2ot[m2selO].type===window._m2tt[m2selTT].type){
+      oe.classList.remove('sel');te.classList.remove('sel');oe.classList.add('ok');te.classList.add('ok');m2matched3[m2selO]=true;
+    } else {
+      oe.classList.add('err');te.classList.add('err');markErr('m2s3');
+      setTimeout(()=>{oe.classList.remove('sel','err');te.classList.remove('sel','err');},900);
+    }
+    m2selO=null;m2selTT=null;
+    if(Object.keys(m2matched3).length===5){stepDone('m2s3');m2s3done=true;setTimeout(()=>showClear((stepErr['m2s1']||0)+(stepErr['m2s2']||0)+(stepErr['m2s3']||0)),600);}
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+// MISSION 3 — ACTIVE / PASSIVE
+// ═══════════════════════════════════════════════════════
+const PRACT = [
+  {text:'Configurer Google Alerts sur "Qualiopi réforme 2025"',correct:'passive'},
   {text:'Lire activement une revue spécialisée chaque semaine',correct:'active'},
-  {text:'S\'abonner à un flux RSS de sites institutionnels',correct:'passive'},
-  {text:'Participer à un groupe LinkedIn pour échanger avec des pairs',correct:'active'},
-  {text:'Recevoir automatiquement la newsletter de l\'OPCO',correct:'passive'},
-  {text:'Assister à un salon professionnel pour collecter des informations',correct:'active'},
-  {text:'Configurer Feedly pour agréger des sources thématiques',correct:'passive'},
-  {text:'Interroger un expert lors d\'une réunion réseau',correct:'active'},
-  {text:'Utiliser Google Actualités avec des mots-clés prédéfinis',correct:'passive'},
-  {text:'Conduire une interview de formateurs expérimentés',correct:'active'}
+  {text:'S\'abonner à un flux RSS Légifrance',correct:'passive'},
+  {text:'Participer à un groupe LinkedIn Formation Pro',correct:'active'},
+  {text:'Recevoir automatiquement la newsletter mensuelle de l\'OPCO',correct:'passive'},
+  {text:'Assister à un salon professionnel pour recueillir des informations',correct:'active'},
+  {text:'Configurer Feedly avec des flux RSS institutionnels',correct:'passive'},
+  {text:'Conduire une interview d\'un expert de la formation',correct:'active'},
+  {text:'Utiliser Google Actualités avec mots-clés prédéfinis',correct:'passive'},
+  {text:'Rédiger une note de synthèse mensuelle à diffuser à l\'équipe',correct:'active'}
 ];
-const TF_ITEMS = [
-  {q:'La veille passive nécessite toujours une action humaine régulière.',correct:'f',expl:'Faux — La veille passive est automatisée (alertes, flux RSS) et fonctionne sans intervention constante.'},
-  {q:'Google Alerts est un outil de veille active.',correct:'f',expl:'Faux — C\'est de la veille passive : une fois configuré, il collecte automatiquement.'},
-  {q:'La veille active est plus coûteuse en temps que la veille passive.',correct:'v',expl:'Vrai — Elle implique des démarches intentionnelles (salons, interviews, lectures actives).'},
-  {q:'Un formateur peut combiner veille active et passive dans sa pratique.',correct:'v',expl:'Vrai — Les deux sont complémentaires et recommandées dans une démarche complète.'},
-  {q:'La veille passive suffit à elle seule pour une veille professionnelle complète.',correct:'f',expl:'Faux — Elle doit être complétée par des démarches actives pour couvrir tous les angles.'}
+const TF3 = [
+  {q:'La veille passive seule suffit pour valider la CP12 du REAC FPA.',correct:'f',expl:'Faux — Elle n\'est pas traçable ni documentée. Le jury et Qualiopi exigent des preuves.'},
+  {q:'Google Alerts, une fois configuré, est un outil de veille passive.',correct:'v',expl:'Vrai — Il collecte automatiquement sans action intentionnelle à chaque résultat.'},
+  {q:'La veille active est plus coûteuse en temps que la veille passive.',correct:'v',expl:'Vrai — Elle implique des démarches intentionnelles, régulières et documentées.'},
+  {q:'Un formateur peut combiner veille active et passive dans sa pratique.',correct:'v',expl:'Vrai — Les deux sont complémentaires : la passive alerte, l\'active approfondit.'},
+  {q:'Un journal de veille est une preuve valable pour l\'Indicateur 30 de Qualiopi.',correct:'v',expl:'Vrai — C\'est la preuve typique du maintien des compétences du formateur.'}
 ];
 
-let m3s1answers={}, m3s1done=false, m3tfAnswers={}, m3s2done=false;
+let m3pans={},m3p1done=false,m3tfans={},m3tf2done=false;
 
-function m3(container) {
-  m3s1answers={}; m3s1done=false; m3tfAnswers={}; m3s2done=false;
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 03</div><h2>⚡ VEILLE ACTIVE / PASSIVE</h2><div class="m-sub">Distinguer les pratiques intentionnelles des pratiques automatisées</div>';
-  container.appendChild(hdr);
-
+function m3(container){
+  m3pans={};m3p1done=false;m3tfans={};m3tf2done=false;
+  mHdr(container,3,'⚡ VEILLE ACTIVE & PASSIVE','Distinguer les deux méthodes de veille professionnelle');
   const s1=mkStep('m3s1','ÉTAPE 1','Classifier les pratiques','▸ Pour chaque pratique, cliquez sur ⚡ ACTIVE ou 🔄 PASSIVE.');
   container.appendChild(s1);
-  const c1=document.getElementById('content-m3s1');
-  c1.innerHTML='<div class="classify-list" id="m3prac"></div>';
-  PRACTICES.forEach((p,i)=>{
-    const row=document.createElement('div');
-    row.className='classify-row';row.id='m3row-'+i;
-    row.innerHTML=`<span class="classify-label">${p.text}</span>
-    <div class="classify-btns">
-      <button class="c-btn sel-0" onclick="m3pick(${i},'active')">⚡ Active</button>
-      <button class="c-btn sel-1" onclick="m3pick(${i},'passive')">🔄 Passive</button>
+  document.getElementById('sc-m3s1').innerHTML='<div class="classify-list" id="m3prac"></div>';
+  PRACT.forEach((p,i)=>{
+    const row=document.createElement('div');row.className='c-row';row.id='m3r-'+i;
+    row.innerHTML=`<span class="c-label">${p.text}</span>
+    <div class="c-btns">
+      <button class="c-btn" onclick="m3pick(${i},'active')">⚡ Active</button>
+      <button class="c-btn" onclick="m3pick(${i},'passive')">🔄 Passive</button>
     </div>`;
     document.getElementById('m3prac').appendChild(row);
   });
-
-  const s2=mkStep('m3s2','ÉTAPE 2','Vrai ou Faux','▸ Répondez par VRAI ou FAUX à chaque affirmation.');
-  s2.classList.add('locked');
-  container.appendChild(s2);
-  const c2=document.getElementById('content-m3s2');
-  c2.innerHTML='<div class="tf-list" id="m3tf"></div>';
-  TF_ITEMS.forEach((item,i)=>{
-    const row=document.createElement('div');
-    row.className='tf-row';row.id='m3tf-'+i;
+  const s2=mkStep('m3s2','ÉTAPE 2','Vrai ou Faux','▸ Répondez par VRAI ou FAUX à chaque affirmation sur les méthodes de veille.');
+  s2.classList.add('locked');container.appendChild(s2);
+  document.getElementById('sc-m3s2').innerHTML='<div class="tf-list" id="m3tf"></div>';
+  TF3.forEach((item,i)=>{
+    const row=document.createElement('div');row.className='tf-row';row.id='m3tf-'+i;
     row.innerHTML=`<span class="tf-q">${item.q}</span>
     <div class="tf-btns">
       <button class="tf-btn v" onclick="m3tf(${i},'v')">VRAI</button>
       <button class="tf-btn f" onclick="m3tf(${i},'f')">FAUX</button>
     </div>
-    <div id="m3expl-${i}" style="display:none;width:100%;font-family:'Share Tech Mono',monospace;font-size:11px;margin-top:6px;color:var(--text-dim)"></div>`;
+    <div class="tf-expl" id="m3ex-${i}">${item.expl}</div>`;
     document.getElementById('m3tf').appendChild(row);
   });
 }
 
 window.m3pick=function(idx,chosen){
-  if(m3s1done||locked||m3s1answers[idx]!==undefined)return;
-  const row=document.getElementById('m3row-'+idx);
-  const btns=row.querySelectorAll('.c-btn');
-  btns.forEach(b=>b.disabled=true);
-  if(chosen===PRACTICES[idx].correct){
-    row.classList.add('correct');m3s1answers[idx]=true;
-    if(Object.keys(m3s1answers).length===10&&Object.values(m3s1answers).every(v=>v)){
-      setTimeout(()=>{markStepDone('m3s1');m3s1done=true;unlockStep('m3s2');},400);
-    }
+  if(m3p1done||locked||m3pans[idx]!==undefined)return;
+  const row=document.getElementById('m3r-'+idx);
+  row.querySelectorAll('.c-btn').forEach(b=>b.disabled=true);
+  if(chosen===PRACT[idx].correct){row.classList.add('correct');m3pans[idx]=true;
+    if(Object.keys(m3pans).length===10&&Object.values(m3pans).every(v=>v)){
+      setTimeout(()=>{stepDone('m3s1');m3p1done=true;unlockStep('m3s2');},400);}
   } else {
-    row.classList.add('wrong');markStepError('m3s1');
-    setTimeout(()=>{row.classList.remove('correct','wrong');btns.forEach(b=>b.disabled=false);delete m3s1answers[idx];},1200);
+    row.classList.add('wrong');m3pans[idx]=false;markErr('m3s1');
+    delete m3pans[idx];
+    setTimeout(()=>{row.classList.remove('correct','wrong');row.querySelectorAll('.c-btn').forEach(b=>b.disabled=false);},1200);
   }
 };
-
 window.m3tf=function(idx,chosen){
-  if(m3s2done||locked||m3tfAnswers[idx]!==undefined)return;
+  if(m3tf2done||locked||m3tfans[idx]!==undefined)return;
   const row=document.getElementById('m3tf-'+idx);
-  row.querySelectorAll('.tf-btn').forEach(b=>b.disabled=true);
-  const expl=document.getElementById('m3expl-'+idx);
-  expl.style.display='block';expl.textContent=TF_ITEMS[idx].expl;
-  if(chosen===TF_ITEMS[idx].correct){
-    row.classList.add('correct');m3tfAnswers[idx]=true;
+  const btns=row.querySelectorAll('.tf-btn');btns.forEach(b=>b.disabled=true);
+  const expl=document.getElementById('m3ex-'+idx);expl.style.display='block';
+  if(chosen===TF3[idx].correct){
+    row.classList.add('correct');
+    [...btns].find(b=>b.classList.contains(chosen)).classList.add('correct');
+    m3tfans[idx]=true;
   } else {
-    row.classList.add('wrong');m3tfAnswers[idx]=false;
-    expl.style.color='var(--red)';markStepError('m3s2');
+    row.classList.add('wrong');
+    [...btns].find(b=>b.classList.contains(chosen)).classList.add('wrong');
+    [...btns].find(b=>b.classList.contains(TF3[idx].correct)).classList.add('correct');
+    m3tfans[idx]=false;markErr('m3s2');
   }
-  if(Object.keys(m3tfAnswers).length===5){
-    m3s2done=true;markStepDone('m3s2');
-    setTimeout(()=>showClear(Object.values(m3tfAnswers).filter(v=>!v).length),600);
-  }
+  if(Object.keys(m3tfans).length===5){m3tf2done=true;stepDone('m3s2');
+    setTimeout(()=>showClear(Object.values(m3tfans).filter(v=>!v).length),600);}
 };
 
-// ═══ MISSION 4 ════════════════════════════════════════════════
-const ALL_TOOLS = [
-  {name:'Google Alerts',isVeille:true,func:'Recevoir des alertes e-mail sur des mots-clés'},
-  {name:'Feedly',isVeille:true,func:'Agréger des flux RSS de sources multiples'},
-  {name:'LinkedIn',isVeille:true,func:'Suivre l\'actualité des professionnels et organismes'},
-  {name:'Scoop.it',isVeille:true,func:'Curation et partage de contenus thématiques'},
-  {name:'Netvibes',isVeille:true,func:'Tableau de bord de veille personnalisable'},
-  {name:'Canva',isVeille:false,func:'Création de supports visuels'},
-  {name:'Slack',isVeille:false,func:'Messagerie instantanée d\'équipe'},
-  {name:'Zoom',isVeille:false,func:'Visioconférence et webinaires'},
-  {name:'Trello',isVeille:false,func:'Gestion de projets par tableaux Kanban'},
-  {name:'PowerPoint',isVeille:false,func:'Création de présentations'}
+// ═══════════════════════════════════════════════════════
+// MISSION 4 — 7 ÉTAPES
+// ═══════════════════════════════════════════════════════
+const ETAPES7 = [
+  {label:'DÉFINIR',desc:'Définir les objectifs SMART de veille'},
+  {label:'IDENTIFIER',desc:'Identifier les besoins d\'information'},
+  {label:'SÉLECTIONNER',desc:'Sélectionner les sources fiables'},
+  {label:'COLLECTER',desc:'Collecter les informations (auto + manuelle)'},
+  {label:'ANALYSER',desc:'Analyser et valider les informations'},
+  {label:'DIFFUSER',desc:'Diffuser les résultats (équipe, apprenants, jury)'},
+  {label:'METTRE À JOUR',desc:'Réviser le système de veille (amélioration continue)'}
 ];
 
-let m4s1sel={}, m4s1done=false, m4selT=null, m4selF=null, m4matched={}, m4s2done=false;
+let m4done=false;
 
-function m4(container) {
-  m4s1sel={}; m4s1done=false; m4selT=null; m4selF=null; m4matched={}; m4s2done=false;
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 04</div><h2>🛠️ OUTILS NUMÉRIQUES</h2><div class="m-sub">Maîtriser les outils de veille numérique du formateur FPA</div>';
-  container.appendChild(hdr);
-
-  const s1=mkStep('m4s1','ÉTAPE 1','Identifier les outils de veille','▸ Parmi ces 10 outils, sélectionnez les 5 outils de veille professionnelle.');
+function m4(container){
+  m4done=false;
+  mHdr(container,4,'🔄 MÉTHODOLOGIE EN 7 ÉTAPES','Reconstituer le cycle de mise en place d\'une veille professionnelle');
+  const s1=mkStep('m4s1','ÉTAPE 1','Remettre les 7 étapes dans l\'ordre','▸ Glissez-déposez les étapes pour les ordonner chronologiquement, puis validez.');
   container.appendChild(s1);
-  const shuffled=[...ALL_TOOLS].sort(()=>Math.random()-.5);
-  window._m4tools=shuffled;
-  document.getElementById('content-m4s1').innerHTML=`<div class="cards-grid" id="m4grid"></div><button class="validate-btn" onclick="m4s1validate()">▶ VALIDER (5 outils)</button><div id="m4s1fb" class="feedback" style="display:none"></div>`;
-  shuffled.forEach((t,i)=>{
-    const card=document.createElement('div');
-    card.className='card-item';card.id='m4c-'+i;
-    card.innerHTML=`<div style="font-size:13px;font-weight:600">${t.name}</div>`;
-    card.onclick=()=>{if(m4s1done||locked)return;card.classList.toggle('selected');card.classList.contains('selected')?m4s1sel[i]=true:delete m4s1sel[i];};
-    document.getElementById('m4grid').appendChild(card);
-  });
-
-  const s2=mkStep('m4s2','ÉTAPE 2','Associer outil → fonction','▸ Cliquez sur un outil (gauche) puis sur sa fonction (droite) pour les associer.');
-  s2.classList.add('locked');
-  container.appendChild(s2);
-  const veille=ALL_TOOLS.filter(t=>t.isVeille);
-  const vshuf=[...veille].sort(()=>Math.random()-.5);
-  const fshuf=[...veille].sort(()=>Math.random()-.5);
-  window._m4v=vshuf; window._m4f=fshuf;
-  document.getElementById('content-m4s2').innerHTML=`<div class="match-container"><div class="match-col" id="m4tcol"></div><div class="match-col" id="m4fcol"></div></div>`;
-  vshuf.forEach((t,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m4t-'+i;el.textContent=t.name;el.onclick=()=>m4match('t',i);document.getElementById('m4tcol').appendChild(el);});
-  fshuf.forEach((f,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m4f-'+i;el.textContent=f.func;el.onclick=()=>m4match('f',i);document.getElementById('m4fcol').appendChild(el);});
-}
-
-window.m4s1validate=function(){
-  if(m4s1done||locked)return;
-  const sel=Object.keys(m4s1sel).map(Number);
-  if(sel.length!==5){const fb=document.getElementById('m4s1fb');fb.className='feedback err';fb.style.display='block';fb.textContent='⚠ Sélectionnez exactement 5 outils.';return;}
-  let err=0;
-  sel.forEach(i=>{const c=document.getElementById('m4c-'+i);window._m4tools[i].isVeille?c.classList.add('correct'):(c.classList.add('wrong'),err++);});
-  if(err===0){markStepDone('m4s1');m4s1done=true;unlockStep('m4s2');}
-  else{markStepError('m4s1');const fb=document.getElementById('m4s1fb');fb.className='feedback err';fb.style.display='block';fb.textContent=`⚠ ${err} mauvais choix.`;setTimeout(()=>{sel.forEach(i=>{const c=document.getElementById('m4c-'+i);c.classList.remove('selected','correct','wrong');});m4s1sel={};fb.style.display='none';},1500);}
-};
-
-window.m4match=function(type,idx){
-  if(m4s2done||locked)return;
-  if(type==='t'){if(m4selT!==null)document.getElementById('m4t-'+m4selT).classList.remove('selected');m4selT=idx;document.getElementById('m4t-'+idx).classList.add('selected');}
-  else{if(m4selF!==null)document.getElementById('m4f-'+m4selF).classList.remove('selected');m4selF=idx;document.getElementById('m4f-'+idx).classList.add('selected');}
-  if(m4selT!==null&&m4selF!==null){
-    const te=document.getElementById('m4t-'+m4selT),fe=document.getElementById('m4f-'+m4selF);
-    if(window._m4v[m4selT].name===window._m4f[m4selF].name){
-      te.classList.remove('selected');fe.classList.remove('selected');te.classList.add('matched-ok');fe.classList.add('matched-ok');m4matched[m4selT]=true;
-    } else {
-      te.classList.add('matched-err');fe.classList.add('matched-err');markStepError('m4s2');
-      setTimeout(()=>{te.classList.remove('selected','matched-err');fe.classList.remove('selected','matched-err');},800);
-    }
-    m4selT=null;m4selF=null;
-    if(Object.keys(m4matched).length===5){markStepDone('m4s2');m4s2done=true;setTimeout(()=>showClear(stepErrors['m4s2']||0),600);}
-  }
-};
-
-// ═══ MISSION 5 ════════════════════════════════════════════════
-const ALL_ACTORS = [
-  {name:'France Compétences',isKey:true,role:'Régule le système de formation — publie les certifications RNCP et CC'},
-  {name:'OPCO (ex-OPCA)',isKey:true,role:'Finance les formations et oriente les branches professionnelles'},
-  {name:'DREETS',isKey:true,role:'Contrôle les organismes de formation et publie les données régionales'},
-  {name:'CARIF-OREF',isKey:true,role:'Observatoire régional — données sur l\'emploi et la formation'},
-  {name:'Communauté de pratiques FPA',isKey:true,role:'Réseau de formateurs — partage d\'expériences et de ressources'},
-  {name:'Ministère du Travail',isKey:false,role:'Définit la politique nationale de l\'emploi'},
-  {name:'France Travail',isKey:false,role:'Accompagne les demandeurs d\'emploi'},
-  {name:'INSEE',isKey:false,role:'Statistiques nationales économiques et sociales'},
-  {name:'Chambre de Commerce',isKey:false,role:'Représente et accompagne les entreprises'}
-];
-
-let m5s1sel={}, m5s1done=false, m5selA=null, m5selR=null, m5matched={}, m5s2done=false;
-
-function m5(container) {
-  m5s1sel={}; m5s1done=false; m5selA=null; m5selR=null; m5matched={}; m5s2done=false;
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 05</div><h2>🏛️ ACTEURS INSTITUTIONNELS</h2><div class="m-sub">Identifier les acteurs clés de la veille FPA</div>';
-  container.appendChild(hdr);
-
-  const s1=mkStep('m5s1','ÉTAPE 1','Sélectionner les acteurs clés','▸ Parmi ces 9 acteurs, sélectionnez les 5 acteurs clés de la veille FPA.');
-  container.appendChild(s1);
-  const shuffled=[...ALL_ACTORS].sort(()=>Math.random()-.5);
-  window._m5actors=shuffled;
-  document.getElementById('content-m5s1').innerHTML=`<div class="cards-grid" id="m5grid"></div><button class="validate-btn" onclick="m5s1validate()">▶ VALIDER (5 acteurs)</button><div id="m5s1fb" class="feedback" style="display:none"></div>`;
-  shuffled.forEach((a,i)=>{
-    const card=document.createElement('div');card.className='card-item';card.id='m5c-'+i;
-    card.innerHTML=`<div style="font-size:13px;font-weight:600">${a.name}</div>`;
-    card.onclick=()=>{if(m5s1done||locked)return;card.classList.toggle('selected');card.classList.contains('selected')?m5s1sel[i]=true:delete m5s1sel[i];};
-    document.getElementById('m5grid').appendChild(card);
-  });
-
-  const s2=mkStep('m5s2','ÉTAPE 2','Associer acteur → rôle','▸ Associez chaque acteur clé à son rôle dans la veille FPA.');
-  s2.classList.add('locked');
-  container.appendChild(s2);
-  const keys=ALL_ACTORS.filter(a=>a.isKey);
-  const kshuf=[...keys].sort(()=>Math.random()-.5);
-  const rshuf=[...keys].sort(()=>Math.random()-.5);
-  window._m5k=kshuf; window._m5r=rshuf;
-  document.getElementById('content-m5s2').innerHTML=`<div class="match-container"><div class="match-col" id="m5acol"></div><div class="match-col" id="m5rcol"></div></div>`;
-  kshuf.forEach((a,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m5a-'+i;el.innerHTML=`<strong>${a.name}</strong>`;el.onclick=()=>m5match('a',i);document.getElementById('m5acol').appendChild(el);});
-  rshuf.forEach((a,i)=>{const el=document.createElement('div');el.className='match-item';el.id='m5r-'+i;el.textContent=a.role;el.onclick=()=>m5match('r',i);document.getElementById('m5rcol').appendChild(el);});
-}
-
-window.m5s1validate=function(){
-  if(m5s1done||locked)return;
-  const sel=Object.keys(m5s1sel).map(Number);
-  if(sel.length!==5){const fb=document.getElementById('m5s1fb');fb.className='feedback err';fb.style.display='block';fb.textContent='⚠ Sélectionnez exactement 5 acteurs.';return;}
-  let err=0;
-  sel.forEach(i=>{const c=document.getElementById('m5c-'+i);window._m5actors[i].isKey?c.classList.add('correct'):(c.classList.add('wrong'),err++);});
-  if(err===0){markStepDone('m5s1');m5s1done=true;unlockStep('m5s2');}
-  else{markStepError('m5s1');const fb=document.getElementById('m5s1fb');fb.className='feedback err';fb.style.display='block';fb.textContent=`⚠ ${err} mauvais choix.`;setTimeout(()=>{sel.forEach(i=>{const c=document.getElementById('m5c-'+i);c.classList.remove('selected','correct','wrong');});m5s1sel={};fb.style.display='none';},1500);}
-};
-
-window.m5match=function(type,idx){
-  if(m5s2done||locked)return;
-  if(type==='a'){if(m5selA!==null)document.getElementById('m5a-'+m5selA).classList.remove('selected');m5selA=idx;document.getElementById('m5a-'+idx).classList.add('selected');}
-  else{if(m5selR!==null)document.getElementById('m5r-'+m5selR).classList.remove('selected');m5selR=idx;document.getElementById('m5r-'+idx).classList.add('selected');}
-  if(m5selA!==null&&m5selR!==null){
-    const ae=document.getElementById('m5a-'+m5selA),re=document.getElementById('m5r-'+m5selR);
-    if(window._m5k[m5selA].name===window._m5r[m5selR].name){
-      ae.classList.remove('selected');re.classList.remove('selected');ae.classList.add('matched-ok');re.classList.add('matched-ok');m5matched[m5selA]=true;
-    } else {
-      ae.classList.add('matched-err');re.classList.add('matched-err');markStepError('m5s2');
-      setTimeout(()=>{ae.classList.remove('selected','matched-err');re.classList.remove('selected','matched-err');},800);
-    }
-    m5selA=null;m5selR=null;
-    if(Object.keys(m5matched).length===5){markStepDone('m5s2');m5s2done=true;setTimeout(()=>showClear(stepErrors['m5s2']||0),600);}
-  }
-};
-
-// ═══ MISSION 6 ════════════════════════════════════════════════
-const STEPS_VEILLE = [
-  {label:'DÉFINIR',desc:'Définir les besoins et thématiques de veille',action:'Identifier ses besoins de veille'},
-  {label:'IDENTIFIER',desc:'Identifier les sources pertinentes',action:'Lister les sources fiables et sélectionner les outils'},
-  {label:'COLLECTER',desc:'Collecter les informations',action:'Paramétrer les alertes et agréger les flux RSS'},
-  {label:'TRAITER',desc:'Traiter et analyser les informations',action:'Trier et évaluer la fiabilité des données'},
-  {label:'ARCHIVER',desc:'Archiver et organiser',action:'Classer dans un système documentaire thématique'},
-  {label:'PARTAGER',desc:'Partager et valoriser',action:'Diffuser aux parties prenantes et intégrer à la pratique'}
-];
-
-let m6s1done=false, m6s2done=false;
-
-function m6(container) {
-  m6s1done=false; m6s2done=false;
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 06</div><h2>🔄 DÉMARCHE DE VEILLE</h2><div class="m-sub">Reconstituer la démarche formalisée en 6 étapes — DICTAP</div>';
-  container.appendChild(hdr);
-
-  const s1=mkStep('m6s1','ÉTAPE 1','Remettre dans l\'ordre','▸ Glissez-déposez les étapes pour les mettre dans le bon ordre chronologique.');
-  container.appendChild(s1);
-  const shuffled=[...STEPS_VEILLE].sort(()=>Math.random()-.5);
-  window._m6shuf=shuffled;
-  document.getElementById('content-m6s1').innerHTML=`<div class="sort-list" id="m6sort"></div><button class="validate-btn" onclick="m6s1validate()">▶ VALIDER L'ORDRE</button><div id="m6s1fb" class="feedback" style="display:none"></div>`;
-  const sortEl=document.getElementById('m6sort');
-  shuffled.forEach((step,i)=>{
-    const item=document.createElement('div');
-    item.className='sort-item';item.id='m6si-'+i;item.dataset.origIdx=i;item.draggable=true;
-    item.innerHTML=`<span class="sort-handle">⠿</span><span style="font-family:'Orbitron',monospace;font-size:11px;color:var(--amber);margin-right:8px">${step.label}</span><span style="font-size:13px">${step.desc}</span>`;
-    item.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',i);item.classList.add('dragging');});
+  const shuf=[...ETAPES7].sort(()=>Math.random()-.5);
+  window._m4shuf=shuf;
+  document.getElementById('sc-m4s1').innerHTML=`<div class="sort-list" id="m4sort"></div>
+  <button class="vbtn" onclick="m4validate()">▶ VALIDER L'ORDRE</button>
+  <div id="m4fb"></div>`;
+  const sl=document.getElementById('m4sort');
+  shuf.forEach((e,i)=>{
+    const item=document.createElement('div');item.className='sort-item';item.dataset.oi=i;item.draggable=true;
+    item.innerHTML=`<span class="sort-handle">⠿</span>
+    <span style="font-family:'Orbitron',monospace;font-size:10px;color:var(--amber);margin-right:8px">${e.label}</span>
+    <span style="font-size:12px">${e.desc}</span>`;
+    item.addEventListener('dragstart',ev=>{ev.dataTransfer.setData('text',i);item.classList.add('dragging');});
     item.addEventListener('dragend',()=>item.classList.remove('dragging'));
-    item.addEventListener('dragover',e=>e.preventDefault());
-    item.addEventListener('drop',e=>{
-      e.preventDefault();
-      const fromOrigIdx=parseInt(e.dataTransfer.getData('text/plain'));
-      const fromEl=sortEl.querySelector('[data-orig-idx="'+fromOrigIdx+'"]');
-      const toEl=item;
-      if(fromEl===toEl)return;
-      const fromPos=[...sortEl.children].indexOf(fromEl);
-      const toPos=[...sortEl.children].indexOf(toEl);
-      if(fromPos<toPos)sortEl.insertBefore(fromEl,toEl.nextSibling);
-      else sortEl.insertBefore(fromEl,toEl);
+    item.addEventListener('dragover',ev=>ev.preventDefault());
+    item.addEventListener('drop',ev=>{ev.preventDefault();
+      const fi=parseInt(ev.dataTransfer.getData('text'));
+      const from=sl.querySelector('[data-oi="'+fi+'"]');
+      const fp=[...sl.children].indexOf(from),tp=[...sl.children].indexOf(item);
+      if(fp<tp)sl.insertBefore(from,item.nextSibling);else sl.insertBefore(from,item);
     });
-    sortEl.appendChild(item);
-  });
-
-  const s2=mkStep('m6s2','ÉTAPE 2','Associer actions → étapes','▸ Pour chaque action concrète, sélectionnez l\'étape correspondante.');
-  s2.classList.add('locked');
-  container.appendChild(s2);
-  const actions=[...STEPS_VEILLE].sort(()=>Math.random()-.5);
-  window._m6actions=actions;
-  window._m6s2sel={};
-  const labels=STEPS_VEILLE.map(s=>s.label);
-  document.getElementById('content-m6s2').innerHTML=`<div style="display:flex;flex-direction:column;gap:10px" id="m6s2list"></div><button class="validate-btn amber" onclick="m6s2validate()">▶ VALIDER</button><div id="m6s2fb" class="feedback" style="display:none"></div>`;
-  actions.forEach((item,i)=>{
-    const row=document.createElement('div');
-    row.style.cssText='display:flex;align-items:center;gap:10px;flex-wrap:wrap';
-    row.innerHTML=`<div style="flex:1;min-width:200px;font-size:13px;padding:10px;background:var(--panel2);border:1px solid var(--border);border-radius:4px">${item.action}</div>
-    <select id="m6sel-${i}" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:12px" onchange="window._m6s2sel[${i}]=this.value">
-      <option value="">-- Choisir --</option>
-      ${labels.map(l=>`<option value="${l}">${l}</option>`).join('')}
-    </select>`;
-    document.getElementById('m6s2list').appendChild(row);
+    sl.appendChild(item);
   });
 }
 
-window.m6s1validate=function(){
-  if(m6s1done||locked)return;
-  const items=[...document.getElementById('m6sort').querySelectorAll('.sort-item')];
-  const actual=items.map(el=>window._m6shuf[parseInt(el.dataset.origIdx)].label);
-  const correct=STEPS_VEILLE.map(s=>s.label);
-  let errs=0;
-  items.forEach((el,pos)=>{el.classList.remove('correct','wrong');actual[pos]===correct[pos]?el.classList.add('correct'):(el.classList.add('wrong'),errs++);});
-  if(errs===0){markStepDone('m6s1');m6s1done=true;unlockStep('m6s2');}
-  else{markStepError('m6s1');const fb=document.getElementById('m6s1fb');fb.className='feedback err';fb.style.display='block';fb.textContent=`⚠ ${errs} étape(s) mal positionnée(s). Réessayez.`;setTimeout(()=>{items.forEach(el=>el.classList.remove('correct','wrong'));fb.style.display='none';},1500);}
-};
-
-window.m6s2validate=function(){
-  if(m6s2done||locked)return;
-  const sel=window._m6s2sel;
-  if(Object.values(sel).filter(v=>v).length<6){const fb=document.getElementById('m6s2fb');fb.className='feedback err';fb.style.display='block';fb.textContent='⚠ Associez toutes les actions.';return;}
-  let errs=0;
-  window._m6actions.forEach((item,i)=>{if(sel[i]!==item.label)errs++;});
-  if(errs===0){markStepDone('m6s2');m6s2done=true;setTimeout(()=>showClear(stepErrors['m6s2']||0),600);}
-  else{markStepError('m6s2');const fb=document.getElementById('m6s2fb');fb.className='feedback err';fb.style.display='block';fb.textContent=`⚠ ${errs} erreur(s). Corrigez et revalidez.`;}
-};
-
-// ═══ MISSION 7 ════════════════════════════════════════════════
-const QUIZ_QS = [
-  {q:'Combien de types de veille le formateur FPA doit-il maîtriser ?',opts:['2','3','4','6'],correct:2},
-  {q:'Quel outil permet de recevoir automatiquement des alertes par e-mail sur des mots-clés ?',opts:['Feedly','Google Alerts','Scoop.it','LinkedIn'],correct:1},
-  {q:'La méthode CRAAP évalue principalement quel aspect d\'une source ?',opts:['Sa popularité','Sa fiabilité','Son coût','Sa lisibilité'],correct:1},
-  {q:'Quelle organisation régule le système de certification en France (RNCP) ?',opts:['DREETS','OPCO','France Compétences','CARIF-OREF'],correct:2},
-  {q:'La première étape de la démarche de veille formalisée est :',opts:['Collecter','Identifier','Définir','Traiter'],correct:2},
-  {q:'Un flux RSS est un exemple de veille :',opts:['Active','Passive','Collaborative','Réglementaire'],correct:1},
-  {q:'La veille concurrentielle consiste à surveiller :',opts:['Les lois','Les outils numériques','Les autres organismes de formation','Les méthodes pédagogiques'],correct:2},
-  {q:'Quelle est la dernière étape de la démarche de veille ?',opts:['Archiver','Traiter','Partager','Collecter'],correct:2},
-  {q:'Feedly est principalement utilisé pour :',opts:['Créer des alertes Google','Agréger des flux RSS','Partager sur les réseaux sociaux','Gérer des projets'],correct:1},
-  {q:'La veille réglementaire inclut le suivi des :',opts:['Nouveaux outils numériques','Pratiques pédagogiques','Évolutions de la loi et certifications','Offres des concurrents'],correct:2},
-  {q:'Les lettres "A" de CRAAP correspondent à :',opts:['Actualité uniquement','Actualité et Autorité','Authenticité','Accessibilité'],correct:1},
-  {q:'Un formateur FPA doit faire de la veille pour :',opts:['Uniquement sa curiosité personnelle','Rester à jour et améliorer ses pratiques','Réduire ses heures de travail','Éviter les réunions d\'équipe'],correct:1}
-];
-
-let m7answers={}, m7done=false;
-
-function m7(container) {
-  m7answers={}; m7done=false;
-  const hdr=document.createElement('div');
-  hdr.className='mission-header';
-  hdr.innerHTML='<div class="m-num">MISSION 07</div><h2>📋 QUIZ SYNTHÈSE</h2><div class="m-sub">12 questions · Score minimum requis : 8/12</div>';
-  container.appendChild(hdr);
-  const panel=document.createElement('div');
-  panel.className='step-panel';
-  panel.innerHTML=`<div class="step-header"><span class="step-badge" id="m7badge">QUIZ</span><span class="step-title">Toutes notions CP12</span></div>
-  <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);margin-bottom:16px">Score en temps réel : <span id="m7score">0</span>/12 — Minimum requis : 8</div>
-  <div id="m7qs"></div><div id="m7result" class="feedback" style="display:none"></div>`;
-  container.appendChild(panel);
-  QUIZ_QS.forEach((item,i)=>{
-    const el=document.createElement('div');el.className='quiz-q';
-    el.innerHTML=`<div class="q-num">QUESTION ${i+1}/12</div><div class="q-text">${item.q}</div>
-    <div class="quiz-opts">${item.opts.map((o,oi)=>`<button class="quiz-opt" onclick="m7pick(${i},${oi})">${o}</button>`).join('')}</div>`;
-    document.getElementById('m7qs').appendChild(el);
-  });
-}
-
-window.m7pick=function(qi,chosen){
-  if(m7done||locked||m7answers[qi]!==undefined)return;
-  const item=QUIZ_QS[qi];
-  const qEl=document.getElementById('m7qs').children[qi];
-  const opts=qEl.querySelectorAll('.quiz-opt');
-  opts.forEach(o=>o.disabled=true);
-  opts[chosen].classList.add(chosen===item.correct?'correct':'wrong');
-  if(chosen!==item.correct){opts[item.correct].classList.add('correct');markStepError('m7');m7answers[qi]=false;}
-  else m7answers[qi]=true;
-  const score=Object.values(m7answers).filter(v=>v).length;
-  document.getElementById('m7score').textContent=score;
-  if(Object.keys(m7answers).length===12){
-    m7done=true;
-    const result=document.getElementById('m7result');
-    if(score>=8){
-      result.className='feedback ok';result.style.display='block';result.textContent=`✓ Score : ${score}/12 — Mission réussie !`;
-      document.getElementById('m7badge').textContent='✓';document.getElementById('m7badge').classList.add('done');
-      setTimeout(()=>showClear(12-score),800);
-    } else {
-      result.className='feedback err';result.style.display='block';result.textContent=`⚠ Score : ${score}/12 — Insuffisant (min 8). Relisez les corrections ci-dessus puis retentez.`;
-      setTimeout(()=>{
-        m7answers={};m7done=false;document.getElementById('m7score').textContent='0';result.style.display='none';
-        document.querySelectorAll('#m7qs .quiz-opt').forEach(o=>{o.disabled=false;o.className='quiz-opt';});
-      },5000);
-    }
-  }
-};
-
-// ═══ MISSION 8 — BOSS ════════════════════════════════════════
-const BOSS_P1 = [
-  {q:'Quel critère CRAAP évalue la réputation de l\'auteur ?',opts:['Actualité','Pertinence','Autorité','Objectivité'],correct:2},
-  {q:'Combien d\'étapes dans la démarche de veille formalisée ?',opts:['4','5','6','8'],correct:2},
-  {q:'Scoop.it est principalement un outil de :',opts:['Veille passive automatique','Curation de contenu','Gestion de projet','Visioconférence'],correct:1},
-  {q:'La veille pédagogique suit les évolutions des :',opts:['Outils numériques','Concurrents','Méthodes d\'apprentissage','Lois et règlements'],correct:2},
-  {q:'CARIF-OREF est un acteur de niveau :',opts:['National','Régional','Européen','Sectoriel'],correct:1}
-];
-
-const RAPPORT_LINES = [
-  {html:'Les alertes Google sont des outils de veille <span class="boss-err" onclick="bossSpot(this,true)">active</span> permettant une collecte intentionnelle.',isErr:true,spotted:false},
-  {html:'France Compétences publie les référentiels <span class="boss-ok" onclick="bossSpot(this,false)">RNCP et CC</span>, indispensables à la veille réglementaire.',isErr:false,spotted:false},
-  {html:'La méthode CRAAP comporte <span class="boss-err" onclick="bossSpot(this,true)">7 critères</span> d\'évaluation des sources.',isErr:true,spotted:false},
-  {html:'La veille concurrentielle analyse les offres des <span class="boss-ok" onclick="bossSpot(this,false)">autres organismes de formation</span>.',isErr:false,spotted:false},
-  {html:'La dernière étape de la démarche de veille est <span class="boss-err" onclick="bossSpot(this,true)">Archiver</span>.',isErr:true,spotted:false},
-  {html:'Un formateur FPA doit combiner veille <span class="boss-ok" onclick="bossSpot(this,false)">active et passive</span> pour une veille complète.',isErr:false,spotted:false},
-  {html:'La veille technologique concerne les <span class="boss-err" onclick="bossSpot(this,true)">pratiques pédagogiques</span> et méthodes d\'apprentissage.',isErr:true,spotted:false}
-];
-
-let bossHP=100, bossP1idx=0, bossP1timer=null, bossP1answers={};
-let bossP2count=0, bossP2done=false;
-
-function m8(container) {
-  bossHP=100;bossP1idx=0;bossP1answers={};bossP2count=0;bossP2done=false;
-  RAPPORT_LINES.forEach(l=>l.spotted=false);
-  container.innerHTML=`
-  <div class="mission-header"><div class="m-num">MISSION 08 — BOSS FINAL</div><h2>💀 LE DIRECTEUR SCEPTIQUE</h2><div class="m-sub">Prouvez votre maîtrise totale de la CP12 en 3 phases</div></div>
-  <div class="boss-hp-wrap"><div class="boss-hp-label">💀 BOSS HP</div><div class="boss-hp-bar"><div class="boss-hp-fill" id="boss-hp-fill"></div></div></div>
-  <div id="boss-content"></div>`;
-  renderBP1();
-}
-
-function updateBossHP(){document.getElementById('boss-hp-fill').style.width=bossHP+'%';}
-
-function renderBP1() {
-  bossP1idx=0;
-  document.getElementById('boss-content').innerHTML=`
-  <div class="boss-phase-title">PHASE 1 — QUESTIONS EN RAFALE</div>
-  <div class="boss-phase-sub">5 questions · 20 secondes par question · Répondez vite !</div>
-  <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
-    <div style="font-family:'Orbitron',monospace;font-size:32px;color:var(--amber)" id="boss-cd">20</div>
-    <div style="font-family:'Share Tech Mono',monospace;color:var(--text-dim)">secondes</div>
-    <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;color:var(--cyan)">Question <span id="boss-qn">1</span>/5</div>
-  </div>
-  <div id="boss-p1q" class="quiz-q" style="margin-bottom:0"></div>`;
-  bossP1next();
-}
-
-function bossP1next(){
-  if(bossP1idx>=5){bossHP=Math.max(0,bossHP-34);updateBossHP();setTimeout(renderBP2,800);return;}
-  clearInterval(bossP1timer);
-  let t=20;
-  document.getElementById('boss-cd').textContent=t;
-  document.getElementById('boss-qn').textContent=bossP1idx+1;
-  const item=BOSS_P1[bossP1idx];
-  document.getElementById('boss-p1q').innerHTML=`<div class="q-text">${item.q}</div><div class="quiz-opts">${item.opts.map((o,oi)=>`<button class="quiz-opt" onclick="bossP1pick(${oi})">${o}</button>`).join('')}</div>`;
-  bossP1timer=setInterval(()=>{t--;document.getElementById('boss-cd').textContent=t;if(t<=0){clearInterval(bossP1timer);bossP1answers[bossP1idx]=false;applyPenalty();bossP1idx++;bossP1next();}},1000);
-}
-
-window.bossP1pick=function(chosen){
-  clearInterval(bossP1timer);
-  const item=BOSS_P1[bossP1idx];
-  const opts=document.getElementById('boss-p1q').querySelectorAll('.quiz-opt');
-  opts.forEach(o=>o.disabled=true);
-  opts[chosen].classList.add(chosen===item.correct?'correct':'wrong');
-  if(chosen!==item.correct){applyPenalty();bossP1answers[bossP1idx]=false;opts[item.correct].classList.add('correct');}
-  else bossP1answers[bossP1idx]=true;
-  bossP1idx++;setTimeout(bossP1next,900);
-};
-
-function renderBP2(){
-  bossP2count=0;
-  document.getElementById('boss-content').innerHTML=`
-  <div class="boss-phase-title">PHASE 2 — REPÉRER LES ERREURS</div>
-  <div class="boss-phase-sub">Ce rapport contient 4 erreurs. Cliquez sur les passages surlignés incorrects pour les identifier.</div>
-  <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);margin-bottom:12px">Erreurs trouvées : <span id="boss-ec">0</span>/4</div>
-  <div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:12px" id="boss-rpt"></div>
-  <div id="boss-p2fb" class="feedback" style="display:none;margin-top:12px"></div>
-  <style>.boss-err{background:rgba(255,183,0,.2);cursor:pointer;padding:2px 4px;border-radius:2px;border-bottom:1px dashed var(--amber)}.boss-ok{background:rgba(0,212,255,.1);cursor:pointer;padding:2px 4px;border-radius:2px;border-bottom:1px dashed var(--cyan)}.boss-err:hover{background:rgba(255,183,0,.4)}.boss-ok:hover{background:rgba(0,212,255,.2)}</style>`;
-  const rpt=document.getElementById('boss-rpt');
-  RAPPORT_LINES.forEach((line,i)=>{
-    const p=document.createElement('p');
-    p.innerHTML=`<span style="color:var(--text-dim);margin-right:8px">${i+1}.</span>${line.html}`;
-    p.style.cssText='font-size:13px;line-height:1.8';
-    rpt.appendChild(p);
-  });
-}
-
-window.bossSpot=function(el,isErr){
-  if(locked||el.dataset.spotted)return;
-  el.dataset.spotted='1';
-  if(isErr){
-    bossP2count++;document.getElementById('boss-ec').textContent=bossP2count;
-    el.style.background='rgba(0,230,118,.4)';el.style.cursor='default';
-    if(bossP2count>=4){
-      bossHP=Math.max(0,bossHP-33);updateBossHP();
-      const fb=document.getElementById('boss-p2fb');
-      fb.className='feedback ok';fb.style.display='block';fb.textContent='✓ 4 erreurs identifiées — Phase 3 débloquée !';
-      setTimeout(renderBP3,1200);
-    }
+window.m4validate=function(){
+  if(m4done||locked)return;
+  const items=[...document.getElementById('m4sort').querySelectorAll('.sort-item')];
+  const actual=items.map(el=>window._m4shuf[parseInt(el.dataset.oi)].label);
+  const correct=ETAPES7.map(e=>e.label);
+  let err=0;
+  items.forEach((el,i)=>{el.classList.remove('correct','wrong');actual[i]===correct[i]?el.classList.add('correct'):(el.classList.add('wrong'),err++);});
+  if(err===0){m4done=true;stepDone('m4s1');
+    const fb=document.getElementById('m4fb');fb.className='fb ok';fb.textContent='✓ Ordre parfait ! Les 7 étapes sont correctement reconstituées.';
+    setTimeout(()=>showClear(stepErr['m4s1']||0),700);
   } else {
-    el.style.background='rgba(255,23,68,.4)';el.style.cursor='default';applyPenalty();
-    setTimeout(()=>{el.style.background='rgba(0,212,255,.1)';},800);
+    markErr('m4s1');
+    const fb=document.getElementById('m4fb');fb.className='fb err';fb.textContent=`⚠ ${err} étape(s) mal positionnée(s). Réessayez.`;
+    setTimeout(()=>{items.forEach(el=>el.classList.remove('correct','wrong'));fb.textContent='';},1600);
   }
 };
 
-function renderBP3(){
-  document.getElementById('boss-content').innerHTML=`
-  <div class="boss-phase-title">PHASE 3 — CODE D'ACCÈS FINAL</div>
-  <div class="boss-phase-sub">Reconstituez le code à 6 lettres : les initiales des 6 étapes de la démarche de veille dans l'ordre.</div>
-  <div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:20px;margin:16px 0">
-    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim);margin-bottom:12px">INDICES :</div>
-    <div style="font-size:13px;line-height:2.2">
-      <div>🔵 Étape 1 : <strong style="color:var(--cyan)">D</strong>éfinir les besoins de veille</div>
-      <div>🔵 Étape 2 : <strong style="color:var(--cyan)">I</strong>dentifier les sources pertinentes</div>
-      <div>🔵 Étape 3 : <strong style="color:var(--cyan)">C</strong>ollecter l'information</div>
-      <div>🔵 Étape 4 : <strong style="color:var(--cyan)">T</strong>raiter et analyser</div>
-      <div>🔵 Étape 5 : <strong style="color:var(--cyan)">A</strong>rchiver et classer</div>
-      <div>🔵 Étape 6 : <strong style="color:var(--cyan)">P</strong>artager aux parties prenantes</div>
+// ═══════════════════════════════════════════════════════
+// MISSION 5 — BOSS FINAL : L'EXAMEN FPA
+// ═══════════════════════════════════════════════════════
+const BOSS_QS = [
+  {q:'Quel est l\'intitulé exact de la Compétence 12 du REAC FPA ?',opts:['Réaliser une veille pour maintenir son expertise','Mettre en place un dispositif qualité','Préparer le dossier pédagogique','Évaluer les acquis des apprenants'],correct:0},
+  {q:'Le dossier de veille correspond à quel chapitre du Dossier Technique ?',opts:['Chapitre 1','Chapitre 2','Chapitre 3','Chapitre 4'],correct:3},
+  {q:'Combien de pages doit compter le dossier de veille (hors annexes) ?',opts:['5 à 10 pages','10 à 15 pages','15 à 20 pages','20 à 25 pages'],correct:1},
+  {q:'Quelle police et taille sont obligatoires pour le Dossier Technique FPA ?',opts:['Times New Roman 12','Arial 11','Calibri 12','Arial 12'],correct:1},
+  {q:'Combien de parties obligatoires comporte le Chapitre 4 du DT ?',opts:['2','3','4','5'],correct:2},
+  {q:'La Partie 3 du dossier de veille concerne :',opts:['Les outils numériques','La cartographie locale des acteurs','Le dossier thématique','Le dispositif global de veille'],correct:1},
+  {q:'Le dossier est évalué lors de quel moment de l\'examen ?',opts:['Entretien de motivation','QPP — Questionnement à partir de Productions','Mise en situation professionnelle','Épreuve écrite'],correct:1},
+  {q:'Un dossier de veille absent ou non tracé entraîne :',opts:['Une pénalité de points','L\'invalidation du Bloc 4 uniquement','L\'impossibilité de délivrer le Titre complet','Un rattrapage possible']  ,correct:2}
+];
+
+const PARTIES_DT = [
+  {num:1,titre:'Description du dispositif de veille',desc:'Présentation de la démarche globale, types pratiqués, fréquence et organisation'},
+  {num:2,titre:'Présentation des outils de veille',desc:'Outils numériques utilisés, sources institutionnelles, modalités de traçabilité'},
+  {num:3,titre:'Cartographie locale',desc:'Acteurs locaux de la formation, de l\'insertion et du secteur d\'activité'},
+  {num:4,titre:'Dossier thématique',desc:'Synthèse approfondie d\'un sujet issu de la veille, en lien avec la spécialité'}
+];
+
+let b5qans={},b5qdone=false,b5p2sel={},b5p2done=false,b5p3done=false;
+
+function m5(container){
+  b5qans={};b5qdone=false;b5p2sel={};b5p2done=false;b5p3done=false;
+  mHdr(container,5,'💀 MISSION FINALE — L\'EXAMEN FPA','Prouvez votre maîtrise complète de la CP12 pour restaurer le système');
+
+  // BOSS HP
+  const hpDiv=document.createElement('div');hpDiv.className='boss-hp-wrap';
+  hpDiv.innerHTML='<div class="boss-hp-label">💀 BOSS HP</div><div class="boss-hp-bar"><div class="boss-hp-fill" id="bhp"></div></div>';
+  container.appendChild(hpDiv);
+
+  // STEP 1 — Quiz 8 questions
+  const s1=mkStep('b5s1','PHASE 1','Quiz Examen FPA (8 questions)','▸ Répondez aux 8 questions sur la structure de l\'examen et du Dossier Technique.');
+  container.appendChild(s1);
+  const sc1=document.getElementById('sc-b5s1');
+  BOSS_QS.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='quiz-q';el.id='bq-'+i;
+    el.innerHTML=`<div class="q-num">QUESTION ${i+1}/8</div><div class="q-text">${item.q}</div>
+    <div class="q-opts">${item.opts.map((o,oi)=>`<button class="q-opt" onclick="b5q(${i},${oi})">${o}</button>`).join('')}</div>`;
+    sc1.appendChild(el);
+  });
+
+  // STEP 2 — Reconstituer les 4 parties (drag & drop)
+  const s2=mkStep('b5s2','PHASE 2','Reconstituer les 4 parties du Dossier de Veille','▸ Associez chaque titre de partie à sa description correspondante.');
+  s2.classList.add('locked');container.appendChild(s2);
+  const shufT=[...PARTIES_DT].sort(()=>Math.random()-.5);
+  const shufD=[...PARTIES_DT].sort(()=>Math.random()-.5);
+  window._b5t=shufT;window._b5d=shufD;
+  document.getElementById('sc-b5s2').innerHTML=`<div class="match-wrap"><div class="match-col" id="b5tc"></div><div class="match-col" id="b5dc"></div></div>`;
+  shufT.forEach((p,i)=>{const el=document.createElement('div');el.className='match-item';el.id='b5t-'+i;el.innerHTML=`<strong>Partie ${p.num}</strong><br><span style="font-size:11px">${p.titre}</span>`;el.onclick=()=>b5match('t',i);document.getElementById('b5tc').appendChild(el);});
+  shufD.forEach((p,i)=>{const el=document.createElement('div');el.className='match-item';el.id='b5d-'+i;el.style.fontSize='12px';el.textContent=p.desc;el.onclick=()=>b5match('d',i);document.getElementById('b5dc').appendChild(el);});
+
+  // STEP 3 — Code final
+  const s3=mkStep('b5s3','PHASE 3','Code d\'accès final','▸ Entrez le code de déverrouillage : l\'acronyme de la Compétence du Bloc 4 concernant la veille (2 chiffres).');
+  s3.classList.add('locked');container.appendChild(s3);
+  document.getElementById('sc-b5s3').innerHTML=`
+  <div style="background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:10px">INDICES :</div>
+    <div style="font-size:12px;line-height:2.2">
+      <div>🔵 Le REAC FPA est structuré en 4 <strong style="color:var(--cyan)">blocs</strong> et <strong style="color:var(--cyan)">12 compétences</strong></div>
+      <div>🔵 La veille est la compétence du <strong style="color:var(--cyan)">dernier bloc</strong></div>
+      <div>🔵 Elle porte le numéro de la <strong style="color:var(--cyan)">dernière compétence</strong></div>
     </div>
   </div>
   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--text-dim);letter-spacing:2px">CODE :</div>
-    <input id="boss-code" type="text" maxlength="6" placeholder="_ _ _ _ _ _"
-      style="font-family:'Orbitron',monospace;font-size:24px;letter-spacing:8px;background:var(--panel2);border:2px solid var(--border);color:var(--cyan);padding:10px 16px;border-radius:4px;width:180px;text-transform:uppercase"
-      oninput="this.value=this.value.toUpperCase()">
-    <button class="validate-btn" onclick="bossP3validate()">▶ DÉVERROUILLER</button>
+    <input id="boss-code" type="text" maxlength="4" placeholder="_ _"
+      style="font-family:'Orbitron',monospace;font-size:28px;letter-spacing:8px;background:var(--panel2);border:2px solid var(--border);color:var(--cyan);padding:10px 16px;border-radius:4px;width:130px;text-transform:uppercase">
+    <button class="vbtn" onclick="b5code()">▶ DÉVERROUILLER</button>
   </div>
-  <div id="boss-p3fb" class="feedback" style="display:none;margin-top:12px"></div>`;
+  <div id="b5fb" class="fb" style="display:none;margin-top:10px"></div>`;
 }
 
-window.bossP3validate=function(){
-  if(locked)return;
+window.b5q=function(qi,chosen){
+  if(b5qdone||locked||b5qans[qi]!==undefined)return;
+  const item=BOSS_QS[qi];
+  const opts=document.querySelectorAll('#bq-'+qi+' .q-opt');
+  opts.forEach(o=>o.disabled=true);
+  opts[chosen].classList.add(chosen===item.correct?'correct':'wrong');
+  if(chosen!==item.correct){opts[item.correct].classList.add('correct');markErr('b5s1');b5qans[qi]=false;}
+  else b5qans[qi]=true;
+  const score=Object.values(b5qans).filter(v=>v).length;
+  // update boss HP
+  const filled=Object.keys(b5qans).length;
+  if(filled===8){b5qdone=true;stepDone('b5s1');
+    document.getElementById('bhp').style.width=Math.max(0,100-33)+'%';
+    unlockStep('b5s2');}
+};
+
+let b5selT=null,b5selD=null,b5matched={};
+window.b5match=function(type,idx){
+  if(b5p2done||locked)return;
+  if(type==='t'){if(b5selT!==null)document.getElementById('b5t-'+b5selT).classList.remove('sel');b5selT=idx;document.getElementById('b5t-'+idx).classList.add('sel');}
+  else{if(b5selD!==null)document.getElementById('b5d-'+b5selD).classList.remove('sel');b5selD=idx;document.getElementById('b5d-'+idx).classList.add('sel');}
+  if(b5selT!==null&&b5selD!==null){
+    const te=document.getElementById('b5t-'+b5selT),de=document.getElementById('b5d-'+b5selD);
+    if(window._b5t[b5selT].num===window._b5d[b5selD].num){
+      te.classList.remove('sel');de.classList.remove('sel');te.classList.add('ok');de.classList.add('ok');b5matched[b5selT]=true;
+    } else {
+      te.classList.add('err');de.classList.add('err');markErr('b5s2');
+      setTimeout(()=>{te.classList.remove('sel','err');de.classList.remove('sel','err');},900);
+    }
+    b5selT=null;b5selD=null;
+    if(Object.keys(b5matched).length===4){b5p2done=true;stepDone('b5s2');
+      document.getElementById('bhp').style.width=Math.max(0,100-66)+'%';
+      unlockStep('b5s3');}
+  }
+};
+
+window.b5code=function(){
+  if(b5p3done||locked)return;
   const code=document.getElementById('boss-code').value.trim();
-  const fb=document.getElementById('boss-p3fb');
-  if(code==='DICTAP'){
-    bossHP=0;updateBossHP();
-    fb.className='feedback ok';fb.style.display='block';fb.textContent='✓ CODE CORRECT — DICTAP — Système déverrouillé !';
+  const fb=document.getElementById('b5fb');fb.style.display='block';
+  if(code==='12'){
+    b5p3done=true;
+    document.getElementById('bhp').style.width='0%';
     document.getElementById('boss-code').disabled=true;
-    setTimeout(()=>showClear(totalErrors),1200);
+    fb.className='fb ok';fb.textContent='✓ CODE CORRECT — Compétence 12 ! Base de connaissances restaurée !';
+    setTimeout(()=>showClear(totalErr),1200);
   } else {
-    fb.className='feedback err';fb.style.display='block';fb.textContent='⚠ Code incorrect. Reprenez les indices.';
+    fb.className='fb err';fb.textContent='⚠ Code incorrect. Reprenez les indices.';
     applyPenalty();document.getElementById('boss-code').value='';
   }
 };

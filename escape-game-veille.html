@@ -100,11 +100,10 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 #book-start-btn{background:rgba(0,212,255,.1);border-color:var(--cyan);color:var(--cyan)}
 
 /* ── BRIEFING & CLEAR ── */
-#briefing-overlay{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;align-items:flex-end;justify-content:center;text-align:center;
-  background:url('c3i-mission.png') center/cover no-repeat}
+#briefing-overlay{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(3,8,16,.97);overflow-y:auto}
 #briefing-overlay.active{display:flex}
-#briefing-overlay::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,8,16,.2) 0%,rgba(3,8,16,.7) 50%,rgba(3,8,16,.97) 100%);pointer-events:none}
-#briefing-inner{position:relative;z-index:1;width:100%;max-width:580px;margin:0 auto;padding:20px;display:flex;flex-direction:column;align-items:center}
+#briefing-img{width:100%;max-width:900px;display:block;margin:0 auto;border-bottom:2px solid var(--cyan);flex-shrink:0}
+#briefing-inner{width:100%;max-width:620px;margin:0 auto;padding:24px 20px;display:flex;flex-direction:column;align-items:center;text-align:center}
 #clear-overlay{position:fixed;inset:0;background:rgba(3,8,16,.96);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
 #clear-overlay.active{display:flex}
 .ov-num{font-family:'Orbitron',monospace;font-size:10px;color:var(--dim);letter-spacing:4px;margin-bottom:8px}
@@ -291,6 +290,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 <!-- BRIEFING -->
 <div id="briefing-overlay">
+  <img id="briefing-img" src="c3i-mission.png" alt="Briefing de Mission">
   <div id="briefing-inner">
     <div class="ov-num" id="br-num">MISSION 01 / 05</div>
     <div class="ov-title" id="br-title"></div>

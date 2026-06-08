@@ -61,6 +61,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
 
 .sb-actions{padding:12px 20px;border-bottom:1px solid var(--border-soft);display:flex;flex-direction:column;gap:8px;}
+.btn-cours{display:flex;align-items:center;gap:7px;background:var(--slate-dark);color:#fff;border:none;border-radius:8px;padding:10px 13px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;width:100%;}
+.btn-cours:hover{background:var(--slate);}
 .btn-reveal{display:flex;align-items:center;gap:7px;background:var(--amber-pale);color:var(--amber);border:1px solid rgba(224,122,47,0.25);border-radius:8px;padding:9px 13px;font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;transition:all 0.2s;}
 .btn-reveal:hover{background:#F5DFC4;}
 .btn-reset{display:flex;align-items:center;gap:7px;background:var(--red-bg);color:var(--red);border:1px solid rgba(184,64,64,0.2);border-radius:8px;padding:9px 13px;font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;cursor:pointer;transition:all 0.2s;}
@@ -201,6 +203,59 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .toast-title.info{color:var(--amber);}
 .toast-msg{font-size:12px;color:var(--text-muted);margin-top:1px;line-height:1.4;}
 
+/* ===== COURS MODAL ===== */
+#coursOverlay{position:fixed;inset:0;background:rgba(28,42,58,0.7);z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
+#coursOverlay.show{display:flex;}
+#cours-modal{background:#fff;border-radius:18px;width:100%;max-width:820px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(28,42,58,0.28);}
+#cours-modal-header{background:var(--slate-dark);padding:16px 24px;display:flex;align-items:center;gap:12px;}
+#cours-modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#fff;letter-spacing:0.06em;text-transform:uppercase;flex:1;}
+.cours-page-badge{font-family:'Fira Code',monospace;font-size:11px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);padding:3px 10px;border-radius:20px;}
+#cours-modal-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;line-height:1;padding:2px 6px;border-radius:6px;transition:.2s;}
+#cours-modal-close:hover{color:#fff;background:rgba(255,255,255,0.1);}
+#cours-modal-body{flex:1;overflow-y:auto;padding:28px 32px;}
+#cours-modal-body h2{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--slate-dark);margin-bottom:6px;}
+#cours-modal-body .page-sub{font-size:13px;color:var(--text-muted);margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--slate-pale);}
+#cours-modal-body h3{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.07em;color:var(--slate-dark);margin:20px 0 10px;display:flex;align-items:center;gap:7px;}
+#cours-modal-body p{font-size:13.5px;color:var(--text-muted);line-height:1.7;margin-bottom:10px;}
+#cours-modal-body ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+#cours-modal-body ul li{font-size:13px;color:var(--text-muted);padding-left:16px;position:relative;line-height:1.6;}
+#cours-modal-body ul li::before{content:'›';position:absolute;left:0;color:var(--slate-mid);font-weight:700;}
+#cours-modal-body ul li strong{color:var(--text);}
+.cours-actor-card{background:var(--slate-ghost);border:1px solid var(--slate-pale);border-radius:10px;padding:14px 16px;margin-bottom:10px;}
+.cours-actor-card.finance{background:var(--teal-bg);border-color:rgba(31,122,140,0.25);}
+.cours-actor-card.certif{background:var(--green-bg);border-color:var(--green-light);}
+.cours-actor-card.repres{background:var(--purple-bg);border-color:rgba(107,94,168,0.2);}
+.cours-actor-card.controle{background:var(--amber-pale);border-color:rgba(224,122,47,0.2);}
+.cours-actor-card.obs{background:var(--slate-ghost);border-color:var(--slate-pale);}
+.cac-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:7px;}
+.cac-role{font-size:12.5px;color:var(--text-muted);line-height:1.55;margin-bottom:6px;}
+.cac-veille{font-size:12px;background:rgba(224,122,47,0.1);border-left:3px solid var(--amber);padding:6px 10px;border-radius:0 6px 6px 0;color:var(--text-muted);}
+.cac-veille strong{color:var(--amber);}
+.cours-highlight{background:var(--slate-ghost);border-left:4px solid var(--slate-dark);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:var(--text-muted);line-height:1.6;}
+.cours-highlight strong{color:var(--slate-dark);}
+.cours-qualiopi{background:var(--amber-pale);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:var(--text-muted);line-height:1.6;}
+.cours-qualiopi strong{color:var(--amber);}
+.cours-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px;}
+.cours-table th{background:var(--slate-dark);color:#fff;padding:9px 12px;text-align:left;font-family:'Syne',sans-serif;font-size:11px;letter-spacing:0.05em;}
+.cours-table td{padding:8px 12px;border-bottom:1px solid var(--border-soft);color:var(--text-muted);vertical-align:top;}
+.cours-table tr:hover td{background:var(--slate-ghost);}
+.cours-tag{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:20px;font-weight:700;font-family:'Syne',sans-serif;}
+.ct-fin{background:var(--teal-bg);color:var(--teal);}
+.ct-cert{background:var(--green-bg);color:var(--green);}
+.ct-ctrl{background:var(--amber-pale);color:var(--amber);}
+.ct-obs{background:var(--slate-ghost);color:var(--slate-dark);}
+.ct-acc{background:var(--purple-bg);color:var(--purple);}
+#cours-modal-nav{border-top:1px solid var(--border-soft);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;background:var(--slate-ghost);}
+.cours-nav-btn{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:8px 18px;border:1.5px solid var(--border);background:#fff;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;}
+.cours-nav-btn:hover{border-color:var(--slate-light);color:var(--slate-dark);}
+.cours-nav-btn:disabled{opacity:.35;pointer-events:none;}
+.cours-nav-btn.primary{background:var(--slate-dark);border-color:var(--slate-dark);color:#fff;}
+.cours-nav-btn.primary:hover{background:var(--slate);}
+.cours-dots{display:flex;gap:6px;}
+.cours-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.3s;cursor:pointer;}
+.cours-dot.active{background:var(--slate-dark);}
+.cours-dot:hover{background:var(--slate-light);}
+
 /* ===== SUCCESS ===== */
 #successOverlay{
   position:fixed;inset:0;background:rgba(28,42,58,0.72);
@@ -279,6 +334,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
   </div>
 
   <div class="sb-actions">
+    <button class="btn-cours" onclick="openCours()">📖 Consulter le cours</button>
     <button class="btn-reveal" onclick="revealAll()">👁️ Révéler le mapping</button>
     <button class="btn-reset" onclick="resetActivity()">🔄 Recommencer</button>
   </div>
@@ -819,8 +875,290 @@ function resetActivity() {
 // ===== INSTR TOGGLE =====
 function toggleInstr() { document.getElementById('instr').classList.toggle('open'); }
 
+// ===== COURS =====
+const COURS_PAGES = [
+  {
+    title: '1 — Introduction : Pourquoi connaître les acteurs ?',
+    html: `
+      <h2>Les acteurs institutionnels de la formation professionnelle</h2>
+      <p class="page-sub">CP N°12 — Réaliser une veille pour maintenir son expertise · Real Conseil · FPA RNCP 35030</p>
+      <p>En tant que formateur professionnel d'adultes, vous évoluez dans un <strong>écosystème institutionnel complexe</strong>. Connaître les acteurs qui le composent est une compétence fondamentale de la CP12 : elle conditionne la qualité de votre veille, la pertinence de vos contenus et votre capacité à orienter les apprenants.</p>
+      <h3>🎯 Pourquoi les connaître ?</h3>
+      <ul>
+        <li>Pour <strong>alimenter votre veille réglementaire</strong> : les acteurs publient les textes qui régissent votre activité</li>
+        <li>Pour <strong>orienter vos apprenants</strong> vers les bons dispositifs et financements</li>
+        <li>Pour <strong>construire votre réseau professionnel</strong> local (Partie 3 du Dossier de Veille FPA)</li>
+        <li>Pour <strong>répondre aux indicateurs Qualiopi</strong> 5, 11, 30 et 32</li>
+      </ul>
+      <div class="cours-highlight"><strong>📋 Lien REAC CP12 :</strong> « Identifier les sources d'information, les événements et les acteurs pertinents » — premier critère de performance de la compétence 12.</div>
+      <h3>📂 Les 4 grandes familles d'acteurs</h3>
+      <table class="cours-table">
+        <tr><th>Famille</th><th>Rôle principal</th><th>Exemples</th></tr>
+        <tr><td><span class="cours-tag ct-fin">💰 Financement</span></td><td>Financent et organisent l'accès à la formation</td><td>OPCO, France Compétences, CPF</td></tr>
+        <tr><td><span class="cours-tag ct-cert">✅ Certification</span></td><td>Certifient et régulent la qualité des formations</td><td>France Compétences, Qualiopi, DREETS</td></tr>
+        <tr><td><span class="cours-tag ct-acc">🤝 Représentation</span></td><td>Représentent les employeurs et les salariés</td><td>MEDEF, CPME, syndicats salariés</td></tr>
+        <tr><td><span class="cours-tag ct-ctrl">🔍 Contrôle</span></td><td>Contrôlent et observent le marché de la formation</td><td>DREETS, CARIF-OREF, France Travail</td></tr>
+      </table>`
+  },
+  {
+    title: '2 — Acteurs du financement',
+    html: `
+      <h2>💰 Les acteurs du financement de la formation</h2>
+      <p class="page-sub">Comprendre qui finance quoi — indispensable pour orienter vos apprenants et construire vos offres</p>
+      <div class="cours-actor-card finance">
+        <div class="cac-name">🏛️ France Compétences</div>
+        <div class="cac-role"><strong>Régulateur national du système de formation et d'apprentissage.</strong> Établissement public créé par la loi Avenir professionnel (2018). Il assure le financement, la régulation et l'évaluation du système de formation professionnelle et d'apprentissage en France.</div>
+        <ul>
+          <li>Répartit les fonds de la formation professionnelle entre OPCO, CPF, etc.</li>
+          <li>Publie et gère le <strong>Répertoire National des Certifications Professionnelles (RNCP)</strong></li>
+          <li>Gère le <strong>Répertoire Spécifique (RS)</strong> pour les certifications complémentaires</li>
+          <li>Émet des recommandations sur les coûts-contrats de l'apprentissage</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> francecompetences.fr — actualités RNCP, RS, financement CPF, réformes de l'apprentissage. Source de référence pour la veille réglementaire (Ind. 32 Qualiopi).</div>
+      </div>
+      <div class="cours-actor-card finance">
+        <div class="cac-name">💼 OPCO — Opérateurs de Compétences</div>
+        <div class="cac-role"><strong>Ex-OPCA (Organismes Paritaires Collecteurs Agréés).</strong> 11 OPCO en France, organisés par branches professionnelles. Ils collectent les contributions des entreprises et financent les formations des salariés.</div>
+        <ul>
+          <li>Financent le <strong>plan de développement des compétences</strong> (TPE/PME)</li>
+          <li>Accompagnent les entreprises dans leurs projets de formation</li>
+          <li>Gèrent les contrats d'alternance (apprentissage, pro)</li>
+          <li>Exemples : OPCO EP (éducation-formation), AFDAS (culture), ATLAS (finance)</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> Identifier l'OPCO de vos employeurs-clients. Suivre les priorités de financement de l'OPCO concerné pour adapter vos offres.</div>
+      </div>
+      <div class="cours-actor-card finance">
+        <div class="cac-name">📱 CPF — Compte Personnel de Formation / Mon Compte Formation</div>
+        <div class="cac-role"><strong>Dispositif individuel alimenté en euros.</strong> Tout actif (salarié, demandeur d'emploi) cumule des droits formation (500 €/an, plafonné à 5 000 €). L'apprenant choisit et finance sa formation via moncompteformation.gouv.fr.</div>
+        <ul>
+          <li>Les OF doivent être <strong>certifiés Qualiopi</strong> pour accéder aux fonds CPF</li>
+          <li>Les formations doivent être enregistrées au RNCP ou RS</li>
+          <li>Géré par la <strong>Caisse des Dépôts et Consignations (CDC)</strong></li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> Surveiller les réformes du CPF (co-financement, fraudes, plafonds) via Légifrance et France Compétences. Impact direct sur l'activité des OF.</div>
+      </div>`
+  },
+  {
+    title: '3 — Acteurs de la certification et du contrôle',
+    html: `
+      <h2>✅ Certification, contrôle et régulation</h2>
+      <p class="page-sub">Les acteurs qui encadrent la qualité et la conformité des organismes de formation</p>
+      <div class="cours-actor-card certif">
+        <div class="cac-name">🎖️ Qualiopi — Certification qualité des OF</div>
+        <div class="cac-role"><strong>Marque nationale de certification des prestataires d'actions de formation.</strong> Obligatoire depuis le 1er janvier 2022 pour accéder aux fonds publics et mutualisés. Délivrée par des organismes certificateurs accrédités COFRAC.</div>
+        <ul>
+          <li>Repose sur le <strong>Référentiel National Qualité (RNQ)</strong> : 7 critères, 32 indicateurs</li>
+          <li>Audit initial + audit de surveillance tous les 18 mois</li>
+          <li>Indicateurs liés à la veille : <strong>11, 27, 30 et 32</strong></li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> Suivre les évolutions du RNQ et des exigences des auditeurs. Un OF non certifié Qualiopi ne peut plus bénéficier des fonds CPF/OPCO.</div>
+      </div>
+      <div class="cours-actor-card controle">
+        <div class="cac-name">🔍 DREETS — Direction Régionale de l'Économie, de l'Emploi, du Travail et des Solidarités</div>
+        <div class="cac-role"><strong>Services déconcentrés de l'État (ex-DIRECCTE).</strong> Représentent le Ministère du Travail dans chaque région. Contrôlent les organismes de formation et veillent au respect de la législation.</div>
+        <ul>
+          <li>Délivrent les <strong>Numéros de Déclaration d'Activité (NDA)</strong> des OF</li>
+          <li>Contrôlent la <strong>conformité pédagogique et administrative</strong> des OF</li>
+          <li>Publient des données régionales sur l'emploi et la formation</li>
+          <li>Gèrent le suivi des <strong>contrats d'apprentissage</strong></li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> dreets.gouv.fr de votre région — publications réglementaires, données emploi-formation, contrôles en cours. Indicateur 32 Qualiopi.</div>
+      </div>
+      <div class="cours-actor-card certif">
+        <div class="cac-name">📋 Ministère du Travail, de la Santé et des Solidarités</div>
+        <div class="cac-role"><strong>Autorité de tutelle du système de formation professionnelle.</strong> Définit la politique nationale de l'emploi et de la formation. Publie les textes réglementaires qui structurent le secteur.</div>
+        <ul>
+          <li>Publie les arrêtés relatifs aux <strong>Titres Professionnels</strong> (dont le FPA)</li>
+          <li>Pilote les réformes majeures (Loi Avenir Pro 2018, France Travail 2023…)</li>
+          <li>Tutelle de France Compétences, DARES, DREETS</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> travail-emploi.gouv.fr — actualités législatives, plans de formation, réformes à venir. Source primaire pour la veille réglementaire.</div>
+      </div>`
+  },
+  {
+    title: '4 — Acteurs de l\'observation et de l\'accompagnement',
+    html: `
+      <h2>📊 Observation, accompagnement et réseau</h2>
+      <p class="page-sub">Les acteurs qui produisent des données et accompagnent les parcours des apprenants</p>
+      <div class="cours-actor-card obs">
+        <div class="cac-name">📊 CARIF-OREF — Centre d'Animation, de Ressources et d'Information sur la Formation</div>
+        <div class="cac-role"><strong>Observatoires régionaux de la formation et de l'emploi.</strong> Un CARIF-OREF par région. Produisent des données sur le marché du travail, les besoins en compétences et les formations disponibles.</div>
+        <ul>
+          <li>Publient des <strong>études et tableaux de bord</strong> sur l'emploi et la formation régionale</li>
+          <li>Recensent l'offre de formation disponible dans la région</li>
+          <li>Ressource clé pour la <strong>cartographie locale</strong> (Partie 3 du Dossier de Veille FPA)</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> CARIF-OREF Hauts-de-France (mef.asso.fr) — données locales sur l'emploi, les métiers en tension, les besoins de formation dans votre région.</div>
+      </div>
+      <div class="cours-actor-card obs">
+        <div class="cac-name">📈 DARES — Direction de l'Animation de la Recherche, des Études et des Statistiques</div>
+        <div class="cac-role"><strong>Service statistique du Ministère du Travail.</strong> Publie des études, enquêtes et statistiques sur le marché du travail, l'emploi, les salaires et la formation professionnelle en France.</div>
+        <ul>
+          <li>Publie des <strong>résultats d'enquêtes</strong> sur les conditions de travail et la formation</li>
+          <li>Données chiffrées sur l'accès à la formation selon les secteurs</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> dares.travail.gouv.fr — publications mensuelles et annuelles sur l'emploi et la formation. Utile pour la veille sectorielle.</div>
+      </div>
+      <div class="cours-actor-card repres">
+        <div class="cac-name">🏢 France Travail (ex Pôle Emploi)</div>
+        <div class="cac-role"><strong>Opérateur public du service de l'emploi.</strong> Accompagne les demandeurs d'emploi dans leur retour à l'emploi et les entreprises dans leurs recrutements. Prescrit et finance des formations pour les demandeurs d'emploi.</div>
+        <ul>
+          <li>Finance des formations via l'<strong>AIF (Aide Individuelle à la Formation)</strong></li>
+          <li>Prescrit des formations <strong>POEI</strong> (Préparation Opérationnelle à l'Emploi)</li>
+          <li>Publie les <strong>fiches ROME</strong> — référentiels des métiers utilisés pour la veille métier</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> francetravail.io — fiches ROME, statistiques emploi, offres d'emploi par secteur. Ressource clé pour la veille métier et sectorielle (Ind. 11 Qualiopi).</div>
+      </div>
+      <div class="cours-actor-card obs">
+        <div class="cac-name">🌐 Centre Inffo</div>
+        <div class="cac-role"><strong>Centre national d'information et de documentation sur la formation professionnelle.</strong> Association paritaire, référence pour l'actualité du droit et des politiques de formation.</div>
+        <ul>
+          <li>Publie <strong>Inffo Formation</strong> — revue de référence sur la formation pro</li>
+          <li>Outil en ligne <strong>Legifformation</strong> pour le droit de la formation</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> centre-inffo.fr — actualités et analyses fiables sur le droit de la formation, les réformes, les financements. Source de confiance pour la veille réglementaire.</div>
+      </div>`
+  },
+  {
+    title: '5 — Acteurs de la représentation et réseaux',
+    html: `
+      <h2>🤝 Représentation, partenaires et réseaux</h2>
+      <p class="page-sub">Les acteurs qui représentent les parties prenantes et structurent le dialogue social</p>
+      <div class="cours-actor-card repres">
+        <div class="cac-name">🏭 MEDEF, CPME, U2P — Organisations patronales</div>
+        <div class="cac-role"><strong>Représentent les employeurs dans le dialogue social.</strong> Co-construisent les accords de branche sur la formation, les qualifications et l'alternance. Siègent au Conseil d'Administration de France Compétences.</div>
+        <ul>
+          <li>MEDEF : grandes entreprises · CPME : PME · U2P : artisanat et professions libérales</li>
+          <li>Négocient les <strong>accords de branche</strong> sur la formation professionnelle</li>
+          <li>Définissent les <strong>Certificats de Qualification Professionnelle (CQP)</strong></li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> Suivre les prises de position patronales sur les réformes de la formation. Impact sur les budgets formation et les priorités des OPCO.</div>
+      </div>
+      <div class="cours-actor-card repres">
+        <div class="cac-name">👷 Syndicats salariés — CGT, CFDT, FO, CFTC, CFE-CGC</div>
+        <div class="cac-role"><strong>Représentent les salariés dans les instances de dialogue social.</strong> Négocient les conditions d'accès à la formation, les droits individuels (CPF, CIF) et la qualité des formations.</div>
+        <ul>
+          <li>Siègent à France Compétences, aux OPCO et aux CPREF (Comités Paritaires Régionaux)</li>
+          <li>Négocient les <strong>Accords Nationaux Interprofessionnels (ANI)</strong> sur la formation</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> Suivre les ANI et accords de branche signés. Ils précèdent souvent les réformes législatives et impactent le financement de la formation.</div>
+      </div>
+      <div class="cours-actor-card obs">
+        <div class="cac-name">🏫 CCI et CMA — Chambres Consulaires</div>
+        <div class="cac-role"><strong>Chambres de Commerce et d'Industrie / Chambres des Métiers et de l'Artisanat.</strong> Accompagnent les entreprises locales et gèrent des centres de formation. Acteurs clés de la cartographie locale.</div>
+        <ul>
+          <li>Gèrent des <strong>CFA et centres de formation</strong> dans toutes les régions</li>
+          <li>Publient des données sur le tissu économique local</li>
+          <li>Partenaires potentiels pour la mutualisation des formations</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> CCI et CMA de votre territoire — données sur les entreprises locales, leurs besoins en formation, les secteurs en développement. Essentiels pour la Partie 3 du Dossier de Veille.</div>
+      </div>
+      <div class="cours-actor-card certif">
+        <div class="cac-name">🧑‍🏫 Communautés de pratiques FPA / Réseaux professionnels</div>
+        <div class="cac-role"><strong>Réseaux informels ou structurés de formateurs professionnels.</strong> Permettent le partage d'expériences, d'outils pédagogiques et de ressources. Indispensables pour la veille pédagogique et métier.</div>
+        <ul>
+          <li>Groupes <strong>LinkedIn</strong> thématiques (formateurs FPA, ingénierie pédagogique…)</li>
+          <li>Associations professionnelles : <strong>AFREF, FFFOD</strong></li>
+          <li>Colloques et événements : AIPU, Educpros, salons Expolearning</li>
+        </ul>
+        <div class="cac-veille"><strong>🔍 Veille :</strong> Participer activement (veille active) aux communautés de pratiques. Partager les résultats de sa veille avec ses pairs — exigence explicite de la CP12 REAC.</div>
+      </div>`
+  },
+  {
+    title: '6 — Synthèse & liens Qualiopi / REAC',
+    html: `
+      <h2>📋 Synthèse — Tableau de bord des acteurs</h2>
+      <p class="page-sub">Vue d'ensemble de tous les acteurs, leur catégorie et leur lien avec la veille du formateur FPA</p>
+      <table class="cours-table">
+        <tr><th>Acteur</th><th>Catégorie</th><th>Lien principal avec la veille</th></tr>
+        <tr><td><strong>France Compétences</strong></td><td><span class="cours-tag ct-cert">Certification</span></td><td>RNCP, RS, réformes financement — veille réglementaire Ind. 32</td></tr>
+        <tr><td><strong>OPCO</strong></td><td><span class="cours-tag ct-fin">Financement</span></td><td>Priorités de branche, financement formations — veille sectorielle</td></tr>
+        <tr><td><strong>CPF / Mon Compte Formation</strong></td><td><span class="cours-tag ct-fin">Financement</span></td><td>Accès aux fonds, éligibilité formations — veille réglementaire</td></tr>
+        <tr><td><strong>DREETS</strong></td><td><span class="cours-tag ct-ctrl">Contrôle</span></td><td>NDA, contrôles OF, données régionales — veille réglementaire Ind. 32</td></tr>
+        <tr><td><strong>Ministère du Travail</strong></td><td><span class="cours-tag ct-cert">Certification</span></td><td>Textes de loi, Titres Professionnels, réformes — veille réglementaire</td></tr>
+        <tr><td><strong>France Travail</strong></td><td><span class="cours-tag ct-ctrl">Contrôle</span></td><td>Fiches ROME, emploi, prescription — veille métier Ind. 11</td></tr>
+        <tr><td><strong>CARIF-OREF</strong></td><td><span class="cours-tag ct-ctrl">Contrôle</span></td><td>Données régionales emploi-formation — cartographie locale CP12</td></tr>
+        <tr><td><strong>Centre Inffo</strong></td><td><span class="cours-tag ct-obs">Observation</span></td><td>Actualité droit formation — veille réglementaire et documentaire</td></tr>
+        <tr><td><strong>DARES</strong></td><td><span class="cours-tag ct-obs">Observation</span></td><td>Statistiques emploi-formation — veille sectorielle</td></tr>
+        <tr><td><strong>MEDEF / CPME</strong></td><td><span class="cours-tag ct-acc">Représentation</span></td><td>Accords de branche, besoins entreprises — veille concurrentielle</td></tr>
+        <tr><td><strong>Syndicats salariés</strong></td><td><span class="cours-tag ct-acc">Représentation</span></td><td>ANI, droits formation — veille réglementaire et sociale</td></tr>
+        <tr><td><strong>CCI / CMA</strong></td><td><span class="cours-tag ct-obs">Observation</span></td><td>Tissu économique local — cartographie locale et veille sectorielle</td></tr>
+        <tr><td><strong>Communautés de pratiques</strong></td><td><span class="cours-tag ct-cert">Réseau</span></td><td>Échanges pairs, retours terrain — veille pédagogique Ind. 30</td></tr>
+      </table>
+      <div class="cours-qualiopi">
+        <strong>🏅 Indicateurs Qualiopi directement concernés :</strong><br>
+        <strong>Ind. 5</strong> — Adéquation des prérequis : la veille sectorielle/métier via DARES, CARIF-OREF, France Travail<br>
+        <strong>Ind. 11</strong> — Ressources pédagogiques actualisées : veille via France Travail, FFFOD, Centre Inffo<br>
+        <strong>Ind. 30</strong> — Maintien des compétences des formateurs : participation aux réseaux et communautés<br>
+        <strong>Ind. 32</strong> — Veille légale et réglementaire : France Compétences, Légifrance, DREETS, Ministère du Travail
+      </div>
+      <div class="cours-highlight">
+        <strong>📌 À retenir pour le Dossier de Veille (Chap. 4 du DT) :</strong><br>
+        La Partie 3 du dossier de veille exige une <strong>cartographie locale</strong> des acteurs. Utilisez ce tableau pour identifier les acteurs pertinents dans votre territoire et votre secteur. Mentionnez pour chacun : son rôle, sa source (URL), et comment vous l'utilisez dans votre veille.
+      </div>`
+  }
+];
+
+let coursPage = 0;
+
+function openCours() {
+  coursPage = 0;
+  renderCoursPage();
+  document.getElementById('coursOverlay').classList.add('show');
+}
+function closeCours() {
+  document.getElementById('coursOverlay').classList.remove('show');
+}
+function renderCoursPage() {
+  const p = COURS_PAGES[coursPage];
+  document.getElementById('cours-modal-title').textContent = '📖 Acteurs institutionnels — Support de cours';
+  document.getElementById('cours-page-badge').textContent = 'Page ' + (coursPage+1) + ' / ' + COURS_PAGES.length;
+  document.getElementById('cours-modal-body').innerHTML = p.html;
+  document.getElementById('cours-prev').disabled = coursPage === 0;
+  document.getElementById('cours-next').textContent = coursPage === COURS_PAGES.length-1 ? '✓ Commencer le mapping' : 'Suivant ▶';
+  document.getElementById('cours-next').className = coursPage === COURS_PAGES.length-1 ? 'cours-nav-btn primary' : 'cours-nav-btn';
+  // dots
+  const dots = document.querySelectorAll('.cours-dot');
+  dots.forEach((d,i) => d.classList.toggle('active', i === coursPage));
+  document.getElementById('cours-modal-body').scrollTop = 0;
+}
+function coursNav(dir) {
+  if (dir === 1 && coursPage === COURS_PAGES.length-1) { closeCours(); return; }
+  coursPage = Math.max(0, Math.min(COURS_PAGES.length-1, coursPage + dir));
+  renderCoursPage();
+}
+function coursGoTo(i) { coursPage = i; renderCoursPage(); }
+
+// ===== INSTR TOGGLE =====
+function toggleInstr() { document.getElementById('instr').classList.toggle('open'); }
+
 // ===== START =====
 init();
 </script>
+
+<!-- ===== COURS MODAL ===== -->
+<div id="coursOverlay" onclick="if(event.target===this)closeCours()">
+  <div id="cours-modal">
+    <div id="cours-modal-header">
+      <div id="cours-modal-title">📖 Support de cours</div>
+      <span class="cours-page-badge" id="cours-page-badge">Page 1 / 6</span>
+      <button id="cours-modal-close" onclick="closeCours()">✕</button>
+    </div>
+    <div id="cours-modal-body"></div>
+    <div id="cours-modal-nav">
+      <button class="cours-nav-btn" id="cours-prev" onclick="coursNav(-1)">◀ Précédent</button>
+      <div class="cours-dots">
+        <div class="cours-dot active" onclick="coursGoTo(0)"></div>
+        <div class="cours-dot" onclick="coursGoTo(1)"></div>
+        <div class="cours-dot" onclick="coursGoTo(2)"></div>
+        <div class="cours-dot" onclick="coursGoTo(3)"></div>
+        <div class="cours-dot" onclick="coursGoTo(4)"></div>
+        <div class="cours-dot" onclick="coursGoTo(5)"></div>
+      </div>
+      <button class="cours-nav-btn" id="cours-next" onclick="coursNav(1)">Suivant ▶</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FPA Amiens — Veille informationnelle | Real Conseil</title>
+<title>FPA Amiens — Supports de cours | Real Conseil</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -59,7 +59,7 @@ body{
   position:absolute;
   top:0;left:0;right:0;
   height:5px;
-  background:linear-gradient(90deg,var(--amber),var(--amber-light),var(--green));
+  background:linear-gradient(90deg,var(--slate),var(--amber),var(--green));
 }
 .hero::after {
   content:'';
@@ -70,16 +70,16 @@ body{
   border-radius:50%;
   pointer-events:none;
 }
-.hero-inner {max-width:980px;margin:0 auto;position:relative;z-index:1;}
+.hero-inner{max-width:980px;margin:0 auto;position:relative;z-index:1;}
 .brand-row{display:flex;align-items:center;gap:14px;margin-bottom:36px;}
 .rc-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:0.12em;color:#fff;text-transform:uppercase;}
 .brand-sep{width:1px;height:22px;background:rgba(255,255,255,0.25);}
 .brand-sub{font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:0.04em;}
 .hero-badges{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px;}
 .hbadge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;padding:4px 13px;border-radius:20px;letter-spacing:0.05em;}
-.hbadge-fpa{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.2);}
-.hbadge-qualiopi{background:rgba(224,122,47,0.2);color:var(--amber-light);border:1px solid rgba(224,122,47,0.3);}
-.hbadge-cp{background:rgba(107,94,168,0.25);color:#C8C0F0;border:1px solid rgba(107,94,168,0.3);}
+.hbadge-fpa    {background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.2);}
+.hbadge-quali  {background:rgba(224,122,47,0.2);color:var(--amber-light);border:1px solid rgba(224,122,47,0.3);}
+.hbadge-amiens {background:rgba(45,125,82,0.25);color:#80D0A8;border:1px solid rgba(45,125,82,0.3);}
 .hero-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:34px;color:#fff;line-height:1.2;margin-bottom:14px;}
 .hero-h1 em{color:var(--amber-light);font-style:normal;}
 .hero-desc{font-size:15px;color:rgba(255,255,255,0.62);max-width:640px;line-height:1.7;margin-bottom:32px;}
@@ -95,7 +95,6 @@ body{
 
 /* ===== CARDS GRID ===== */
 .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px;}
-.cards-grid.two-col{grid-template-columns:repeat(2,1fr);}
 
 .card{
   background:var(--bg-card);
@@ -125,12 +124,11 @@ body{
 .card:hover::before{opacity:1;}
 
 /* card color themes */
-.card.c-module  {--card-color:linear-gradient(90deg,var(--slate),var(--slate-mid));}
-.card.c-atelier {--card-color:linear-gradient(90deg,var(--amber),var(--amber-light));}
-.card.c-fiche   {--card-color:linear-gradient(90deg,var(--green),#5AB080);}
-.card.c-seance  {--card-color:linear-gradient(90deg,var(--purple),#9B8FD8);}
-.card.c-game    {--card-color:linear-gradient(90deg,var(--red),#D06060);}
-.card.c-cartes  {--card-color:linear-gradient(90deg,var(--teal),#2EA8C0);}
+.card.c-m1  {--card-color:linear-gradient(90deg,var(--slate),var(--slate-mid));}
+.card.c-m2  {--card-color:linear-gradient(90deg,var(--amber),var(--amber-light));}
+.card.c-m3  {--card-color:linear-gradient(90deg,var(--green),#5AB080);}
+.card.c-m4  {--card-color:linear-gradient(90deg,var(--purple),#9B8FD8);}
+.card.c-m5  {--card-color:linear-gradient(90deg,var(--teal),#2EA8C0);}
 
 .card-icon{
   width:48px;height:48px;
@@ -138,12 +136,26 @@ body{
   display:flex;align-items:center;justify-content:center;
   font-size:22px;flex-shrink:0;
 }
-.c-module  .card-icon{background:var(--slate-ghost);}
-.c-atelier .card-icon{background:var(--amber-pale);}
-.c-fiche   .card-icon{background:var(--green-bg);}
-.c-seance  .card-icon{background:var(--purple-bg);}
-.c-game    .card-icon{background:var(--red-bg);}
-.c-cartes  .card-icon{background:var(--teal-bg);}
+.c-m1 .card-icon{background:var(--slate-ghost);}
+.c-m2 .card-icon{background:var(--amber-pale);}
+.c-m3 .card-icon{background:var(--green-bg);}
+.c-m4 .card-icon{background:var(--purple-bg);}
+.c-m5 .card-icon{background:var(--teal-bg);}
+
+/* Carte "à venir" */
+.card.soon{
+  opacity:0.55;
+  cursor:default;
+  pointer-events:none;
+}
+.card.soon::before{display:none;}
+.soon-badge{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:700;font-family:'Syne',sans-serif;
+  padding:3px 9px;border-radius:20px;letter-spacing:0.05em;
+  background:var(--border);color:var(--text-dim);
+  width:fit-content;
+}
 
 .card-top{display:flex;align-items:flex-start;gap:12px;}
 .card-meta{flex:1;}
@@ -153,15 +165,12 @@ body{
 .card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
 .tag{font-size:10.5px;padding:3px 9px;border-radius:20px;font-weight:600;font-family:'Syne',sans-serif;letter-spacing:0.02em;border:1px solid var(--border);}
 .tag-time{background:var(--slate-ghost);color:var(--slate-dark);}
-.tag-mode{background:var(--amber-pale);color:var(--amber);}
-.tag-pub {background:var(--green-bg);color:var(--green);}
-.tag-type{background:var(--purple-bg);color:var(--purple);}
-.tag-game{background:var(--red-bg);color:var(--red);}
-.tag-def {background:var(--teal-bg);color:var(--teal);}
+.tag-seq {background:var(--amber-pale);color:var(--amber);}
+.tag-mod {background:var(--green-bg);color:var(--green);}
 .card-arrow{font-size:16px;color:var(--text-dim);transition:color 0.2s,transform 0.2s;margin-left:auto;align-self:flex-end;}
 .card:hover .card-arrow{color:var(--slate);transform:translateX(4px);}
 
-/* ===== INFO ===== */
+/* ===== INFO BOX ===== */
 .info-box{
   background:var(--slate-ghost);
   border:1px solid var(--slate-pale);
@@ -186,7 +195,6 @@ body{
   .hero{padding:36px 24px 32px;}
   .page-content{padding:32px 20px 60px;}
   .cards-grid{grid-template-columns:1fr;}
-  .cards-grid.two-col{grid-template-columns:1fr;}
   .hero-h1{font-size:26px;}
 }
 </style>
@@ -203,16 +211,15 @@ body{
     </div>
     <div class="hero-badges">
       <span class="hbadge hbadge-fpa">FPA — RNCP 35030</span>
-      <span class="hbadge hbadge-qualiopi">✦ Qualiopi Indicateur 2</span>
-      <span class="hbadge hbadge-cp">CP N°12 — Veille informationnelle</span>
+      <span class="hbadge hbadge-quali">✦ Qualiopi</span>
+      <span class="hbadge hbadge-amiens">📍 Amiens</span>
     </div>
-    <h1 class="hero-h1">Supports numériques<br><em>Veille informationnelle</em></h1>
-    <p class="hero-desc">Tous les supports pédagogiques pour enseigner la veille informationnelle aux apprenants FPA. Cliquez sur une carte pour ouvrir le support.</p>
+    <h1 class="hero-h1">Supports de cours<br><em>FPA Amiens</em></h1>
+    <p class="hero-desc">Tous les supports numériques de la formation Formateur Professionnel d'Adultes. Sélectionnez un module pour accéder aux séquences et activités.</p>
     <div class="hero-stats">
-      <span class="stat-pill">📦 5 supports</span>
-      <span class="stat-pill">🕐 6h de contenu</span>
-      <span class="stat-pill">👤 Débutant complet</span>
+      <span class="stat-pill">📦 5 modules</span>
       <span class="stat-pill">🏛️ Real Conseil · Amiens</span>
+      <span class="stat-pill">✦ Certifié Qualiopi</span>
     </div>
   </div>
 </header>
@@ -220,128 +227,88 @@ body{
 <!-- ===== CONTENT ===== -->
 <div class="page-content">
 
-  <!-- Modules de formation -->
   <div class="section-label">
-    <h2>📦 Modules de formation</h2>
-    <div class="section-label-line"></div>
-  </div>
-
-  <div class="cards-grid two-col" style="margin-bottom:48px;">
-
-    <!-- Module 1 -->
-    <a href="module1/index.html" class="card c-module">
-      <div class="card-top">
-        <div class="card-icon">📁</div>
-        <div class="card-meta">
-          <div class="card-num">MODULE 01</div>
-          <div class="card-title">Analyser les besoins de formation</div>
-        </div>
-      </div>
-      <p class="card-desc">4 séquences : analyser une demande, formaliser le besoin, identifier les écarts de compétences, contextualiser la réponse formation.</p>
-      <div class="card-tags">
-        <span class="tag tag-time">⏱ 2h</span>
-        <span class="tag tag-mode">4 séquences</span>
-        <span class="tag tag-pub">Module 1</span>
-      </div>
-      <span class="card-arrow">→</span>
-    </a>
-
-  </div>
-
-  <!-- Supports pédagogiques -->
-  <div class="section-label">
-    <h2>📘 Supports pédagogiques — Veille informationnelle</h2>
+    <h2>📘 Modules de formation</h2>
     <div class="section-label-line"></div>
   </div>
 
   <div class="cards-grid">
 
-    <!-- 1. Activité interactive CP12 -->
-    <a href="activite-cp12-interactive.html" class="card c-game">
+    <!-- Module 1 -->
+    <a href="module1/index.html" class="card c-m1">
+      <div class="card-top">
+        <div class="card-icon">🔍</div>
+        <div class="card-meta">
+          <div class="card-num">MODULE 01</div>
+          <div class="card-title">Analyser les besoins de formation</div>
+        </div>
+      </div>
+      <p class="card-desc">Analyser une demande, formaliser le besoin, identifier les écarts de compétences, contextualiser la réponse formation.</p>
+      <div class="card-tags">
+        <span class="tag tag-time">⏱ 2h</span>
+        <span class="tag tag-seq">4 séquences</span>
+      </div>
+      <span class="card-arrow">→</span>
+    </a>
+
+    <!-- Module 2 — à venir -->
+    <div class="card c-m2 soon">
       <div class="card-top">
         <div class="card-icon">🎯</div>
         <div class="card-meta">
-          <div class="card-num">LIVRABLE 01</div>
-          <div class="card-title">Activité interactive CP12</div>
+          <div class="card-num">MODULE 02</div>
+          <div class="card-title">Concevoir une action de formation</div>
         </div>
       </div>
-      <p class="card-desc">Trouvez les 7 mots-clés cachés dans la Fiche CP12. Score en temps réel, blocage à 3 erreurs, mode annotation.</p>
+      <p class="card-desc">Définir les objectifs pédagogiques, choisir les modalités, concevoir les séquences et les supports.</p>
       <div class="card-tags">
-        <span class="tag tag-game">🎮 Jeu interactif</span>
-        <span class="tag tag-mode">CP N°12</span>
-        <span class="tag tag-pub">Individuel</span>
+        <span class="soon-badge">À venir</span>
       </div>
-      <span class="card-arrow">→</span>
-    </a>
+    </div>
 
-    <!-- 2. Cartes définitions -->
-    <a href="cartes-definitions.html" class="card c-cartes">
-      <div class="card-top">
-        <div class="card-icon">🃏</div>
-        <div class="card-meta">
-          <div class="card-num">LIVRABLE 02</div>
-          <div class="card-title">Cartes définitions</div>
-        </div>
-      </div>
-      <p class="card-desc">Cartes à retourner — définitions clés de la veille informationnelle. Format mémorisation interactive.</p>
-      <div class="card-tags">
-        <span class="tag tag-def">🃏 Flashcards</span>
-        <span class="tag tag-mode">Mémorisation</span>
-        <span class="tag tag-pub">Individuel</span>
-      </div>
-      <span class="card-arrow">→</span>
-    </a>
-
-    <!-- 3. Escape Game -->
-    <a href="escape-game-veille.html" class="card" style="--card-color:linear-gradient(90deg,#1C3A5C,#6B5EA8);">
-      <div class="card-top">
-        <div class="card-icon" style="background:#1A1F2E;font-size:24px;">🔐</div>
-        <div class="card-meta">
-          <div class="card-num">LIVRABLE 03</div>
-          <div class="card-title">Escape Game — CELLULE C3I</div>
-        </div>
-      </div>
-      <p class="card-desc">5 missions pour reconstituer la base de connaissances CP12 : Qualiopi, types de veille, méthodes, 7 étapes, examen FPA. Timer 90 min.</p>
-      <div class="card-tags">
-        <span class="tag" style="background:#1A1F2E;color:#8BAABF;border-color:#1C3A5C;">🔐 Escape game</span>
-        <span class="tag tag-mode">90 min</span>
-        <span class="tag tag-pub">CP12 complet</span>
-      </div>
-      <span class="card-arrow">→</span>
-    </a>
-
-    <!-- 4. Mapping acteurs -->
-    <a href="mapping-acteurs-fpa.html" class="card" style="--card-color:linear-gradient(90deg,var(--teal),#2EA8C0);">
-      <div class="card-top">
-        <div class="card-icon" style="background:var(--teal-bg);">🗺️</div>
-        <div class="card-meta">
-          <div class="card-num">LIVRABLE 04</div>
-          <div class="card-title">Mapping acteurs institutionnels</div>
-        </div>
-      </div>
-      <p class="card-desc">Positionnez les 15 acteurs (OPCO, France Compétences, DREETS…) dans 4 catégories. Blocage à 5 erreurs, fiches rapides au survol.</p>
-      <div class="card-tags">
-        <span class="tag tag-def">🗺️ Mapping interactif</span>
-        <span class="tag tag-mode">CP N°12</span>
-        <span class="tag tag-pub">Individuel</span>
-      </div>
-      <span class="card-arrow">→</span>
-    </a>
-
-    <!-- 5. Atelier pratique guidé -->
-    <a href="atelier/atelier-veille-fpa.html" class="card c-atelier">
+    <!-- Module 3 — à venir -->
+    <div class="card c-m3 soon">
       <div class="card-top">
         <div class="card-icon">🛠️</div>
         <div class="card-meta">
-          <div class="card-num">LIVRABLE 05</div>
-          <div class="card-title">Atelier pratique guidé</div>
+          <div class="card-num">MODULE 03</div>
+          <div class="card-title">Animer une action de formation</div>
         </div>
       </div>
-      <p class="card-desc">7 étapes pas à pas, checklists interactives, tableau de bord imprimable et plan d'engagement 30 jours.</p>
+      <p class="card-desc">Mettre en œuvre les techniques d'animation, gérer le groupe, adapter sa posture de formateur.</p>
       <div class="card-tags">
-        <span class="tag tag-time">⏱ 3h</span>
-        <span class="tag tag-mode">Présentiel / Distanciel</span>
-        <span class="tag tag-pub">6 à 16 personnes</span>
+        <span class="soon-badge">À venir</span>
+      </div>
+    </div>
+
+    <!-- Module 4 — à venir -->
+    <div class="card c-m4 soon">
+      <div class="card-top">
+        <div class="card-icon">📊</div>
+        <div class="card-meta">
+          <div class="card-num">MODULE 04</div>
+          <div class="card-title">Évaluer les apprentissages</div>
+        </div>
+      </div>
+      <p class="card-desc">Construire des évaluations formatives et certificatives, analyser les résultats, ajuster la formation.</p>
+      <div class="card-tags">
+        <span class="soon-badge">À venir</span>
+      </div>
+    </div>
+
+    <!-- Module 5 — Veille -->
+    <a href="module-veille/index.html" class="card c-m5">
+      <div class="card-top">
+        <div class="card-icon">🔭</div>
+        <div class="card-meta">
+          <div class="card-num">MODULE 05</div>
+          <div class="card-title">Veille informationnelle — CP12</div>
+        </div>
+      </div>
+      <p class="card-desc">Supports interactifs pour enseigner la veille : activité CP12, escape game, mapping acteurs, atelier pratique.</p>
+      <div class="card-tags">
+        <span class="tag tag-time">⏱ 6h</span>
+        <span class="tag tag-seq">5 supports</span>
       </div>
       <span class="card-arrow">→</span>
     </a>
@@ -354,16 +321,15 @@ body{
     <ul>
       <li><strong>Organisme :</strong> Real Conseil — certifié Qualiopi, Hauts-de-France</li>
       <li><strong>Formation :</strong> Titre Professionnel Formateur Professionnel d'Adultes (FPA) — RNCP 35030</li>
-      <li><strong>Compétence visée :</strong> CP N°12 — Réaliser une veille pour maintenir son expertise de formateur et de professionnel dans sa spécialité</li>
+      <li><strong>Public :</strong> Apprenants FPA en formation initiale · Real Conseil · Amiens</li>
       <li><strong>Lien Qualiopi :</strong> Indicateur 2 — actualisation des compétences du personnel de formation</li>
-      <li><strong>Public :</strong> Apprenants FPA, débutants complets en veille informationnelle</li>
     </ul>
   </div>
 
   <!-- Footer -->
   <div class="footer">
     <span class="footer-rc">Real Conseil</span>
-    <span class="footer-tag">· Certifié Qualiopi · Hauts-de-France · FPA v1.1 · 2026</span>
+    <span class="footer-tag">· Certifié Qualiopi · Hauts-de-France · FPA v2.0 · 2026</span>
     <a href="https://github.com/nicepowpowloko/FPA_Amiens" class="footer-gh" target="_blank">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
       GitHub

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPA – M1 / S1.4 – Contextualiser une réponse formation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #2C3F77;
+    --navy-dark: #1e2d57;
+    --navy-light: #3a518f;
+    --gold: #A0896A;
+    --gold-light: #c4a882;
+    --gold-pale: #f5efe6;
+    --white: #ffffff;
+    --gray-light: #f0f2f8;
+    --gray-mid: #d0d6e8;
+    --text: #1a2240;
+    --success: #2e7d52;
+    --error: #b93232;
+    --success-bg: #e8f5ee;
+    --error-bg: #fdeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--text); line-height: 1.7; }
+
+  header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    color: var(--white); padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .header-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .badge-module { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .badge-seq { background: rgba(255,255,255,0.15); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); }
+  .badge-duree { margin-left: auto; background: rgba(255,255,255,0.1); color: var(--gold-light); font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  header h2 { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.7); }
+
+  .objectifs-bar { background: var(--white); border-left: 4px solid var(--gold); margin: 1.5rem 2rem; padding: 1.2rem 1.5rem; border-radius: 0 6px 6px 0; box-shadow: 0 2px 8px rgba(44,63,119,0.08); }
+  .objectifs-bar h3 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.8rem; }
+  .objectifs-bar ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .objectifs-bar ul li { background: var(--gold-pale); color: var(--navy); font-size: 0.85rem; font-weight: 500; padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid rgba(160,137,106,0.25); }
+  .objectifs-bar ul li::before { content: '✓ '; color: var(--gold); font-weight: 700; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+  .section-title { display: flex; align-items: center; gap: 0.8rem; margin: 2rem 0 1rem; }
+  .section-title .num { background: var(--navy); color: var(--white); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-title h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); }
+
+  .accordion { background: var(--white); border-radius: 8px; margin-bottom: 0.6rem; box-shadow: 0 2px 6px rgba(44,63,119,0.07); overflow: hidden; border: 1px solid var(--gray-mid); }
+  .accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem; cursor: pointer; user-select: none; transition: background 0.2s; }
+  .accordion-header:hover { background: var(--gray-light); }
+  .accordion-header.active { background: var(--navy); color: var(--white); }
+  .accordion-header h3 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+  .accordion-arrow { font-size: 0.8rem; transition: transform 0.3s; color: var(--gold); }
+  .accordion-header.active .accordion-arrow { transform: rotate(180deg); color: var(--gold-light); }
+  .accordion-body { display: none; padding: 1.3rem 1.5rem; border-top: 1px solid var(--gray-mid); }
+  .accordion-body.open { display: block; }
+  .accordion-body p { margin-bottom: 0.8rem; font-size: 0.93rem; }
+  .accordion-body ul, .accordion-body ol { margin: 0.5rem 0 0.8rem 1.2rem; font-size: 0.93rem; }
+  .accordion-body li { margin-bottom: 0.4rem; }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--navy); color: var(--white); padding: 0.7rem 1rem; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--gray-mid); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  tr:hover td { background: var(--gold-pale); }
+
+  .encadre { border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem; }
+  .encadre.info { background: #e8edf8; border-left: 4px solid var(--navy); }
+  .encadre.tip { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .encadre.warning { background: #fff8e6; border-left: 4px solid #e6a817; }
+  .encadre strong { display: block; margin-bottom: 0.4rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+
+  /* CONTEXTE CARDS */
+  .contexte-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin: 1rem 0;
+  }
+  .contexte-card {
+    background: var(--white);
+    border: 1px solid var(--gray-mid);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    border-top: 3px solid var(--navy);
+  }
+  .contexte-card.gold { border-top-color: var(--gold); }
+  .contexte-card h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .contexte-card.gold h4 { color: var(--gold); }
+  .contexte-card ul { list-style: none; font-size: 0.85rem; }
+  .contexte-card ul li { padding: 0.2rem 0; border-bottom: 1px solid var(--gray-light); }
+  .contexte-card ul li:last-child { border-bottom: none; }
+  .contexte-card ul li::before { content: '→ '; color: var(--gold); font-weight: 700; }
+
+  /* MODALITES VISUELLES */
+  .modalites-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+  .modalite-card {
+    background: var(--white);
+    border: 1px solid var(--gray-mid);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+  .modalite-card .icon { font-size: 1.8rem; margin-bottom: 0.4rem; display: block; }
+  .modalite-card strong { display: block; font-weight: 700; color: var(--navy); margin-bottom: 0.3rem; font-size: 0.88rem; }
+  .modalite-card span { font-size: 0.78rem; color: #666; }
+
+  .cas-pratique { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); color: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0 1rem; }
+  .cas-pratique .cp-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
+  .cas-pratique .cp-badge { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .cas-pratique h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .cas-pratique .scenario { background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6; }
+  .cas-pratique .consignes p { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 0.5rem; }
+  .cas-pratique ol { margin-left: 1.2rem; font-size: 0.9rem; }
+  .cas-pratique ol li { margin-bottom: 0.4rem; }
+  .toggle-correction { background: var(--gold); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 1rem; }
+  .toggle-correction:hover { background: var(--gold-light); }
+  .correction { display: none; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+  .correction.open { display: block; }
+  .correction h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 0.7rem; }
+  .correction ul { margin-left: 1.2rem; }
+  .correction li { margin-bottom: 0.5rem; }
+
+  .quiz-section { background: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0; box-shadow: 0 2px 10px rgba(44,63,119,0.1); border: 1px solid var(--gray-mid); }
+  .quiz-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--gray-light); }
+  .quiz-badge { background: var(--navy); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .quiz-section h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); }
+  .question { margin-bottom: 1.5rem; }
+  .question p { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.7rem; color: var(--navy); }
+  .option { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.4rem; cursor: pointer; border: 2px solid var(--gray-mid); transition: all 0.2s; font-size: 0.9rem; }
+  .option:hover { border-color: var(--navy); background: var(--gray-light); }
+  .option input[type="radio"] { margin-top: 2px; accent-color: var(--navy); }
+  .option.correct { border-color: var(--success); background: var(--success-bg); }
+  .option.incorrect { border-color: var(--error); background: var(--error-bg); }
+  .feedback { display: none; font-size: 0.85rem; padding: 0.6rem 0.8rem; border-radius: 4px; margin-top: 0.3rem; }
+  .feedback.correct { background: var(--success-bg); color: var(--success); display: block; }
+  .feedback.incorrect { background: var(--error-bg); color: var(--error); display: block; }
+  .quiz-btn { background: var(--navy); color: var(--white); border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; transition: background 0.2s; }
+  .quiz-btn:hover { background: var(--navy-light); }
+  .quiz-score { display: none; margin-top: 1rem; padding: 1rem; border-radius: 6px; text-align: center; font-weight: 600; font-size: 1rem; }
+  .quiz-score.show { display: block; }
+  .quiz-score.good { background: var(--success-bg); color: var(--success); }
+  .quiz-score.bad { background: var(--error-bg); color: var(--error); }
+
+  footer { text-align: center; padding: 2rem; color: rgba(44,63,119,0.4); font-size: 0.8rem; border-top: 1px solid var(--gray-mid); margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .objectifs-bar { margin: 1rem; }
+    main { padding: 0 1rem 2rem; }
+    .contexte-grid, .modalites-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge-module">FPA – M1</span>
+    <span class="badge-seq">Séquence S1.4</span>
+    <span class="badge-duree">⏱ 0,5 h</span>
+  </div>
+  <h1>Contextualiser une réponse formation adaptée</h1>
+  <h2>Elaborer la progression pédagogique d'une formation multimodale à partir d'une demande</h2>
+</header>
+
+<div class="objectifs-bar">
+  <h3>Objectifs pédagogiques</h3>
+  <ul>
+    <li>Prendre en compte le contexte organisationnel et humain</li>
+    <li>Identifier les contraintes qui pèsent sur la réponse formation</li>
+    <li>Choisir des modalités adaptées au public et au contexte</li>
+    <li>Argumenter une proposition de formation auprès d'un commanditaire</li>
+  </ul>
+</div>
+
+<main>
+
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>Apports théoriques</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🌍</span> Pourquoi contextualiser sa réponse formation ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Analyser un besoin de formation ne suffit pas. Le formateur doit aussi prendre en compte le <strong>contexte global</strong> dans lequel s'inscrit la demande pour proposer une réponse réaliste, cohérente et acceptée par toutes les parties.</p>
+      <p>Une réponse formation inadaptée au contexte, même techniquement solide, risque de :</p>
+      <ul>
+        <li>Ne pas être acceptée par le commanditaire (budget trop élevé, durée incompatible)</li>
+        <li>Être rejetée par les apprenants (modalités inadaptées à leur réalité terrain)</li>
+        <li>Produire des résultats insuffisants (objectifs trop ambitieux pour le temps imparti)</li>
+        <li>Créer des tensions dans l'organisation (formation perçue comme contrainte, pas comme soutien)</li>
+      </ul>
+      <div class="encadre tip">
+        <strong>💡 Principe clé</strong>
+        La meilleure réponse formation est celle qui concilie ce qui est pédagogiquement souhaitable avec ce qui est organisationnellement faisable.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🗺️</span> Les dimensions du contexte à analyser</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le contexte d'une demande de formation s'analyse selon plusieurs dimensions complémentaires :</p>
+      <div class="contexte-grid">
+        <div class="contexte-card">
+          <h4>🏢 Contexte organisationnel</h4>
+          <ul>
+            <li>Taille et secteur de l'entreprise</li>
+            <li>Culture interne et rapport à la formation</li>
+            <li>Enjeux stratégiques en cours (fusion, réorganisation…)</li>
+            <li>Politique de formation existante</li>
+          </ul>
+        </div>
+        <div class="contexte-card gold">
+          <h4>👤 Contexte humain</h4>
+          <ul>
+            <li>Profil et hétérogénéité du public</li>
+            <li>Rapport à l'apprentissage et à la formation</li>
+            <li>Freins potentiels (résistance au changement, illettrisme…)</li>
+            <li>Disponibilité et rythme de travail</li>
+          </ul>
+        </div>
+        <div class="contexte-card">
+          <h4>⚙️ Contexte logistique</h4>
+          <ul>
+            <li>Budget alloué</li>
+            <li>Délais de réalisation</li>
+            <li>Lieux disponibles (locaux, déplacements)</li>
+            <li>Équipements et outils accessibles</li>
+          </ul>
+        </div>
+        <div class="contexte-card gold">
+          <h4>📋 Contexte réglementaire</h4>
+          <ul>
+            <li>Obligations légales (habilitations, certifications)</li>
+            <li>Critères du financeur (Qualiopi, OPCO, Région…)</li>
+            <li>Référentiel de certification applicable</li>
+            <li>Convention collective du secteur</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🎛️</span> Choisir les modalités adaptées</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Les <strong>modalités pédagogiques</strong> désignent la manière dont la formation est organisée et délivrée. Le choix des modalités doit être justifié par le contexte, pas dicté par les habitudes du formateur.</p>
+
+      <div class="modalites-grid">
+        <div class="modalite-card">
+          <span class="icon">🏫</span>
+          <strong>Présentiel</strong>
+          <span>Favorise l'interaction, adapté aux savoir-être et pratiques collectives</span>
+        </div>
+        <div class="modalite-card">
+          <span class="icon">💻</span>
+          <strong>Distanciel synchrone</strong>
+          <span>Classe virtuelle, maintient le lien, adapté aux publics dispersés géographiquement</span>
+        </div>
+        <div class="modalite-card">
+          <span class="icon">📱</span>
+          <strong>Distanciel asynchrone</strong>
+          <span>E-learning, modules SCORM, adapté aux savoirs théoriques à son rythme</span>
+        </div>
+        <div class="modalite-card">
+          <span class="icon">🔀</span>
+          <strong>Hybride / Blended</strong>
+          <span>Combine présentiel et distanciel, offre flexibilité et ancrage pratique</span>
+        </div>
+        <div class="modalite-card">
+          <span class="icon">🏭</span>
+          <strong>AFEST</strong>
+          <span>Action de Formation en Situation de Travail, apprentissage sur poste réel avec réflexivité</span>
+        </div>
+        <div class="modalite-card">
+          <span class="icon">🎓</span>
+          <strong>Tutorat / Mentorat</strong>
+          <span>Accompagnement individualisé, adapté aux primo-arrivants ou aux évolutions de poste</span>
+        </div>
+      </div>
+
+      <div class="encadre info">
+        <strong>📌 Critères de choix des modalités</strong>
+        Le choix doit répondre à : Quel est le profil du public ? Quelles sont les contraintes de temps et de lieu ? Quel type de compétences vise-t-on (savoir, savoir-faire, savoir-être) ? Quels équipements sont disponibles ?
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💬</span> Argumenter sa proposition auprès du commanditaire</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Une fois la réponse formation construite, le formateur doit être capable de la <strong>présenter et de la défendre</strong> auprès du commanditaire. Cela implique de :</p>
+      <ul>
+        <li>Reformuler les besoins identifiés pour montrer qu'on a bien compris la demande</li>
+        <li>Expliquer les choix pédagogiques et les justifier par rapport au contexte</li>
+        <li>Anticiper les objections (coût, durée, modalités) avec des arguments concrets</li>
+        <li>Proposer des indicateurs de réussite mesurables pour rassurer le commanditaire</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Objection fréquente</th><th>Argument du formateur</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>« C'est trop long, on ne peut pas libérer les équipes. »</td>
+              <td>Proposer une approche hybride ou des sessions courtes fractionnées, sans perdre en efficacité</td>
+            </tr>
+            <tr>
+              <td>« C'est trop cher pour le résultat attendu. »</td>
+              <td>Chiffrer le coût de l'inaction (erreurs, turnover, non-conformité) et le comparer au coût de la formation</td>
+            </tr>
+            <tr>
+              <td>« Nos équipes n'aiment pas les formations. »</td>
+              <td>Proposer des modalités actives et contextualisées (AFEST, cas pratiques métier) qui ancrent l'apprentissage dans le réel</td>
+            </tr>
+            <tr>
+              <td>« Comment savoir si ça a servi ? »</td>
+              <td>Présenter un plan d'évaluation : à chaud, à froid, suivi des indicateurs terrain à 3 mois</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAS PRATIQUE -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Cas pratique</h2>
+  </div>
+
+  <div class="cas-pratique">
+    <div class="cp-header">
+      <span class="cp-badge">Cas pratique</span>
+      <h3>Proposer une réponse adaptée au contexte</h3>
+    </div>
+    <div class="scenario">
+      <strong style="display:block; margin-bottom:0.5rem; color:var(--gold-light); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">Mise en situation</strong>
+      Une association d'aide à domicile (45 auxiliaires de vie) vous sollicite pour une formation sur la prévention des risques liés à l'activité physique (TMS). Voici les contraintes identifiées lors du recueil :
+      <br><br>
+      <ul style="margin-left:1.2rem; margin-top:0.5rem; margin-bottom:0.5rem;">
+        <li>Les auxiliaires travaillent seules chez les bénéficiaires, avec des horaires très décalés</li>
+        <li>Elles ne peuvent pas toutes se libérer en même temps (service continu 7j/7)</li>
+        <li>Niveau numérique hétérogène (certaines peu à l'aise avec les outils digitaux)</li>
+        <li>Budget limité à 3 500 € pour l'ensemble du groupe</li>
+        <li>Résultats attendus : réduction des arrêts maladie liés aux TMS</li>
+      </ul>
+    </div>
+    <div class="consignes">
+      <p>Consignes de travail</p>
+      <ol>
+        <li>Identifiez les 3 principales contraintes contextuelles qui vont influencer votre réponse formation.</li>
+        <li>Proposez une combinaison de modalités pédagogiques adaptées à ce contexte. Justifiez vos choix.</li>
+        <li>Anticipez une objection probable du commanditaire et rédigez l'argument que vous lui opposeriez.</li>
+      </ol>
+    </div>
+    <button class="toggle-correction" onclick="toggleCorrection(this)">Afficher la correction</button>
+    <div class="correction">
+      <h4>Éléments de correction</h4>
+      <p><strong>1. Contraintes contextuelles principales :</strong></p>
+      <ul>
+        <li><strong>Logistique :</strong> impossibilité de réunir tout le groupe en même temps → sessions fractionnées ou individuelles obligatoires</li>
+        <li><strong>Numérique :</strong> hétérogénéité des compétences digitales → le tout e-learning serait excluant pour une partie du public</li>
+        <li><strong>Financière :</strong> 3 500 € pour 45 personnes = environ 78 € par personne → choix de modalités économiques sans sacrifier l'efficacité</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>2. Combinaison de modalités proposée :</strong></p>
+      <ul>
+        <li><strong>AFEST sur poste</strong> : un formateur intervient directement chez les bénéficiaires ou dans les locaux de l'association pour observer et corriger les gestes en situation réelle → ancrage fort, pas de contrainte de réunion collective</li>
+        <li><strong>Modules courts asynchrones (vidéos + fiches pratiques)</strong> : accessibles sur smartphone, à consulter entre deux interventions → contourne l'hétérogénéité numérique avec des supports simples (vidéos de démonstration de gestes)</li>
+        <li><strong>1 ou 2 séances de regroupement courtes (2h)</strong> par groupe de 10 : pour les gestes techniques nécessitant une pratique supervisée, planifiées en rotation</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>3. Objection et argument :</strong></p>
+      <ul>
+        <li><em>Objection probable :</em> « Comment on va évaluer si les gestes ont changé sur le terrain ? »</li>
+        <li><em>Argument :</em> « Nous prévoyons un suivi à 3 mois avec une observation de gestes en situation et un relevé du nombre d'arrêts maladie TMS. Ce sont vos propres indicateurs RH qui valideront l'efficacité de la formation. »</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Quiz de vérification</h2>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <span class="quiz-badge">Quiz</span>
+      <h3>Vérifier ses acquis – S1.4</h3>
+    </div>
+
+    <div class="question" id="q1">
+      <p>1. Pourquoi est-il indispensable de contextualiser une réponse formation ?</p>
+      <label class="option"><input type="radio" name="q1" value="a"> Pour augmenter le coût de la prestation</label>
+      <label class="option"><input type="radio" name="q1" value="b"> Pour proposer une réponse réaliste, cohérente et acceptée par toutes les parties</label>
+      <label class="option"><input type="radio" name="q1" value="c"> Pour éviter d'avoir à analyser les besoins en profondeur</label>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <p>2. Quel est le risque d'une formation techniquement solide mais ignorant le contexte organisationnel ?</p>
+      <label class="option"><input type="radio" name="q2" value="a"> Elle coûtera plus cher à produire</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Elle risque d'être rejetée par le commanditaire ou les apprenants</label>
+      <label class="option"><input type="radio" name="q2" value="c"> Elle sera trop longue à concevoir</label>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <p>3. L'AFEST (Action de Formation en Situation de Travail) est particulièrement adaptée pour :</p>
+      <label class="option"><input type="radio" name="q3" value="a"> Transmettre des savoirs théoriques à distance</label>
+      <label class="option"><input type="radio" name="q3" value="b"> Former sur des gestes et postures directement en situation réelle de travail</label>
+      <label class="option"><input type="radio" name="q3" value="c"> Organiser des sessions de groupe en amphithéâtre</label>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <p>4. Un public peu à l'aise avec le numérique oriente le choix vers :</p>
+      <label class="option"><input type="radio" name="q4" value="a"> Un programme 100% e-learning asynchrone</label>
+      <label class="option"><input type="radio" name="q4" value="b"> Des modalités qui limitent la dépendance aux outils numériques complexes (présentiel, AFEST, supports simples)</label>
+      <label class="option"><input type="radio" name="q4" value="c"> Une formation entièrement en classe virtuelle</label>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <p>5. Quelle information relève du contexte réglementaire d'une demande de formation ?</p>
+      <label class="option"><input type="radio" name="q5" value="a"> Le niveau de diplôme des apprenants</label>
+      <label class="option"><input type="radio" name="q5" value="b"> Les critères Qualiopi et les exigences du financeur</label>
+      <label class="option"><input type="radio" name="q5" value="c"> Le nombre de jours de congés disponibles dans l'équipe</label>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <p>6. Face à un commanditaire qui dit "c'est trop cher", quelle est la meilleure réponse du formateur ?</p>
+      <label class="option"><input type="radio" name="q6" value="a"> Baisser immédiatement le prix sans justification</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Chiffrer le coût de l'inaction et comparer avec le coût de la formation</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Proposer de supprimer des séquences pour réduire la durée</label>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <p>7. Le blended learning (hybride) combine :</p>
+      <label class="option"><input type="radio" name="q7" value="a"> Deux formateurs différents pour une même formation</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Des modalités présentiel et distanciel au sein d'un même dispositif</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Une formation théorique et une évaluation pratique uniquement</label>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <p>8. Pour argumenter sa proposition auprès du commanditaire, le formateur doit en priorité :</p>
+      <label class="option"><input type="radio" name="q8" value="a"> Lister toutes les références de formations déjà réalisées</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Reformuler les besoins identifiés et justifier les choix pédagogiques par rapport au contexte</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Proposer systématiquement la formation la plus courte possible</label>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <p>9. Une formation distancielle asynchrone est particulièrement adaptée pour :</p>
+      <label class="option"><input type="radio" name="q9" value="a"> Les apprentissages nécessitant un fort travail de groupe et de mise en situation collective</label>
+      <label class="option"><input type="radio" name="q9" value="b"> L'acquisition de savoirs théoriques à son propre rythme, pour des publics géographiquement dispersés</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Les formations aux gestes techniques nécessitant une correction immédiate</label>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <p>10. Quel indicateur peut rassurer un commanditaire sur l'efficacité d'une formation à moyen terme ?</p>
+      <label class="option"><input type="radio" name="q10" value="a"> Le nombre de pages du programme pédagogique</label>
+      <label class="option"><input type="radio" name="q10" value="b"> Un suivi à 3 mois avec des indicateurs terrain mesurables (ex : réduction des erreurs, des arrêts maladie)</label>
+      <label class="option"><input type="radio" name="q10" value="c"> Le nombre de formateurs mobilisés pour la prestation</label>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+
+    <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
+    <div class="quiz-score" id="quiz-score"></div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Synthèse à retenir</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💡</span> Les 5 points clés de la séquence S1.4</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <ol>
+        <li><strong>Contexte = 4 dimensions</strong> : organisationnel, humain, logistique, réglementaire. Toutes influencent la réponse formation.</li>
+        <li><strong>Les modalités se choisissent, elles ne s'imposent pas</strong> : présentiel, distanciel, AFEST, hybride — chaque choix doit être justifié par le contexte et les objectifs.</li>
+        <li><strong>La faisabilité est aussi importante que la pertinence</strong> : une formation idéale mais irréaliste ne sert à rien.</li>
+        <li><strong>Argumenter, c'est rassurer</strong> : le commanditaire a besoin de comprendre pourquoi ces choix, avec quels résultats attendus et comment on les mesurera.</li>
+        <li><strong>Le coût de l'inaction</strong> : face aux objections budgétaires, chiffrer ce que coûte l'absence de formation est souvent l'argument le plus convaincant.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Real Conseil – Formation Professionnelle · FPA RNCP 35030 · Module M1 – Séquence S1.4<br>
+  Support pédagogique à usage interne
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isActive = header.classList.contains('active');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isActive) {
+      header.classList.add('active');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleCorrection(btn) {
+    const correction = btn.nextElementSibling;
+    if (correction.classList.contains('open')) {
+      correction.classList.remove('open');
+      btn.textContent = 'Afficher la correction';
+    } else {
+      correction.classList.add('open');
+      btn.textContent = 'Masquer la correction';
+    }
+  }
+
+  const reponses = { q1: 'b', q2: 'b', q3: 'b', q4: 'b', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'b' };
+  const feedbacks = {
+    q1: { b: 'Exact ! Contextualiser garantit que la réponse est réaliste et acceptée par toutes les parties.', a: 'La contextualisation ne vise pas à augmenter les coûts mais à adapter la réponse.', c: 'Au contraire, contextualiser approfondit l\'analyse du besoin — ça ne la remplace pas.' },
+    q2: { b: 'Correct ! Une formation hors-sol peut être rejetée par le commanditaire ou les apprenants, quelles que soient ses qualités intrinsèques.', a: 'Le coût n\'est pas directement lié à la prise en compte du contexte.', c: 'La durée de conception n\'est pas le risque principal ici.' },
+    q3: { b: 'Exact ! L\'AFEST forme directement en situation réelle de travail avec un accompagnement réflexif — idéal pour les gestes techniques.', a: 'La transmission de savoirs théoriques à distance relève plutôt du distanciel asynchrone.', c: 'L\'amphithéâtre est une modalité présentielle classique, sans lien avec l\'AFEST.' },
+    q4: { b: 'Exact ! Face à un public peu à l\'aise avec le numérique, on privilégie les modalités qui ne nécessitent pas de maîtrise digitale avancée.', a: 'Le 100% e-learning serait excluant pour ce type de public.', c: 'La classe virtuelle requiert une aisance numérique que ce public n\'a pas forcément.' },
+    q5: { b: 'Exact ! Les critères Qualiopi et les exigences des financeurs sont typiquement des éléments de contexte réglementaire.', a: 'Le niveau de diplôme relève du contexte humain, pas réglementaire.', c: 'Les congés sont une contrainte logistique, pas réglementaire.' },
+    q6: { b: 'Exact ! Chiffrer le coût de l\'inaction donne au commanditaire une perspective de comparaison objective.', a: 'Baisser le prix sans justification dévalue la prestation et fragilise le formateur.', c: 'Supprimer des séquences sans analyse peut compromettre les objectifs pédagogiques.' },
+    q7: { b: 'Exact ! Le blended learning combine présentiel et distanciel pour allier flexibilité et ancrage pratique.', a: 'Le nombre de formateurs n\'a pas de rapport avec la définition du blended learning.', c: 'La combinaison théorie/évaluation ne définit pas le blended learning.' },
+    q8: { b: 'Correct ! Reformuler les besoins montre qu\'on a compris, justifier les choix rassure sur la cohérence de la démarche.', a: 'Les références sont utiles mais pas l\'argument principal face à un commanditaire.', c: 'La durée doit être justifiée par les objectifs, pas réduite par principe.' },
+    q9: { b: 'Exact ! L\'asynchrone permet l\'apprentissage à son rythme, à distance, sans contrainte de synchronisation — idéal pour les savoirs théoriques.', a: 'Le travail collectif et la mise en situation nécessitent du présentiel ou du synchrone.', c: 'La correction de gestes techniques nécessite une présence du formateur, donc du présentiel ou de l\'AFEST.' },
+    q10: { b: 'Exact ! Un suivi à 3 mois avec des indicateurs terrain mesurables est le meilleur gage d\'efficacité visible pour le commanditaire.', a: 'Le nombre de pages d\'un programme n\'est pas un indicateur d\'efficacité.', c: 'Le nombre de formateurs est une donnée logistique, pas un indicateur de résultat.' }
+  };
+
+  function corrigerQuiz() {
+    let score = 0;
+    Object.keys(reponses).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById(`fb-${q}`);
+      const options = document.querySelectorAll(`input[name="${q}"]`);
+      options.forEach(opt => opt.closest('.option').classList.remove('correct', 'incorrect'));
+      if (selected) {
+        const val = selected.value;
+        const correct = reponses[q];
+        selected.closest('.option').classList.add(val === correct ? 'correct' : 'incorrect');
+        if (val === correct) {
+          score++;
+          fb.className = 'feedback correct';
+          fb.textContent = '✓ ' + feedbacks[q][val];
+        } else {
+          fb.className = 'feedback incorrect';
+          fb.textContent = '✗ ' + feedbacks[q][val] + ' — Bonne réponse : ' + feedbacks[q][correct];
+          document.querySelector(`input[name="${q}"][value="${correct}"]`).closest('.option').classList.add('correct');
+        }
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = '⚠ Aucune réponse sélectionnée.';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.className = `quiz-score show ${score >= 7 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/10 — ${score === 10 ? '🎉 Parfait !' : score >= 8 ? '👍 Très bien !' : score >= 6 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+  }
+</script>
+
+</body>
+</html>

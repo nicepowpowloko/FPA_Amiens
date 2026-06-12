@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPA – M1 / S1.2 – Analyser une demande d'un besoin de formation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #2C3F77;
+    --navy-dark: #1e2d57;
+    --navy-light: #3a518f;
+    --gold: #A0896A;
+    --gold-light: #c4a882;
+    --gold-pale: #f5efe6;
+    --white: #ffffff;
+    --gray-light: #f0f2f8;
+    --gray-mid: #d0d6e8;
+    --text: #1a2240;
+    --success: #2e7d52;
+    --error: #b93232;
+    --success-bg: #e8f5ee;
+    --error-bg: #fdeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-light);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    color: var(--white);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+  .header-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .badge-module { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .badge-seq { background: rgba(255,255,255,0.15); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); }
+  .badge-duree { margin-left: auto; background: rgba(255,255,255,0.1); color: var(--gold-light); font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  header h2 { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.7); }
+
+  .objectifs-bar { background: var(--white); border-left: 4px solid var(--gold); margin: 1.5rem 2rem; padding: 1.2rem 1.5rem; border-radius: 0 6px 6px 0; box-shadow: 0 2px 8px rgba(44,63,119,0.08); }
+  .objectifs-bar h3 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.8rem; }
+  .objectifs-bar ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .objectifs-bar ul li { background: var(--gold-pale); color: var(--navy); font-size: 0.85rem; font-weight: 500; padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid rgba(160,137,106,0.25); }
+  .objectifs-bar ul li::before { content: '✓ '; color: var(--gold); font-weight: 700; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+  .section-title { display: flex; align-items: center; gap: 0.8rem; margin: 2rem 0 1rem; }
+  .section-title .num { background: var(--navy); color: var(--white); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-title h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); }
+
+  .accordion { background: var(--white); border-radius: 8px; margin-bottom: 0.6rem; box-shadow: 0 2px 6px rgba(44,63,119,0.07); overflow: hidden; border: 1px solid var(--gray-mid); }
+  .accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem; cursor: pointer; user-select: none; transition: background 0.2s; }
+  .accordion-header:hover { background: var(--gray-light); }
+  .accordion-header.active { background: var(--navy); color: var(--white); }
+  .accordion-header h3 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+  .accordion-arrow { font-size: 0.8rem; transition: transform 0.3s; color: var(--gold); }
+  .accordion-header.active .accordion-arrow { transform: rotate(180deg); color: var(--gold-light); }
+  .accordion-body { display: none; padding: 1.3rem 1.5rem; border-top: 1px solid var(--gray-mid); }
+  .accordion-body.open { display: block; }
+  .accordion-body p { margin-bottom: 0.8rem; font-size: 0.93rem; }
+  .accordion-body ul, .accordion-body ol { margin: 0.5rem 0 0.8rem 1.2rem; font-size: 0.93rem; }
+  .accordion-body li { margin-bottom: 0.4rem; }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--navy); color: var(--white); padding: 0.7rem 1rem; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--gray-mid); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  tr:hover td { background: var(--gold-pale); }
+
+  .encadre { border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem; }
+  .encadre.info { background: #e8edf8; border-left: 4px solid var(--navy); }
+  .encadre.tip { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .encadre.warning { background: #fff8e6; border-left: 4px solid #e6a817; }
+  .encadre strong { display: block; margin-bottom: 0.4rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+
+  /* GRILLE OUTIL */
+  .grille-outil {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    padding: 1.3rem 1.5rem;
+    margin: 1rem 0;
+  }
+  .grille-outil h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray-mid);
+  }
+  .grille-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.88rem;
+  }
+  .grille-label {
+    font-weight: 600;
+    color: var(--navy);
+    background: var(--gray-light);
+    padding: 0.4rem 0.7rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+  }
+  .grille-value {
+    background: var(--gold-pale);
+    padding: 0.4rem 0.7rem;
+    border-radius: 4px;
+    color: var(--text);
+    border: 1px solid rgba(160,137,106,0.2);
+  }
+
+  .cas-pratique { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); color: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0 1rem; }
+  .cas-pratique .cp-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
+  .cas-pratique .cp-badge { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .cas-pratique h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .cas-pratique .scenario { background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6; }
+  .cas-pratique .consignes p { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 0.5rem; }
+  .cas-pratique ol { margin-left: 1.2rem; font-size: 0.9rem; }
+  .cas-pratique ol li { margin-bottom: 0.4rem; }
+  .toggle-correction { background: var(--gold); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 1rem; }
+  .toggle-correction:hover { background: var(--gold-light); }
+  .correction { display: none; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+  .correction.open { display: block; }
+  .correction h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 0.7rem; }
+  .correction ul { margin-left: 1.2rem; }
+  .correction li { margin-bottom: 0.4rem; }
+
+  .quiz-section { background: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0; box-shadow: 0 2px 10px rgba(44,63,119,0.1); border: 1px solid var(--gray-mid); }
+  .quiz-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--gray-light); }
+  .quiz-badge { background: var(--navy); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .quiz-section h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); }
+  .question { margin-bottom: 1.5rem; }
+  .question p { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.7rem; color: var(--navy); }
+  .option { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.4rem; cursor: pointer; border: 2px solid var(--gray-mid); transition: all 0.2s; font-size: 0.9rem; }
+  .option:hover { border-color: var(--navy); background: var(--gray-light); }
+  .option input[type="radio"] { margin-top: 2px; accent-color: var(--navy); }
+  .option.correct { border-color: var(--success); background: var(--success-bg); }
+  .option.incorrect { border-color: var(--error); background: var(--error-bg); }
+  .feedback { display: none; font-size: 0.85rem; padding: 0.6rem 0.8rem; border-radius: 4px; margin-top: 0.3rem; }
+  .feedback.correct { background: var(--success-bg); color: var(--success); display: block; }
+  .feedback.incorrect { background: var(--error-bg); color: var(--error); display: block; }
+  .quiz-btn { background: var(--navy); color: var(--white); border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; transition: background 0.2s; }
+  .quiz-btn:hover { background: var(--navy-light); }
+  .quiz-score { display: none; margin-top: 1rem; padding: 1rem; border-radius: 6px; text-align: center; font-weight: 600; font-size: 1rem; }
+  .quiz-score.show { display: block; }
+  .quiz-score.good { background: var(--success-bg); color: var(--success); }
+  .quiz-score.bad { background: var(--error-bg); color: var(--error); }
+
+  footer { text-align: center; padding: 2rem; color: rgba(44,63,119,0.4); font-size: 0.8rem; border-top: 1px solid var(--gray-mid); margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .objectifs-bar { margin: 1rem; }
+    main { padding: 0 1rem 2rem; }
+    .grille-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge-module">FPA – M1</span>
+    <span class="badge-seq">Séquence S1.2</span>
+    <span class="badge-duree">⏱ 0,5 h</span>
+  </div>
+  <h1>Formaliser et qualifier une demande de formation</h1>
+  <h2>Elaborer la progression pédagogique d'une formation multimodale à partir d'une demande</h2>
+</header>
+
+<div class="objectifs-bar">
+  <h3>Objectifs pédagogiques</h3>
+  <ul>
+    <li>Structurer les informations recueillies lors de l'analyse</li>
+    <li>Utiliser une grille de recueil de besoins</li>
+    <li>Identifier les parties prenantes et leurs attentes</li>
+    <li>Produire un cahier des charges pédagogique simplifié</li>
+  </ul>
+</div>
+
+<main>
+
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>Apports théoriques</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📝</span> Pourquoi formaliser la demande ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Formaliser une demande de formation, c'est passer d'une expression orale ou informelle à un document structuré qui servira de <strong>référence commune</strong> entre le formateur, le commanditaire et les apprenants.</p>
+      <p>Cela permet de :</p>
+      <ul>
+        <li>Eviter les malentendus sur les attentes</li>
+        <li>Fixer un cadre contractuel clair (objectifs, durée, livrables)</li>
+        <li>Construire une réponse pédagogique cohérente et argumentée</li>
+        <li>Disposer d'une base d'évaluation en fin de formation</li>
+      </ul>
+      <div class="encadre tip">
+        <strong>💡 Bonne pratique</strong>
+        Un document formalisé protège le formateur en cas de désaccord ultérieur sur les objectifs ou le contenu de la formation. Il engage aussi le commanditaire dans la démarche.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">👥</span> Cartographier les parties prenantes</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Toute demande de formation implique plusieurs acteurs dont les intérêts peuvent diverger. Il est essentiel de les identifier et de comprendre leurs attentes respectives.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Acteur</th><th>Rôle</th><th>Attentes typiques</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Le commanditaire</strong></td>
+              <td>Passe la commande (DRH, direction, OPCO…)</td>
+              <td>ROI, conformité, résultats mesurables</td>
+            </tr>
+            <tr>
+              <td><strong>Le financeur</strong></td>
+              <td>Paye la formation (OPCO, Région, CPF…)</td>
+              <td>Respect du cahier des charges, certification, livrables</td>
+            </tr>
+            <tr>
+              <td><strong>Le prescripteur</strong></td>
+              <td>Oriente vers la formation (conseiller, médecin du travail…)</td>
+              <td>Adéquation profil/programme, suivi</td>
+            </tr>
+            <tr>
+              <td><strong>Le manager</strong></td>
+              <td>Encadre les apprenants au quotidien</td>
+              <td>Montée en compétences opérationnelles, disponibilité de l'équipe</td>
+            </tr>
+            <tr>
+              <td><strong>L'apprenant</strong></td>
+              <td>Participe et apprend</td>
+              <td>Pertinence, utilité concrète, reconnaissance</td>
+            </tr>
+            <tr>
+              <td><strong>Le formateur</strong></td>
+              <td>Conçoit et anime</td>
+              <td>Clarté des objectifs, conditions de réalisation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre warning">
+        <strong>⚠️ Point de vigilance</strong>
+        Commanditaire et financeur ne sont pas toujours la même entité. Dans le cas d'une formation France Travail, le financeur (France Travail) et le commanditaire (l'entreprise partenaire ou le demandeur d'emploi lui-même) ont des attentes différentes.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🗂️</span> La grille de recueil de besoins</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La <strong>grille de recueil de besoins</strong> est l'outil central de formalisation. Elle structure l'ensemble des informations collectées lors des échanges avec le commanditaire.</p>
+      <p>Voici un exemple de grille type :</p>
+
+      <div class="grille-outil">
+        <h4>📋 Grille de recueil de besoins — Modèle type</h4>
+        <div class="grille-row">
+          <div class="grille-label">Commanditaire</div>
+          <div class="grille-value">Nom, fonction, organisation</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Public cible</div>
+          <div class="grille-value">Profil, niveau, nombre, contraintes spécifiques</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Contexte</div>
+          <div class="grille-value">Situation déclenchante, enjeux organisationnels</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Demande exprimée</div>
+          <div class="grille-value">Ce qui a été formulé explicitement</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Besoin identifié</div>
+          <div class="grille-value">Ecart compétences actuelles / compétences cibles</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Objectifs visés</div>
+          <div class="grille-value">Compétences à acquérir, comportements attendus</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Critères de réussite</div>
+          <div class="grille-value">Indicateurs mesurables en fin de formation</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Contraintes</div>
+          <div class="grille-value">Délais, budget, modalités, disponibilités</div>
+        </div>
+        <div class="grille-row">
+          <div class="grille-label">Financement</div>
+          <div class="grille-value">OPCO, CPF, plan formation, autre</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📄</span> Du recueil au cahier des charges pédagogique</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Une fois la grille complétée, le formateur peut produire un <strong>cahier des charges pédagogique (CDCP)</strong>, document de référence qui formalise la réponse à la demande.</p>
+      <p>Le CDCP comprend généralement :</p>
+      <ol>
+        <li><strong>La présentation du contexte</strong> : qui, pourquoi, dans quel cadre</li>
+        <li><strong>Les objectifs généraux et spécifiques</strong> : formulés en termes de compétences observables</li>
+        <li><strong>Le public et les prérequis</strong> : profil des apprenants, niveau d'entrée attendu</li>
+        <li><strong>Les contenus et la progression</strong> : grandes thématiques, découpage en séquences</li>
+        <li><strong>Les modalités pédagogiques</strong> : présentiel, distanciel, hybride, classes virtuelles…</li>
+        <li><strong>Les modalités d'évaluation</strong> : quand, comment, avec quels outils</li>
+        <li><strong>Les ressources nécessaires</strong> : matériels, intervenants, plateformes</li>
+        <li><strong>Le budget et le calendrier</strong></li>
+      </ol>
+      <div class="encadre info">
+        <strong>📌 Lien avec la certification</strong>
+        Dans le cadre du titre pro FPA, la capacité à produire un cahier des charges pédagogique rigoureux est directement évaluée dans le CCP1. C'est un livrable central de votre activité de formateur.
+      </div>
+    </div>
+  </div>
+
+  <!-- CAS PRATIQUE -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Cas pratique</h2>
+  </div>
+
+  <div class="cas-pratique">
+    <div class="cp-header">
+      <span class="cp-badge">Cas pratique</span>
+      <h3>Formaliser la demande d'un OPCO</h3>
+    </div>
+    <div class="scenario">
+      <strong style="display:block; margin-bottom:0.5rem; color:var(--gold-light); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">Mise en situation</strong>
+      Vous travaillez pour un organisme de formation certifié Qualiopi. Un conseiller de l'OPCO Constructys vous contacte pour une demande de formation dans une PME du bâtiment de 45 salariés. Il vous indique :
+      <br><br>
+      <em>« On a 12 chefs de chantier qui n'ont aucune formation en management. Ça pose des problèmes de communication avec les équipes et de turnover. Le dirigeant veut une formation, idéalement sur 3 jours, pas trop loin des chantiers. Budget : 4 500 €. Il faudrait que ça se fasse avant fin septembre. »</em>
+    </div>
+    <div class="consignes">
+      <p>Consignes de travail</p>
+      <ol>
+        <li>Complétez la grille de recueil de besoins à partir des informations disponibles. Identifiez les cases vides (informations manquantes).</li>
+        <li>Listez 3 questions complémentaires à poser au conseiller ou au dirigeant avant de proposer un programme.</li>
+        <li>Rédigez en 3-4 phrases le contexte d'un futur cahier des charges pédagogique à partir de ces éléments.</li>
+      </ol>
+    </div>
+    <button class="toggle-correction" onclick="toggleCorrection(this)">Afficher la correction</button>
+    <div class="correction">
+      <h4>Éléments de correction</h4>
+      <p><strong>1. Grille complétée :</strong></p>
+      <ul>
+        <li><strong>Commanditaire :</strong> Dirigeant de la PME du bâtiment (nom inconnu → à compléter)</li>
+        <li><strong>Financeur :</strong> OPCO Constructys</li>
+        <li><strong>Public :</strong> 12 chefs de chantier (profil, ancienneté, niveau → à préciser)</li>
+        <li><strong>Contexte :</strong> Problèmes de communication et turnover dans les équipes de chantier</li>
+        <li><strong>Demande exprimée :</strong> Formation management, 3 jours, budget 4 500 €, avant fin septembre</li>
+        <li><strong>Besoin identifié :</strong> Développer des compétences managériales de base (communication, gestion d'équipe, fidélisation)</li>
+        <li><strong>Critères de réussite :</strong> Non précisés → à définir avec le commanditaire</li>
+        <li><strong>Contraintes :</strong> Proximité géographique des chantiers, 3 jours max, budget 4 500 €, deadline fin septembre</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>2. Questions complémentaires :</strong></p>
+      <ul>
+        <li>« Quelles situations concrètes illustrent les problèmes de communication ? (exemples de conflits, de difficultés de coordination) »</li>
+        <li>« Les chefs de chantier ont-ils des prérequis en management ou c'est une première formation ? »</li>
+        <li>« Comment mesurez-vous le turnover actuellement ? Quel objectif de réduction visez-vous ? »</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>3. Contexte pour le CDCP :</strong></p>
+      <p style="font-style:italic; opacity:0.9;">« Cette formation s'inscrit dans le cadre du développement des compétences managériales de 12 chefs de chantier d'une PME du bâtiment de 45 salariés. Elle répond à des difficultés de communication interne et à un taux de turnover préoccupant. Le commanditaire (la direction) et le financeur (OPCO Constructys) souhaitent une action de formation courte (3 jours), réalisable avant fin septembre, dans une enveloppe de 4 500 €. La réponse pédagogique devra s'adapter à un public opérationnel de terrain, sans expérience préalable en management. »</p>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Quiz de vérification</h2>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <span class="quiz-badge">Quiz</span>
+      <h3>Vérifier ses acquis – S1.2</h3>
+    </div>
+
+    <div class="question" id="q1">
+      <p>1. Formaliser une demande de formation sert principalement à :</p>
+      <label class="option"><input type="radio" name="q1" value="a"> Rédiger un programme de formation prêt à l'emploi</label>
+      <label class="option"><input type="radio" name="q1" value="b"> Fixer un cadre de référence commun entre formateur et commanditaire</label>
+      <label class="option"><input type="radio" name="q1" value="c"> Calculer le coût pédagogique de la formation</label>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <p>2. Dans un dispositif financé par France Travail, qui est le commanditaire ?</p>
+      <label class="option"><input type="radio" name="q2" value="a"> France Travail, qui paye la formation</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Le demandeur d'emploi ou l'entreprise partenaire qui exprime le besoin</label>
+      <label class="option"><input type="radio" name="q2" value="c"> Le formateur qui conçoit le programme</label>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <p>3. Laquelle de ces informations N'apparaît PAS dans une grille de recueil de besoins ?</p>
+      <label class="option"><input type="radio" name="q3" value="a"> Les critères de réussite attendus</label>
+      <label class="option"><input type="radio" name="q3" value="b"> Le CV du formateur pressenti</label>
+      <label class="option"><input type="radio" name="q3" value="c"> Les contraintes budgétaires et de calendrier</label>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <p>4. Le cahier des charges pédagogique (CDCP) est :</p>
+      <label class="option"><input type="radio" name="q4" value="a"> Un outil d'évaluation des apprenants en fin de formation</label>
+      <label class="option"><input type="radio" name="q4" value="b"> Le document qui formalise la réponse pédagogique à la demande de formation</label>
+      <label class="option"><input type="radio" name="q4" value="c"> Le contrat signé entre l'OPCO et l'organisme de formation</label>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <p>5. Parmi les acteurs suivants, lequel a pour rôle principal d'orienter l'apprenant vers la formation ?</p>
+      <label class="option"><input type="radio" name="q5" value="a"> Le commanditaire</label>
+      <label class="option"><input type="radio" name="q5" value="b"> Le prescripteur</label>
+      <label class="option"><input type="radio" name="q5" value="c"> Le financeur</label>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <p>6. Dans une grille de recueil de besoins, que désigne le "besoin identifié" ?</p>
+      <label class="option"><input type="radio" name="q6" value="a"> Ce que le commanditaire a exprimé lors du premier contact</label>
+      <label class="option"><input type="radio" name="q6" value="b"> L'écart entre les compétences actuelles et les compétences cibles</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Le budget alloué à la formation</label>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <p>7. Pourquoi la formalisation de la demande protège-t-elle le formateur ?</p>
+      <label class="option"><input type="radio" name="q7" value="a"> Elle lui permet d'augmenter le tarif de la formation</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Elle constitue un document de référence en cas de désaccord sur les objectifs ou le contenu</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Elle remplace le contrat de formation signé avec l'organisme</label>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <p>8. Quelle est la bonne séquence de travail pour le formateur ?</p>
+      <label class="option"><input type="radio" name="q8" value="a"> Concevoir le programme → recueillir les besoins → valider avec le commanditaire</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Recueillir les besoins → formaliser → produire le cahier des charges → concevoir le programme</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Former les apprenants → évaluer les résultats → recueillir les besoins</label>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <p>9. Un OPCO finance une formation. Quel est son rôle principal dans le dispositif ?</p>
+      <label class="option"><input type="radio" name="q9" value="a"> Il prescrit la formation et oriente les apprenants</label>
+      <label class="option"><input type="radio" name="q9" value="b"> Il finance tout ou partie de la formation des salariés des entreprises adhérentes</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Il conçoit le programme pédagogique avec le formateur</label>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <p>10. Une information manquante dans la grille de recueil de besoins doit conduire le formateur à :</p>
+      <label class="option"><input type="radio" name="q10" value="a"> Faire une hypothèse et démarrer la conception sans attendre</label>
+      <label class="option"><input type="radio" name="q10" value="b"> Poser la question au commanditaire ou aux parties prenantes avant de concevoir</label>
+      <label class="option"><input type="radio" name="q10" value="c"> Ignorer l'information manquante si elle semble secondaire</label>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+
+    <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
+    <div class="quiz-score" id="quiz-score"></div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Synthèse à retenir</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💡</span> Les 5 points clés de la séquence S1.2</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <ol>
+        <li><strong>Formaliser, c'est sécuriser</strong> : un document écrit protège toutes les parties et garantit la cohérence du dispositif.</li>
+        <li><strong>Cartographier les acteurs</strong> : commanditaire, financeur, manager, apprenant ont des attentes différentes à prendre en compte.</li>
+        <li><strong>La grille de recueil</strong> : outil structurant incontournable pour ne rien oublier et poser les bonnes questions.</li>
+        <li><strong>Le CDCP</strong> : point d'aboutissement de l'analyse, il deviendra la feuille de route de toute la conception pédagogique.</li>
+        <li><strong>Les zones de flou sont des alertes</strong> : une information manquante dans la grille = une question à poser avant de concevoir.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Real Conseil – Formation Professionnelle · FPA RNCP 35030 · Module M1 – Séquence S1.2<br>
+  Support pédagogique à usage interne
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isActive = header.classList.contains('active');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isActive) {
+      header.classList.add('active');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleCorrection(btn) {
+    const correction = btn.nextElementSibling;
+    if (correction.classList.contains('open')) {
+      correction.classList.remove('open');
+      btn.textContent = 'Afficher la correction';
+    } else {
+      correction.classList.add('open');
+      btn.textContent = 'Masquer la correction';
+    }
+  }
+
+  const reponses = { q1: 'b', q2: 'b', q3: 'b', q4: 'b', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'b' };
+  const feedbacks = {
+    q1: { b: 'Correct ! La formalisation crée un cadre de référence partagé, base de toute la conception.', a: 'Le programme vient après la formalisation, il en est la conséquence.', c: 'Le calcul du coût est une étape ultérieure, pas l\'objectif premier.' },
+    q2: { b: 'Exact ! Le commanditaire exprime le besoin. France Travail est le financeur.', a: 'France Travail est le financeur, pas le commanditaire.', c: 'Le formateur est le prestataire, pas le commanditaire.' },
+    q3: { b: 'Exact ! Le CV du formateur n\'a pas sa place dans la grille de recueil de besoins.', a: 'Les critères de réussite sont essentiels dans la grille.', c: 'Les contraintes budgétaires et calendaires font bien partie des informations à recueillir.' },
+    q4: { b: 'Correct ! Le CDCP formalise la réponse pédagogique complète à la demande analysée.', a: 'L\'évaluation des apprenants est traitée dans le CDCP mais ce n\'est pas sa définition.', c: 'Le contrat avec l\'OPCO est un document administratif distinct du CDCP.' },
+    q5: { b: 'Exact ! Le prescripteur oriente l\'apprenant vers la formation (conseiller France Travail, médecin du travail…).', a: 'Le commanditaire passe la commande mais n\'oriente pas nécessairement l\'apprenant.', c: 'Le financeur paye la formation, il n\'a pas pour rôle d\'orienter l\'apprenant.' },
+    q6: { b: 'Correct ! Le besoin identifié est l\'écart entre compétences actuelles et cibles, révélé par l\'analyse.', a: 'Ce que le commanditaire exprime est la demande, pas le besoin identifié.', c: 'Le budget est une contrainte, pas le besoin de formation.' },
+    q7: { b: 'Exact ! Le document formalisé est une référence en cas de litige sur les attentes ou le contenu.', a: 'La formalisation n\'a pas d\'impact direct sur le tarif.', c: 'Le contrat de formation est un document distinct, à valeur juridique supérieure.' },
+    q8: { b: 'Correct ! C\'est la séquence logique : recueil → formalisation → CDCP → conception.', a: 'Concevoir avant de recueillir les besoins conduit à des formations inadaptées.', c: 'Former avant d\'analyser les besoins est une erreur de méthode fondamentale.' },
+    q9: { b: 'Exact ! L\'OPCO collecte et redistribue les fonds de la formation professionnelle des entreprises adhérentes.', a: 'La prescription est le rôle du conseiller France Travail ou du médecin du travail, pas de l\'OPCO.', c: 'La conception pédagogique est la responsabilité du formateur, pas de l\'OPCO.' },
+    q10: { b: 'Correct ! Une information manquante = une question à poser avant de concevoir. Les zones de flou sont des alertes.', a: 'Faire une hypothèse sans vérifier expose à concevoir une formation à côté du besoin réel.', c: 'Aucune information dans la grille n\'est vraiment secondaire : chaque case vide est un risque.' }
+  };
+
+  function corrigerQuiz() {
+    let score = 0;
+    Object.keys(reponses).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById(`fb-${q}`);
+      const options = document.querySelectorAll(`input[name="${q}"]`);
+      options.forEach(opt => opt.closest('.option').classList.remove('correct', 'incorrect'));
+      if (selected) {
+        const val = selected.value;
+        const correct = reponses[q];
+        selected.closest('.option').classList.add(val === correct ? 'correct' : 'incorrect');
+        if (val === correct) {
+          score++;
+          fb.className = 'feedback correct';
+          fb.textContent = '✓ ' + feedbacks[q][val];
+        } else {
+          fb.className = 'feedback incorrect';
+          fb.textContent = '✗ ' + feedbacks[q][val] + ' — Bonne réponse : ' + feedbacks[q][correct];
+          document.querySelector(`input[name="${q}"][value="${correct}"]`).closest('.option').classList.add('correct');
+        }
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = '⚠ Aucune réponse sélectionnée.';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.className = `quiz-score show ${score >= 7 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/10 — ${score === 10 ? '🎉 Parfait !' : score >= 8 ? '👍 Très bien !' : score >= 6 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+  }
+</script>
+
+</body>
+</html>

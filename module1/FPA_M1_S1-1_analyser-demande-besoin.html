@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPA – M1 / S1.1 – Analyser une demande de besoin de formation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #2C3F77;
+    --navy-dark: #1e2d57;
+    --navy-light: #3a518f;
+    --gold: #A0896A;
+    --gold-light: #c4a882;
+    --gold-pale: #f5efe6;
+    --white: #ffffff;
+    --gray-light: #f0f2f8;
+    --gray-mid: #d0d6e8;
+    --text: #1a2240;
+    --success: #2e7d52;
+    --error: #b93232;
+    --success-bg: #e8f5ee;
+    --error-bg: #fdeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-light);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    color: var(--white);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .badge-module {
+    background: var(--gold);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+  }
+  .badge-seq {
+    background: rgba(255,255,255,0.15);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .badge-duree {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    color: var(--gold-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+    border: 1px solid rgba(160,137,106,0.4);
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    color: var(--white);
+  }
+  header h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.7);
+  }
+
+  /* OBJECTIFS BAR */
+  .objectifs-bar {
+    background: var(--white);
+    border-left: 4px solid var(--gold);
+    margin: 1.5rem 2rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 0 6px 6px 0;
+    box-shadow: 0 2px 8px rgba(44,63,119,0.08);
+  }
+  .objectifs-bar h3 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .objectifs-bar ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .objectifs-bar ul li {
+    background: var(--gold-pale);
+    color: var(--navy);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    border: 1px solid rgba(160,137,106,0.25);
+  }
+  .objectifs-bar ul li::before {
+    content: '✓ ';
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 2rem 0 1rem;
+  }
+  .section-title .num {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    color: var(--navy);
+  }
+
+  /* ACCORDION */
+  .accordion {
+    background: var(--white);
+    border-radius: 8px;
+    margin-bottom: 0.6rem;
+    box-shadow: 0 2px 6px rgba(44,63,119,0.07);
+    overflow: hidden;
+    border: 1px solid var(--gray-mid);
+  }
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.3rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .accordion-header:hover { background: var(--gray-light); }
+  .accordion-header.active { background: var(--navy); color: var(--white); }
+  .accordion-header h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .accordion-header .icon {
+    font-size: 1rem;
+  }
+  .accordion-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+    color: var(--gold);
+  }
+  .accordion-header.active .accordion-arrow {
+    transform: rotate(180deg);
+    color: var(--gold-light);
+  }
+  .accordion-body {
+    display: none;
+    padding: 1.3rem 1.5rem;
+    border-top: 1px solid var(--gray-mid);
+    background: var(--white);
+  }
+  .accordion-body.open { display: block; }
+
+  .accordion-body p { margin-bottom: 0.8rem; font-size: 0.93rem; }
+  .accordion-body ul, .accordion-body ol {
+    margin: 0.5rem 0 0.8rem 1.2rem;
+    font-size: 0.93rem;
+  }
+  .accordion-body li { margin-bottom: 0.4rem; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--gray-mid);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  tr:hover td { background: var(--gold-pale); }
+
+  /* ENCADRÉS */
+  .encadre {
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .encadre.info {
+    background: #e8edf8;
+    border-left: 4px solid var(--navy);
+  }
+  .encadre.tip {
+    background: var(--gold-pale);
+    border-left: 4px solid var(--gold);
+  }
+  .encadre.warning {
+    background: #fff8e6;
+    border-left: 4px solid #e6a817;
+  }
+  .encadre strong { display: block; margin-bottom: 0.4rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+
+  /* CAS PRATIQUE */
+  .cas-pratique {
+    background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+    color: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0 1rem;
+  }
+  .cas-pratique .cp-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+  .cas-pratique .cp-badge {
+    background: var(--gold);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+  }
+  .cas-pratique h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--white);
+  }
+  .cas-pratique .scenario {
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .cas-pratique .consignes { margin-bottom: 1rem; }
+  .cas-pratique .consignes p {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+  .cas-pratique ol {
+    margin-left: 1.2rem;
+    font-size: 0.9rem;
+  }
+  .cas-pratique ol li { margin-bottom: 0.4rem; }
+
+  .toggle-correction {
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .toggle-correction:hover { background: var(--gold-light); }
+
+  .correction {
+    display: none;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  .correction.open { display: block; }
+  .correction h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+    margin-bottom: 0.7rem;
+  }
+  .correction ul { margin-left: 1.2rem; }
+  .correction li { margin-bottom: 0.4rem; }
+
+  /* QUIZ */
+  .quiz-section {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 10px rgba(44,63,119,0.1);
+    border: 1px solid var(--gray-mid);
+  }
+  .quiz-section .quiz-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-light);
+  }
+  .quiz-badge {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+  }
+  .quiz-section h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+  }
+
+  .question { margin-bottom: 1.5rem; }
+  .question p {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.7rem;
+    color: var(--navy);
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 0.4rem;
+    cursor: pointer;
+    border: 2px solid var(--gray-mid);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+  .option:hover { border-color: var(--navy); background: var(--gray-light); }
+  .option input[type="radio"] { margin-top: 2px; accent-color: var(--navy); }
+  .option.correct { border-color: var(--success); background: var(--success-bg); }
+  .option.incorrect { border-color: var(--error); background: var(--error-bg); }
+
+  .feedback {
+    display: none;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 4px;
+    margin-top: 0.3rem;
+  }
+  .feedback.correct { background: var(--success-bg); color: var(--success); display: block; }
+  .feedback.incorrect { background: var(--error-bg); color: var(--error); display: block; }
+
+  .quiz-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+  }
+  .quiz-btn:hover { background: var(--navy-light); }
+
+  .quiz-score {
+    display: none;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .quiz-score.show { display: block; }
+  .quiz-score.good { background: var(--success-bg); color: var(--success); }
+  .quiz-score.bad { background: var(--error-bg); color: var(--error); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: rgba(44,63,119,0.4);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--gray-mid);
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .objectifs-bar { margin: 1rem; }
+    main { padding: 0 1rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge-module">FPA – M1</span>
+    <span class="badge-seq">Séquence S1.1</span>
+    <span class="badge-duree">⏱ 0,5 h</span>
+  </div>
+  <h1>Analyser une demande d'un besoin de formation</h1>
+  <h2>Elaborer la progression pédagogique d'une formation multimodale à partir d'une demande</h2>
+</header>
+
+<div class="objectifs-bar">
+  <h3>Objectifs pédagogiques</h3>
+  <ul>
+    <li>Distinguer demande et besoin de formation</li>
+    <li>Identifier les sources d'une demande de formation</li>
+    <li>Recueillir et formaliser les informations clés</li>
+    <li>Repérer les enjeux organisationnels et humains</li>
+  </ul>
+</div>
+
+<main>
+
+  <!-- SECTION 1 : APPORTS THEORIQUES -->
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>Apports théoriques</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🎯</span> Demande vs Besoin de formation : quelle différence ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La <strong>demande de formation</strong> est l'expression d'un souhait formulé par un individu, une équipe ou une organisation. Elle peut prendre la forme d'une demande explicite : <em>« Je veux une formation Excel »</em> ou <em>« Il faut former nos équipes à la relation client »</em>.</p>
+      <p>Le <strong>besoin de formation</strong>, lui, est un écart constaté entre une situation actuelle (compétences, comportements, résultats) et une situation cible souhaitée. C'est le rôle du formateur de le mettre à jour à travers une analyse rigoureuse.</p>
+      <div class="encadre tip">
+        <strong>🔑 Principe clé</strong>
+        La demande n'est pas toujours le besoin réel. Un manager qui demande une formation à la « gestion du temps » traduit peut-être un besoin de priorisation, de délégation, ou un problème de surcharge managériale.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Demande</th><th>Besoin potentiel sous-jacent</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>« Formation Excel »</td><td>Maîtriser les tableaux croisés dynamiques pour un reporting mensuel</td></tr>
+            <tr><td>« Formation cohésion d'équipe »</td><td>Résoudre des conflits interpersonnels récurrents</td></tr>
+            <tr><td>« Formation communication »</td><td>Améliorer les prises de parole en réunion avec la direction</td></tr>
+            <tr><td>« Formation management »</td><td>Accompagner un primo-manager nouvellement nommé</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📋</span> Les sources d'une demande de formation</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La demande de formation peut émaner de plusieurs acteurs avec des logiques différentes :</p>
+      <ul>
+        <li><strong>L'entreprise / l'organisation</strong> : plan de développement des compétences, obligations légales, évolution stratégique</li>
+        <li><strong>Le manager</strong> : difficultés observées sur le terrain, objectifs de performance de l'équipe</li>
+        <li><strong>Le salarié / apprenant</strong> : souhait d'évolution professionnelle, CPF, VAE</li>
+        <li><strong>Un prescripteur externe</strong> : OPCO, France Travail, Région (dans le cadre de formations certifiantes comme le titre pro FPA)</li>
+        <li><strong>Des obligations réglementaires</strong> : habilitations, certifications obligatoires, conformité légale</li>
+      </ul>
+      <div class="encadre info">
+        <strong>📌 À retenir</strong>
+        Chaque source porte des attentes et des contraintes différentes. Le formateur doit identifier qui commande, qui finance, qui participe et qui bénéficiera réellement de la formation.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🔍</span> Comment recueillir et analyser une demande ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>L'analyse d'une demande repose sur un <strong>recueil d'informations structuré</strong>. Plusieurs outils et méthodes sont mobilisables :</p>
+      <ul>
+        <li><strong>L'entretien de recueil de besoins</strong> : échange direct avec le commanditaire, le manager, les futurs apprenants</li>
+        <li><strong>Le questionnaire de positionnement</strong> : identifier les compétences déjà acquises et les lacunes</li>
+        <li><strong>L'analyse documentaire</strong> : fiche de poste, référentiel métier, résultats d'évaluation, plan de formation existant</li>
+        <li><strong>L'observation de situation de travail</strong> : dans les contextes qui le permettent</li>
+      </ul>
+      <p>Les questions clés à poser lors du recueil :</p>
+      <ol>
+        <li>Quel problème ou défi a déclenché cette demande ?</li>
+        <li>Quels comportements / compétences sont attendus à l'issue ?</li>
+        <li>Qui sont les apprenants (profil, niveau, contraintes) ?</li>
+        <li>Quel est le contexte de travail et les contraintes organisationnelles ?</li>
+        <li>Quels sont les critères de réussite attendus ?</li>
+        <li>Quels sont les délais, le budget, les modalités possibles ?</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📊</span> Les 4 niveaux d'analyse (modèle Kaufman)</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Pour aller au-delà de la demande de surface, le modèle de Kaufman propose d'analyser les besoins à <strong>4 niveaux</strong> :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Niveau</th><th>Question centrale</th><th>Exemple</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Méga</strong> (sociétal)</td>
+              <td>Quel impact sur la société ?</td>
+              <td>Former des assistants de vie pour répondre au vieillissement de la population</td>
+            </tr>
+            <tr>
+              <td><strong>Macro</strong> (organisationnel)</td>
+              <td>Quel impact sur l'organisation ?</td>
+              <td>Réduire le turn-over, améliorer la qualité de service</td>
+            </tr>
+            <tr>
+              <td><strong>Micro</strong> (individuel)</td>
+              <td>Quel impact sur les apprenants ?</td>
+              <td>Maîtriser les gestes techniques, acquérir une posture professionnelle</td>
+            </tr>
+            <tr>
+              <td><strong>Intrant</strong> (moyens)</td>
+              <td>Quels moyens mobiliser ?</td>
+              <td>Budget, durée, modalités, ressources pédagogiques</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre warning">
+        <strong>⚠️ Attention</strong>
+        Ne pas confondre besoin de formation et besoin organisationnel. Certains problèmes (mauvaise organisation, absence de procédures) ne se règlent pas par la formation.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 : CAS PRATIQUE -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Cas pratique</h2>
+  </div>
+
+  <div class="cas-pratique">
+    <div class="cp-header">
+      <span class="cp-badge">Cas pratique</span>
+      <h3>La demande de la directrice RH</h3>
+    </div>
+    <div class="scenario">
+      <strong style="display:block; margin-bottom:0.5rem; color:var(--gold-light); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">Mise en situation</strong>
+      Vous êtes formateur dans un organisme de formation. Mme Leclercq, DRH d'une PME de 80 salariés dans le secteur du commerce, vous contacte avec la demande suivante :
+      <br><br>
+      <em>« Bonjour, j'ai besoin d'une formation de 2 jours sur la gestion des conflits pour tous mes managers. On a beaucoup de tensions en ce moment dans les équipes et ça nuit à la productivité. »</em>
+    </div>
+    <div class="consignes">
+      <p>Consignes de travail</p>
+      <ol>
+        <li>Identifiez 3 informations manquantes essentielles à collecter avant de proposer un programme.</li>
+        <li>Reformulez la demande en distinguant ce qui relève de la demande explicite et ce qui pourrait être le besoin réel.</li>
+        <li>Proposez 2 questions d'entretien que vous poseriez à Mme Leclercq pour approfondir l'analyse.</li>
+      </ol>
+    </div>
+    <button class="toggle-correction" onclick="toggleCorrection(this)">Afficher la correction</button>
+    <div class="correction">
+      <h4>Éléments de correction</h4>
+      <p><strong>1. Informations manquantes essentielles :</strong></p>
+      <ul>
+        <li>Profil et nombre de managers concernés (ancienneté, niveau hiérarchique)</li>
+        <li>Nature des tensions : entre managers ? entre managers et équipes ? entre collaborateurs ?</li>
+        <li>Événements déclencheurs : réorganisation, fusion, changement de direction ?</li>
+        <li>Résultats attendus à l'issue de la formation (indicateurs de réussite)</li>
+        <li>Contraintes : disponibilités, budget, modalités souhaitées (présentiel/distanciel)</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>2. Demande explicite vs besoin potentiel :</strong></p>
+      <ul>
+        <li><em>Demande explicite</em> : formation gestion des conflits, 2 jours, pour tous les managers</li>
+        <li><em>Besoin potentiel</em> : comprendre l'origine des tensions (organisationnelle ? relationnelle ? managériale ?), développer des compétences en communication non-violente, en posture managériale, ou résoudre un problème structurel (charges de travail, rôles flous)</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>3. Questions d'entretien pertinentes :</strong></p>
+      <ul>
+        <li>« Pouvez-vous me décrire une situation de conflit concrète observée récemment ? Qui était impliqué, dans quel contexte ? »</li>
+        <li>« Qu'est-ce qui vous ferait dire, dans 6 mois, que la formation a été un succès ? »</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : QUIZ -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Quiz de vérification</h2>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <span class="quiz-badge">Quiz</span>
+      <h3>Vérifier ses acquis – S1.1</h3>
+    </div>
+
+    <div class="question" id="q1">
+      <p>1. La demande de formation correspond à :</p>
+      <label class="option"><input type="radio" name="q1" value="a"> L'écart entre compétences actuelles et compétences attendues</label>
+      <label class="option"><input type="radio" name="q1" value="b"> L'expression d'un souhait formulé par un individu ou une organisation</label>
+      <label class="option"><input type="radio" name="q1" value="c"> Le résultat de l'analyse documentaire des postes</label>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <p>2. Lequel de ces éléments N'est PAS une source habituelle de demande de formation ?</p>
+      <label class="option"><input type="radio" name="q2" value="a"> Le plan de développement des compétences de l'entreprise</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Les résultats du bilan carbone de l'organisation</label>
+      <label class="option"><input type="radio" name="q2" value="c"> Les obligations réglementaires et habilitations</label>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <p>3. Lors d'un entretien de recueil de besoins, quelle question est la plus pertinente pour identifier le besoin réel ?</p>
+      <label class="option"><input type="radio" name="q3" value="a"> « Quel thème de formation souhaitez-vous ? »</label>
+      <label class="option"><input type="radio" name="q3" value="b"> « Combien de stagiaires avez-vous ? »</label>
+      <label class="option"><input type="radio" name="q3" value="c"> « Qu'est-ce qui vous ferait dire que la formation est une réussite ? »</label>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <p>4. Le niveau "Macro" du modèle de Kaufman s'intéresse à :</p>
+      <label class="option"><input type="radio" name="q4" value="a"> L'impact de la formation sur la société</label>
+      <label class="option"><input type="radio" name="q4" value="b"> L'impact de la formation sur l'organisation</label>
+      <label class="option"><input type="radio" name="q4" value="c"> L'impact de la formation sur chaque apprenant individuellement</label>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <p>5. Un manager demande une formation « gestion du temps » pour son équipe. Quel est le réflexe du formateur ?</p>
+      <label class="option"><input type="radio" name="q5" value="a"> Concevoir immédiatement un programme sur la gestion du temps</label>
+      <label class="option"><input type="radio" name="q5" value="b"> Analyser le contexte pour vérifier si le besoin réel est bien la gestion du temps</label>
+      <label class="option"><input type="radio" name="q5" value="c"> Refuser la demande car elle est trop vague</label>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <p>6. L'observation de situations de travail est utilisée lors du recueil de besoins pour :</p>
+      <label class="option"><input type="radio" name="q6" value="a"> Evaluer les apprenants à l'issue de la formation</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Comprendre concrètement les pratiques et les écarts de compétences en contexte réel</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Rédiger le programme pédagogique définitif</label>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <p>7. Quel outil permet d'identifier les compétences déjà acquises avant la formation ?</p>
+      <label class="option"><input type="radio" name="q7" value="a"> Le questionnaire de positionnement</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Le cahier des charges pédagogique</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Le bilan de fin de formation</label>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <p>8. Dans le modèle de Kaufman, quel niveau analyse l'impact sur chaque apprenant individuellement ?</p>
+      <label class="option"><input type="radio" name="q8" value="a"> Niveau Méga</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Niveau Macro</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Niveau Micro</label>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <p>9. Un problème de désorganisation interne dans une entreprise peut-il être résolu uniquement par la formation ?</p>
+      <label class="option"><input type="radio" name="q9" value="a"> Oui, la formation peut toujours résoudre les problèmes organisationnels</label>
+      <label class="option"><input type="radio" name="q9" value="b"> Non, certains problèmes sont organisationnels et ne relèvent pas d'un besoin de formation</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Oui, à condition que la formation dure suffisamment longtemps</label>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <p>10. Parmi ces acteurs, lequel est à l'origine d'une demande de formation liée à une obligation légale ?</p>
+      <label class="option"><input type="radio" name="q10" value="a"> Le salarié via son CPF</label>
+      <label class="option"><input type="radio" name="q10" value="b"> L'entreprise pour respecter une réglementation (ex : habilitation électrique)</label>
+      <label class="option"><input type="radio" name="q10" value="c"> Le formateur qui propose ses services</label>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+
+    <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
+    <div class="quiz-score" id="quiz-score"></div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Synthèse à retenir</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💡</span> Les 5 points clés de la séquence S1.1</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <ol>
+        <li><strong>Demande ≠ Besoin</strong> : la demande est l'expression d'un souhait, le besoin est un écart à combler.</li>
+        <li><strong>Identifier les acteurs</strong> : commanditaire, financeur, manager, apprenant — chacun a ses propres attentes.</li>
+        <li><strong>Recueillir avant de concevoir</strong> : entretien, questionnaire, analyse documentaire permettent de poser un diagnostic solide.</li>
+        <li><strong>Poser les bonnes questions</strong> : se concentrer sur les situations de travail réelles, les résultats attendus, les indicateurs de réussite.</li>
+        <li><strong>La formation n'est pas toujours la solution</strong> : certains problèmes sont organisationnels, pas pédagogiques.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Real Conseil – Formation Professionnelle · FPA RNCP 35030 · Module M1 – Séquence S1.1<br>
+  Support pédagogique à usage interne
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isActive = header.classList.contains('active');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isActive) {
+      header.classList.add('active');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleCorrection(btn) {
+    const correction = btn.nextElementSibling;
+    if (correction.classList.contains('open')) {
+      correction.classList.remove('open');
+      btn.textContent = 'Afficher la correction';
+    } else {
+      correction.classList.add('open');
+      btn.textContent = 'Masquer la correction';
+    }
+  }
+
+  const reponses = { q1: 'b', q2: 'b', q3: 'c', q4: 'b', q5: 'b', q6: 'b', q7: 'a', q8: 'c', q9: 'b', q10: 'b' };
+  const feedbacks = {
+    q1: { b: 'Correct ! La demande est l\'expression d\'un souhait. Le besoin, lui, est l\'écart entre situation actuelle et cible.', a: 'C\'est la définition du besoin de formation, pas de la demande.', c: 'L\'analyse documentaire est un outil de recueil, pas la définition de la demande.' },
+    q2: { b: 'Exact ! Le bilan carbone est un outil environnemental, pas une source de demande de formation.', a: 'Le plan de développement des compétences est bien une source classique de demandes.', c: 'Les obligations réglementaires génèrent fréquemment des demandes de formation.' },
+    q3: { c: 'Excellente question ! Elle identifie les résultats attendus et donc le besoin réel.', a: 'Cette question recueille la demande mais pas le besoin sous-jacent.', b: 'Le nombre de stagiaires est une donnée logistique, pas un levier d\'analyse du besoin.' },
+    q4: { b: 'Correct ! Le niveau Macro analyse l\'impact sur l\'organisation (performance, qualité, résultats).', a: 'C\'est le niveau Méga qui s\'intéresse à l\'impact sociétal.', c: 'C\'est le niveau Micro qui concerne l\'impact sur chaque apprenant.' },
+    q5: { b: 'Exact ! Le formateur doit toujours questionner la demande pour identifier le besoin réel sous-jacent.', a: 'Concevoir sans analyser, c\'est risquer de répondre à côté du vrai problème.', c: 'La demande vague est précisément le point de départ du travail d\'analyse.' },
+    q6: { b: 'Correct ! L\'observation terrain permet de voir les pratiques réelles et les écarts concrets.', a: 'L\'observation en recueil de besoins précède la formation, elle n\'évalue pas les apprenants.', c: 'Le programme vient après le recueil, pas pendant.' },
+    q7: { a: 'Exact ! Le questionnaire de positionnement mesure le niveau d\'entrée des apprenants.', b: 'Le CDCP est un document de cadrage, pas un outil de mesure des acquis.', c: 'Le bilan de fin de formation évalue les acquis après la formation, pas avant.' },
+    q8: { c: 'Correct ! Le niveau Micro s\'intéresse à l\'impact individuel sur chaque apprenant.', a: 'Le niveau Méga concerne l\'impact sur la société.', b: 'Le niveau Macro concerne l\'impact sur l\'organisation.' },
+    q9: { b: 'Exact ! La formation ne peut pas résoudre un problème organisationnel structurel. C\'est une erreur classique.', a: 'Faux. La formation agit sur les compétences, pas sur les dysfonctionnements organisationnels.', c: 'La durée ne change pas la nature du problème s\'il est organisationnel.' },
+    q10: { b: 'Correct ! Les habilitations et certifications obligatoires sont typiquement des demandes initiées par l\'entreprise pour respecter la loi.', a: 'Le CPF est une démarche volontaire du salarié, pas une obligation légale.', c: 'Le formateur est prestataire, il ne génère pas la demande.' }
+  };
+
+  function corrigerQuiz() {
+    let score = 0;
+    Object.keys(reponses).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById(`fb-${q}`);
+      const options = document.querySelectorAll(`input[name="${q}"]`);
+      options.forEach(opt => opt.closest('.option').classList.remove('correct', 'incorrect'));
+      if (selected) {
+        const val = selected.value;
+        const correct = reponses[q];
+        selected.closest('.option').classList.add(val === correct ? 'correct' : 'incorrect');
+        if (val === correct) {
+          score++;
+          fb.className = 'feedback correct';
+          fb.textContent = '✓ ' + feedbacks[q][val];
+        } else {
+          fb.className = 'feedback incorrect';
+          fb.textContent = '✗ ' + feedbacks[q][val] + ' — Bonne réponse : ' + feedbacks[q][correct];
+          document.querySelector(`input[name="${q}"][value="${correct}"]`).closest('.option').classList.add('correct');
+        }
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = '⚠ Aucune réponse sélectionnée.';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.className = `quiz-score show ${score >= 7 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/10 — ${score === 10 ? '🎉 Parfait !' : score >= 8 ? '👍 Très bien !' : score >= 6 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+  }
+</script>
+
+</body>
+</html>

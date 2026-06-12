@@ -358,6 +358,64 @@
     </div>
   </div>
 
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">👥</span> Analyser le public cible et ses caractéristiques</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le REAC FPA insiste sur la nécessité de <strong>repérer les caractéristiques des apprenants</strong> dès l'analyse de la demande. Ce travail conditionne toute la conception pédagogique : modalités, rythme, niveau de difficulté, outils d'accompagnement.</p>
+      <p>Les dimensions à analyser pour chaque public :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Dimension</th><th>Questions à poser</th><th>Impact sur la conception</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Profil socioprofessionnel</strong></td>
+              <td>Quel métier ? Quelle ancienneté ? Quel niveau de qualification ?</td>
+              <td>Niveau de langage, exemples concrets, références métier</td>
+            </tr>
+            <tr>
+              <td><strong>Niveau de départ</strong></td>
+              <td>Quels prérequis ? Quelles compétences déjà acquises ?</td>
+              <td>Point de départ de la progression, positionnement</td>
+            </tr>
+            <tr>
+              <td><strong>Hétérogénéité</strong></td>
+              <td>Le groupe est-il homogène ? Existe-t-il des écarts importants ?</td>
+              <td>Individualisation, groupes de niveau, parcours différenciés</td>
+            </tr>
+            <tr>
+              <td><strong>Rapport à la formation</strong></td>
+              <td>La formation est-elle choisie ou imposée ? Existe-t-il des freins ?</td>
+              <td>Posture du formateur, techniques de mise en confiance</td>
+            </tr>
+            <tr>
+              <td><strong>Situations de handicap</strong></td>
+              <td>Y a-t-il des apprenants en situation de handicap ? Quels aménagements ?</td>
+              <td>Accessibilité des supports, référent handicap, adaptation des évaluations</td>
+            </tr>
+            <tr>
+              <td><strong>Contraintes pratiques</strong></td>
+              <td>Disponibilités, mobilité, équipement numérique, illettrisme ?</td>
+              <td>Modalités, durée des sessions, support aux outils</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre tip">
+        <strong>💡 Hétérogénéité : une réalité à anticiper</strong>
+        Dans la plupart des groupes en formation professionnelle, les apprenants ont des niveaux, des expériences et des rythmes d'apprentissage très différents. Identifier cette hétérogénéité dès l'analyse de la demande permet de concevoir des parcours adaptés et d'éviter les formations "taille unique" peu efficaces.
+      </div>
+      <div class="encadre info">
+        <strong>📌 Savoirs et compétences attendus à l'issue</strong>
+        Le REAC exige que l'analyse de la demande précise explicitement les <strong>savoirs et compétences que les apprenants devront avoir acquis à l'issue de la formation</strong>. Ce n'est pas la même chose que les objectifs pédagogiques (qui viennent après) : c'est la cible globale définie avec le commanditaire, souvent formulée à partir d'un référentiel métier ou de certification (RNCP, fiche de poste, convention collective).
+      </div>
+    </div>
+  </div>
+
   <!-- CAS PRATIQUE -->
   <div class="section-title">
     <div class="num">2</div>
@@ -500,6 +558,22 @@
       <div class="feedback" id="fb-q10"></div>
     </div>
 
+    <div class="question" id="q11">
+      <p>11. Pourquoi est-il important d'identifier l'hétérogénéité du groupe dès l'analyse de la demande ?</p>
+      <label class="option"><input type="radio" name="q11" value="a"> Pour établir un classement des apprenants par niveau</label>
+      <label class="option"><input type="radio" name="q11" value="b"> Pour anticiper les besoins d'individualisation et adapter les modalités pédagogiques</label>
+      <label class="option"><input type="radio" name="q11" value="c"> Pour refuser les apprenants qui ne correspondent pas au niveau requis</label>
+      <div class="feedback" id="fb-q11"></div>
+    </div>
+
+    <div class="question" id="q12">
+      <p>12. Selon le REAC FPA, les "savoirs et compétences attendus à l'issue" désignent :</p>
+      <label class="option"><input type="radio" name="q12" value="a"> Les objectifs pédagogiques rédigés par le formateur après la conception</label>
+      <label class="option"><input type="radio" name="q12" value="b"> La cible globale définie avec le commanditaire, souvent issue d'un référentiel métier ou de certification</label>
+      <label class="option"><input type="radio" name="q12" value="c"> Le niveau de diplôme que les apprenants doivent avoir avant d'entrer en formation</label>
+      <div class="feedback" id="fb-q12"></div>
+    </div>
+
     <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
     <div class="quiz-score" id="quiz-score"></div>
   </div>
@@ -558,7 +632,7 @@
     }
   }
 
-  const reponses = { q1: 'b', q2: 'b', q3: 'b', q4: 'b', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'b' };
+  const reponses = { q1: 'b', q2: 'b', q3: 'b', q4: 'b', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'b', q11: 'b', q12: 'b' };
   const feedbacks = {
     q1: { b: 'Correct ! La formalisation crée un cadre de référence partagé, base de toute la conception.', a: 'Le programme vient après la formalisation, il en est la conséquence.', c: 'Le calcul du coût est une étape ultérieure, pas l\'objectif premier.' },
     q2: { b: 'Exact ! Le commanditaire exprime le besoin. France Travail est le financeur.', a: 'France Travail est le financeur, pas le commanditaire.', c: 'Le formateur est le prestataire, pas le commanditaire.' },
@@ -569,7 +643,9 @@
     q7: { b: 'Exact ! Le document formalisé est une référence en cas de litige sur les attentes ou le contenu.', a: 'La formalisation n\'a pas d\'impact direct sur le tarif.', c: 'Le contrat de formation est un document distinct, à valeur juridique supérieure.' },
     q8: { b: 'Correct ! C\'est la séquence logique : recueil → formalisation → CDCP → conception.', a: 'Concevoir avant de recueillir les besoins conduit à des formations inadaptées.', c: 'Former avant d\'analyser les besoins est une erreur de méthode fondamentale.' },
     q9: { b: 'Exact ! L\'OPCO collecte et redistribue les fonds de la formation professionnelle des entreprises adhérentes.', a: 'La prescription est le rôle du conseiller France Travail ou du médecin du travail, pas de l\'OPCO.', c: 'La conception pédagogique est la responsabilité du formateur, pas de l\'OPCO.' },
-    q10: { b: 'Correct ! Une information manquante = une question à poser avant de concevoir. Les zones de flou sont des alertes.', a: 'Faire une hypothèse sans vérifier expose à concevoir une formation à côté du besoin réel.', c: 'Aucune information dans la grille n\'est vraiment secondaire : chaque case vide est un risque.' }
+    q10: { b: 'Correct ! Une information manquante = une question à poser avant de concevoir. Les zones de flou sont des alertes.', a: 'Faire une hypothèse sans vérifier expose à concevoir une formation à côté du besoin réel.', c: 'Aucune information dans la grille n\'est vraiment secondaire : chaque case vide est un risque.' },
+    q11: { b: 'Exact ! Anticiper l\'hétérogénéité dès l\'analyse permet de concevoir des parcours adaptés à tous les profils.', a: 'Il ne s\'agit pas de classer mais d\'adapter la formation aux différents niveaux et besoins.', c: 'La formation professionnelle doit s\'adapter aux apprenants, pas l\'inverse.' },
+    q12: { b: 'Correct ! Les savoirs et compétences attendus à l\'issue sont la cible définie avec le commanditaire, issue du référentiel métier ou de certification — ils précèdent les objectifs pédagogiques.', a: 'Les objectifs pédagogiques sont rédigés par le formateur après la conception, pas lors de l\'analyse.', c: 'Le niveau de diplôme est un prérequis d\'entrée, pas la cible à atteindre en sortie.' }
   };
 
   function corrigerQuiz() {
@@ -598,8 +674,8 @@
       }
     });
     const scoreEl = document.getElementById('quiz-score');
-    scoreEl.className = `quiz-score show ${score >= 7 ? 'good' : 'bad'}`;
-    scoreEl.textContent = `Score : ${score}/10 — ${score === 10 ? '🎉 Parfait !' : score >= 8 ? '👍 Très bien !' : score >= 6 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+    scoreEl.className = `quiz-score show ${score >= 9 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/12 — ${score === 12 ? '🎉 Parfait !' : score >= 10 ? '👍 Très bien !' : score >= 7 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
   }
 </script>
 

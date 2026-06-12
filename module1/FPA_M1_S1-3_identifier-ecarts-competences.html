@@ -384,6 +384,59 @@
     </div>
   </div>
 
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📚</span> S'appuyer sur les référentiels de certification</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le REAC FPA précise que le formateur s'appuie sur les <strong>référentiels métier et de certification</strong> pour définir les compétences cibles. Ce n'est pas lui qui fixe arbitrairement ce que les apprenants doivent savoir : il s'ancre dans des textes officiels et des attentes sectorielles.</p>
+      <p>Les référentiels utilisables selon le contexte :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Référentiel</th><th>Usage</th><th>Exemple</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Fiche RNCP</strong></td>
+              <td>Définit les blocs de compétences d'une certification nationale</td>
+              <td>FPA RNCP37275 : 4 CCP, 13 compétences professionnelles</td>
+            </tr>
+            <tr>
+              <td><strong>REAC</strong></td>
+              <td>Décrit les activités, compétences et savoir-faire du métier visé</td>
+              <td>REAC FPA : fiches compétences détaillées avec critères de performance</td>
+            </tr>
+            <tr>
+              <td><strong>Fiche de poste</strong></td>
+              <td>Décrit les missions et compétences attendues dans un emploi précis</td>
+              <td>Chef de chantier : management équipe, lecture de plans, sécurité</td>
+            </tr>
+            <tr>
+              <td><strong>Convention collective</strong></td>
+              <td>Fixe les compétences et qualifications requises par secteur</td>
+              <td>Convention collective de la propreté : niveaux de qualification I à V</td>
+            </tr>
+            <tr>
+              <td><strong>Référentiel interne entreprise</strong></td>
+              <td>Décrit les compétences attendues selon la culture et les pratiques de l'organisation</td>
+              <td>Référentiel managérial d'une grande enseigne de distribution</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre info">
+        <strong>📌 De l'écart à la progression pédagogique</strong>
+        Une fois les écarts de compétences identifiés et formalisés via un référentiel, le formateur peut construire la <strong>progression pédagogique</strong> : la séquence logique et progressive des apprentissages, organisée pour amener les apprenants du niveau actuel au niveau cible. C'est l'aboutissement direct de l'analyse des écarts — et le point de départ de la conception pédagogique (S2.1 et S2.2).
+      </div>
+      <div class="encadre tip">
+        <strong>💡 Propriété intellectuelle</strong>
+        Lorsqu'il conçoit ses ressources pédagogiques, le formateur doit respecter la réglementation sur la <strong>propriété intellectuelle</strong> : il ne peut pas reproduire sans autorisation des contenus protégés (textes, images, vidéos, schémas). Il doit soit créer ses propres ressources, soit utiliser des ressources sous licence libre (Creative Commons), soit obtenir les droits d'utilisation auprès des auteurs.
+      </div>
+    </div>
+  </div>
+
   <!-- CAS PRATIQUE -->
   <div class="section-title">
     <div class="num">2</div>
@@ -525,6 +578,22 @@
       <div class="feedback" id="fb-q10"></div>
     </div>
 
+    <div class="question" id="q11">
+      <p>11. Sur quoi le formateur s'appuie-t-il pour définir les compétences cibles selon le REAC FPA ?</p>
+      <label class="option"><input type="radio" name="q11" value="a"> Uniquement sur sa propre expérience du métier</label>
+      <label class="option"><input type="radio" name="q11" value="b"> Sur les référentiels métier et de certification (RNCP, REAC, fiche de poste, convention collective)</label>
+      <label class="option"><input type="radio" name="q11" value="c"> Sur les préférences exprimées par les apprenants lors du positionnement</label>
+      <div class="feedback" id="fb-q11"></div>
+    </div>
+
+    <div class="question" id="q12">
+      <p>12. Un formateur utilise une vidéo YouTube dans son support sans vérifier sa licence. Quel risque prend-il ?</p>
+      <label class="option"><input type="radio" name="q12" value="a"> Aucun, les vidéos en ligne sont libres de droits par défaut</label>
+      <label class="option"><input type="radio" name="q12" value="b"> Il risque de violer la réglementation sur la propriété intellectuelle</label>
+      <label class="option"><input type="radio" name="q12" value="c"> Il risque uniquement de perdre du temps si la vidéo est supprimée</label>
+      <div class="feedback" id="fb-q12"></div>
+    </div>
+
     <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
     <div class="quiz-score" id="quiz-score"></div>
   </div>
@@ -583,7 +652,7 @@
     }
   }
 
-  const reponses = { q1: 'b', q2: 'b', q3: 'a', q4: 'c', q5: 'b', q6: 'a', q7: 'b', q8: 'b', q9: 'b', q10: 'c' };
+  const reponses = { q1: 'b', q2: 'b', q3: 'a', q4: 'c', q5: 'b', q6: 'a', q7: 'b', q8: 'b', q9: 'b', q10: 'c', q11: 'b', q12: 'b' };
   const feedbacks = {
     q1: { b: 'Exact ! Le Boterf insiste sur le "savoir agir en situation" — la compétence se révèle dans l\'action, pas dans la possession de savoirs.', a: 'Un stock de connaissances est un savoir, pas une compétence au sens de Le Boterf.', c: 'La maîtrise d\'un savoir-faire est une composante, pas la compétence dans sa globalité.' },
     q2: { b: 'Correct ! L\'écart est bien la mesure de ce qui sépare le niveau actuel du niveau attendu.', a: 'La liste des formations suivies est un historique, pas une mesure d\'écart.', c: 'Les heures manquantes sont une contrainte logistique, pas la définition de l\'écart.' },
@@ -594,7 +663,9 @@
     q7: { b: 'Correct ! Un problème de motivation relève du management ou du bien-être au travail, pas d\'un manque de compétences.', a: 'La formation agit sur les compétences, pas sur la motivation intrinsèque.', c: 'La durée ne change pas la nature du problème si celui-ci est motivationnel.' },
     q8: { b: 'Exact ! "Connaître" n\'est pas un verbe observable. On ne peut pas mesurer directement si quelqu\'un "connaît".', a: 'Cet objectif n\'est pas mesurable car on ne sait pas ce que l\'apprenant devra faire concrètement.', c: 'Préciser le contenu ne suffit pas : il faut aussi un verbe d\'action observable.' },
     q9: { b: 'Exact ! Le questionnaire de positionnement évalue le niveau d\'entrée des apprenants avant la formation.', a: 'Le CDCP cadre la formation, il ne mesure pas les compétences des apprenants.', c: 'Le bilan de fin de formation évalue les acquis après la formation, pas avant.' },
-    q10: { c: 'Exact ! "Concevoir" est un verbe de création — c\'est le niveau N6, le plus élevé de la taxonomie.', a: 'N3 (Appliquer) consiste à utiliser une méthode existante, pas à créer quelque chose de nouveau.', b: 'N4 (Analyser) consiste à décomposer et diagnostiquer, pas à produire un plan complet.' }
+    q10: { c: 'Exact ! "Concevoir" est un verbe de création — c\'est le niveau N6, le plus élevé de la taxonomie.', a: 'N3 (Appliquer) consiste à utiliser une méthode existante, pas à créer quelque chose de nouveau.', b: 'N4 (Analyser) consiste à décomposer et diagnostiquer, pas à produire un plan complet.' },
+    q11: { b: 'Exact ! Le REAC exige que le formateur s\'appuie sur les référentiels officiels pour définir les compétences cibles, pas uniquement sur son expérience.', a: 'L\'expérience est utile mais ne suffit pas : elle doit être validée par des référentiels officiels.', c: 'Les préférences des apprenants orientent la pédagogie, pas la définition des compétences cibles.' },
+    q12: { b: 'Exact ! Toute vidéo en ligne est protégée par défaut par le droit d\'auteur. L\'utiliser sans vérifier sa licence constitue une violation de la propriété intellectuelle.', a: 'Faux : les vidéos YouTube sont protégées par défaut. Seules les licences Creative Commons autorisent la réutilisation.', c: 'Le risque juridique est bien réel et peut aller au-delà de la simple indisponibilité de la ressource.' }
   };
 
   function corrigerQuiz() {
@@ -623,8 +694,8 @@
       }
     });
     const scoreEl = document.getElementById('quiz-score');
-    scoreEl.className = `quiz-score show ${score >= 7 ? 'good' : 'bad'}`;
-    scoreEl.textContent = `Score : ${score}/10 — ${score === 10 ? '🎉 Parfait !' : score >= 8 ? '👍 Très bien !' : score >= 6 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+    scoreEl.className = `quiz-score show ${score >= 9 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/12 — ${score === 12 ? '🎉 Parfait !' : score >= 10 ? '👍 Très bien !' : score >= 7 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
   }
 </script>
 

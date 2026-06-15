@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module — Veille informationnelle | FPA | Real Conseil</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --slate:        #3D5A80;
+  --slate-dark:   #1C3A5C;
+  --slate-mid:    #4E6F99;
+  --slate-light:  #8BAABF;
+  --slate-pale:   #C8D9E8;
+  --slate-ghost:  #EEF3F8;
+  --amber:        #E07A2F;
+  --amber-light:  #F0A060;
+  --amber-pale:   #FBF0E4;
+  --bg:           #F4F6F9;
+  --bg-card:      #FFFFFF;
+  --bg-card2:     #F8FAFB;
+  --text:         #1C2B3A;
+  --text-muted:   #4A5D70;
+  --text-dim:     #8A9EAF;
+  --border:       #D0DCE8;
+  --border-soft:  #E8EFF5;
+  --green:        #2D7D52;
+  --green-bg:     #E8F5EE;
+  --orange:       #C8612A;
+  --orange-bg:    #FBF0E8;
+  --red:          #B84040;
+  --red-bg:       #FAEAEA;
+  --purple:       #6B5EA8;
+  --purple-bg:    #F0EEF8;
+  --sidebar-w:    290px;
+  --radius:       12px;
+  --shadow:       0 2px 12px rgba(28,42,58,0.08);
+  --shadow-md:    0 4px 24px rgba(28,42,58,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; font-size:15px; line-height:1.75; }
+
+/* SIDEBAR */
+#sidebar { width:var(--sidebar-w); min-height:100vh; background:#fff; position:fixed; top:0; left:0; display:flex; flex-direction:column; border-right:1px solid var(--border); z-index:100; overflow-y:auto; box-shadow:2px 0 16px rgba(28,42,58,0.06); }
+.sidebar-brand { padding:22px 22px 18px; border-bottom:1px solid var(--border-soft); background:var(--slate-dark); }
+.sidebar-brand .rc-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; letter-spacing:0.12em; color:#fff; text-transform:uppercase; }
+.sidebar-brand .formation-tag { display:inline-block; margin-top:8px; background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.9); font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; letter-spacing:0.05em; }
+.livrable-tag { display:inline-block; margin-top:6px; background:rgba(224,122,47,0.25); color:var(--amber-light); font-size:10.5px; font-weight:700; font-family:'Syne',sans-serif; padding:2px 9px; border-radius:20px; letter-spacing:0.05em; }
+.sidebar-module-info { padding:16px 22px; border-bottom:1px solid var(--border-soft); background:var(--slate-ghost); }
+.module-title-side { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; color:var(--text); line-height:1.4; }
+.sidebar-nav { padding:14px 0; flex:1; }
+.nav-section-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); padding:0 22px; margin-bottom:4px; margin-top:14px; }
+.nav-link { display:flex; align-items:center; gap:10px; padding:9px 22px; color:var(--text-muted); text-decoration:none; font-size:13px; border-left:3px solid transparent; transition:all 0.2s; }
+.nav-link:hover { color:var(--text); background:var(--slate-ghost); border-left-color:var(--slate-light); }
+.nav-link.active { color:var(--slate-dark); background:var(--slate-ghost); border-left-color:var(--slate); font-weight:500; }
+.nav-link .seq-num { font-family:'Fira Code',monospace; font-size:11px; color:var(--text-dim); background:var(--bg-card2); padding:2px 6px; border-radius:4px; min-width:28px; text-align:center; border:1px solid var(--border-soft); }
+.nav-link.active .seq-num { color:var(--slate-dark); background:var(--slate-ghost); border-color:var(--slate-pale); }
+.sidebar-footer { padding:16px 22px; border-top:1px solid var(--border-soft); }
+.back-link { display:flex; align-items:center; gap:8px; color:var(--text-dim); text-decoration:none; font-size:12px; transition:color 0.2s; }
+.back-link:hover { color:var(--slate-dark); }
+
+/* MAIN */
+#main { margin-left:var(--sidebar-w); flex:1; max-width:920px; padding:48px 52px 100px; }
+.module-header { margin-bottom:48px; padding:36px 40px; background:#fff; border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.module-header::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg, var(--slate-dark), var(--slate-light)); }
+.module-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.badge-fpa { display:inline-flex; align-items:center; gap:5px; background:var(--slate-ghost); color:var(--slate-dark); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid var(--slate-pale); }
+.badge-livrable { display:inline-flex; align-items:center; gap:5px; background:var(--amber-pale); color:var(--amber); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid rgba(224,122,47,0.2); }
+.badge-level { display:inline-flex; align-items:center; gap:5px; background:var(--green-bg); color:var(--green); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.05em; border:1px solid rgba(45,125,82,0.2); }
+.module-h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:26px; color:var(--text); line-height:1.25; margin-bottom:12px; }
+.module-h1 em { color:var(--slate-dark); font-style:normal; }
+.module-desc { color:var(--text-muted); font-size:15px; max-width:680px; line-height:1.7; margin-bottom:20px; }
+.module-meta { display:flex; gap:12px; flex-wrap:wrap; }
+.meta-item { display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-dim); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border); }
+.meta-item span { color:var(--text-muted); font-weight:500; }
+
+/* SECTIONS */
+section { margin-bottom:52px; scroll-margin-top:24px; }
+.section-label { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.section-label .icon { font-size:18px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:var(--slate-ghost); border-radius:10px; border:1px solid var(--border); }
+.section-label h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:18px; color:var(--text); }
+
+/* OBJECTIFS */
+.objectifs-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.obj-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px; display:flex; gap:12px; align-items:flex-start; box-shadow:var(--shadow); transition:all 0.2s; }
+.obj-card:hover { box-shadow:var(--shadow-md); border-color:var(--slate-light); }
+.obj-num { font-family:'Fira Code',monospace; font-size:11px; font-weight:500; color:var(--slate-dark); background:var(--slate-ghost); padding:3px 8px; border-radius:5px; min-width:40px; text-align:center; margin-top:1px; border:1px solid var(--border); }
+.obj-text { font-size:13.5px; color:var(--text-muted); line-height:1.55; }
+
+/* SEQ BLOCKS */
+.seq-block { background:#fff; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; box-shadow:var(--shadow); transition:box-shadow 0.2s; }
+.seq-block.open { box-shadow:var(--shadow-md); border-color:var(--slate-light); }
+.seq-progress { display:flex; gap:3px; padding:10px 20px; border-bottom:1px solid var(--border-soft); background:var(--bg); }
+.seq-dot { height:3px; flex:1; border-radius:2px; background:var(--border); transition:background 0.3s; }
+.seq-dot.done { background:var(--slate); }
+.seq-header { display:flex; align-items:center; gap:14px; padding:16px 20px; cursor:pointer; user-select:none; transition:background 0.2s; }
+.seq-header:hover { background:var(--slate-ghost); }
+.seq-badge { font-family:'Fira Code',monospace; font-size:11px; font-weight:500; color:var(--slate-dark); background:var(--slate-ghost); padding:4px 10px; border-radius:5px; white-space:nowrap; border:1px solid var(--border); }
+.seq-title { font-family:'Syne',sans-serif; font-weight:600; font-size:14px; color:var(--text); flex:1; line-height:1.4; }
+.seq-duration { font-size:11px; color:var(--text-dim); background:var(--bg); padding:3px 8px; border-radius:4px; border:1px solid var(--border-soft); white-space:nowrap; }
+.seq-toggle { color:var(--text-dim); font-size:16px; transition:transform 0.25s; }
+.seq-block.open .seq-toggle { transform:rotate(180deg); }
+.seq-body { display:none; padding:4px 20px 22px; }
+.seq-block.open .seq-body { display:block; }
+
+/* THEORY BLOCKS */
+.theory-block { background:var(--bg-card2); border-radius:10px; padding:18px 20px; margin:14px 0; border:1px solid var(--border-soft); border-left:4px solid var(--slate); }
+.theory-block.green  { border-left-color:var(--green);  background:var(--green-bg);  border-color:rgba(45,125,82,0.15); }
+.theory-block.orange { border-left-color:var(--orange); background:var(--orange-bg); border-color:rgba(200,97,42,0.15); }
+.theory-block.blue   { border-left-color:var(--slate);  background:var(--slate-ghost); border-color:rgba(61,90,128,0.15); }
+.theory-block.red    { border-left-color:var(--red);    background:var(--red-bg);    border-color:rgba(184,64,64,0.15); }
+.theory-block.purple { border-left-color:var(--purple); background:var(--purple-bg); border-color:rgba(107,94,168,0.15); }
+.theory-block h4 { font-family:'Syne',sans-serif; font-weight:700; font-size:12.5px; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px; color:var(--slate-dark); }
+.theory-block.green h4  { color:var(--green); }
+.theory-block.orange h4 { color:var(--orange); }
+.theory-block.blue h4   { color:var(--slate-dark); }
+.theory-block.red h4    { color:var(--red); }
+.theory-block.purple h4 { color:var(--purple); }
+.theory-block p, .theory-block li { font-size:14px; color:var(--text-muted); line-height:1.7; }
+.theory-block ul { padding-left:18px; }
+.theory-block ul li { margin-bottom:5px; }
+.theory-block strong { color:var(--text); }
+
+/* DATA TABLE */
+.data-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px; border-radius:10px; overflow:hidden; box-shadow:var(--shadow); }
+.data-table th { background:var(--slate-dark); color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; padding:11px 16px; text-align:left; }
+.data-table td { padding:10px 16px; color:var(--text-muted); border-bottom:1px solid var(--border-soft); background:#fff; vertical-align:top; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:var(--slate-ghost); }
+
+/* QUIZ */
+.quiz-intro { background:var(--slate-ghost); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; gap:12px; font-size:13.5px; color:var(--text-muted); }
+.quiz-intro strong { color:var(--slate-dark); }
+.quiz-score-box { margin-left:auto; font-family:'Fira Code',monospace; font-size:13px; font-weight:500; color:var(--slate-dark); background:#fff; padding:5px 14px; border-radius:20px; border:2px solid var(--slate-pale); white-space:nowrap; }
+.quiz-container { display:flex; flex-direction:column; gap:12px; }
+.quiz-item { background:#fff; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); transition:border-color 0.2s; }
+.quiz-item.revealed { border-color:var(--slate-light); }
+.quiz-question { padding:14px 18px; font-size:14px; color:var(--text); cursor:pointer; display:flex; align-items:flex-start; gap:12px; user-select:none; transition:background 0.2s; }
+.quiz-question:hover { background:var(--slate-ghost); }
+.quiz-q-icon { width:28px; height:28px; background:var(--slate-ghost); color:var(--slate-dark); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; font-family:'Fira Code',monospace; flex-shrink:0; border:1px solid var(--border); margin-top:1px; }
+.quiz-q-text { flex:1; line-height:1.55; }
+.quiz-hint { font-size:11px; color:var(--text-dim); margin-top:3px; }
+.quiz-reveal { display:none; padding:16px 18px; background:var(--green-bg); border-top:1px solid rgba(45,125,82,0.15); }
+.quiz-item.revealed .quiz-reveal { display:block; }
+.quiz-reveal .answer-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:6px; }
+.quiz-reveal p { font-size:13.5px; color:var(--text-muted); line-height:1.65; }
+.quiz-reveal strong { color:var(--text); }
+
+/* CAS PRATIQUES */
+.cas-block { background:#fff; border:1px solid var(--border); border-radius:var(--radius); margin-bottom:16px; overflow:hidden; box-shadow:var(--shadow); }
+.cas-header { display:flex; align-items:center; gap:14px; padding:18px 22px; background:var(--amber-pale); border-bottom:1px solid rgba(224,122,47,0.2); }
+.cas-num { font-family:'Fira Code',monospace; font-size:11px; font-weight:500; color:var(--amber); background:#fff; padding:4px 10px; border-radius:5px; border:1px solid rgba(224,122,47,0.25); white-space:nowrap; }
+.cas-title { font-family:'Syne',sans-serif; font-weight:700; font-size:14px; color:var(--text); flex:1; }
+.cas-body { padding:20px 22px; }
+.scenario-box { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:16px 18px; margin-bottom:14px; font-size:14px; color:var(--text-muted); line-height:1.7; border-left:4px solid var(--amber); }
+.scenario-box .scenario-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--amber); margin-bottom:8px; }
+.questions-list { list-style:none; padding:0; margin-bottom:14px; }
+.questions-list li { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:13.5px; color:var(--text-muted); line-height:1.55; }
+.questions-list li:last-child { border-bottom:none; }
+.q-bullet { font-family:'Fira Code',monospace; font-size:11px; color:var(--amber); background:var(--amber-pale); padding:2px 7px; border-radius:4px; height:fit-content; margin-top:1px; flex-shrink:0; border:1px solid rgba(224,122,47,0.2); }
+.cas-solution { display:none; background:var(--green-bg); border-top:1px solid rgba(45,125,82,0.15); padding:18px 22px; }
+.cas-block.open .cas-solution { display:block; }
+.solution-label { font-family:'Syne',sans-serif; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:10px; }
+.solution-item { display:flex; gap:10px; padding:7px 0; font-size:13.5px; color:var(--text-muted); line-height:1.55; border-bottom:1px solid rgba(45,125,82,0.1); }
+.solution-item:last-child { border-bottom:none; }
+.sol-num { font-family:'Fira Code',monospace; font-size:11px; color:var(--green); background:#fff; padding:2px 7px; border-radius:4px; height:fit-content; margin-top:1px; flex-shrink:0; border:1px solid rgba(45,125,82,0.2); }
+.solution-item strong { color:var(--text); }
+.toggle-solution-btn { display:flex; align-items:center; gap:8px; background:none; border:1px solid var(--border); border-radius:8px; padding:9px 16px; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text-muted); cursor:pointer; transition:all 0.2s; margin-top:6px; }
+.toggle-solution-btn:hover { background:var(--slate-ghost); border-color:var(--slate-light); color:var(--slate-dark); }
+
+/* MEMO GRID */
+.memo-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.memo-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow); }
+.memo-card h4 { font-family:'Syne',sans-serif; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid var(--green-bg); }
+.memo-card ul { padding-left:0; list-style:none; }
+.memo-card ul li { font-size:13px; color:var(--text-muted); padding:4px 0 4px 16px; position:relative; line-height:1.5; }
+.memo-card ul li::before { content:'›'; position:absolute; left:0; color:var(--amber); font-weight:700; }
+
+/* UTILS */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--slate-pale); border-radius:3px; }
+
+@media(max-width:900px) {
+  #sidebar { display:none; }
+  #main { margin-left:0; padding:24px 20px 60px; }
+  .objectifs-grid, .memo-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="sidebar-brand">
+    <div class="rc-logo">Real Conseil</div>
+    <span class="formation-tag">FPA — RNCP 35030</span><br>
+    <span class="livrable-tag">📘 Module</span>
+  </div>
+  <div class="sidebar-module-info">
+    <div class="module-title-side">Veille informationnelle du formateur</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Contenu</div>
+    <a href="#objectifs" class="nav-link active"><span class="seq-num">🎯</span> Objectifs pédagogiques</a>
+    <a href="#s1" class="nav-link"><span class="seq-num">S1</span> C'est quoi la veille ?</a>
+    <a href="#s2" class="nav-link"><span class="seq-num">S2</span> Les sources</a>
+    <a href="#s3" class="nav-link"><span class="seq-num">S3</span> Les outils</a>
+    <a href="#s4" class="nav-link"><span class="seq-num">S4</span> Organiser sa veille</a>
+    <a href="#s5" class="nav-link"><span class="seq-num">S5</span> Évaluer l'information</a>
+    <a href="#s6" class="nav-link"><span class="seq-num">S6</span> Partager sa veille</a>
+    <div class="nav-section-label">Évaluation</div>
+    <a href="#quiz" class="nav-link"><span class="seq-num">❓</span> Quiz — 10 questions</a>
+    <a href="#cas" class="nav-link"><span class="seq-num">💼</span> Cas pratiques — 4 exercices</a>
+    <a href="#memo" class="nav-link"><span class="seq-num">📋</span> Fiche mémo</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="../index.html" class="back-link">← Retour à l'index FPA</a>
+  </div>
+</aside>
+
+<main id="main">
+
+  <header class="module-header">
+    <div class="module-eyebrow">
+      <span class="badge-fpa">FPA — RNCP 35030</span>
+      <span class="badge-livrable">📘 Module complet</span>
+      <span class="badge-level">Débutant</span>
+    </div>
+    <h1 class="module-h1">La veille informationnelle<br><em>du formateur professionnel</em></h1>
+    <p class="module-desc">Construire et maintenir un système de veille informationnelle professionnel, régulier et documenté — compétence clé du FPA et indicateur Qualiopi critère 2.</p>
+    <div class="module-meta">
+      <div class="meta-item">⏱ <span>6 heures</span></div>
+      <div class="meta-item">👤 <span>Apprenants FPA</span></div>
+      <div class="meta-item">📶 <span>Débutant complet</span></div>
+      <div class="meta-item">🏛️ <span>Real Conseil · Hauts-de-France</span></div>
+    </div>
+  </header>
+
+  <!-- OBJECTIFS -->
+  <section id="objectifs">
+    <div class="section-label"><div class="icon">🎯</div><h2>Objectifs pédagogiques</h2></div>
+    <div class="objectifs-grid">
+      <div class="obj-card"><span class="obj-num">OBJ 1</span><span class="obj-text">Définir la veille informationnelle et ses 4 types appliqués au métier de FPA</span></div>
+      <div class="obj-card"><span class="obj-num">OBJ 2</span><span class="obj-text">Identifier et évaluer les sources d'information fiables pour son domaine</span></div>
+      <div class="obj-card"><span class="obj-num">OBJ 3</span><span class="obj-text">Maîtriser les outils de veille essentiels : Google Alertes, Feedly, LinkedIn</span></div>
+      <div class="obj-card"><span class="obj-num">OBJ 4</span><span class="obj-text">Construire un système de veille personnalisé, régulier et réaliste</span></div>
+      <div class="obj-card"><span class="obj-num">OBJ 5</span><span class="obj-text">Évaluer la fiabilité d'une information avec la méthode CRAAP</span></div>
+      <div class="obj-card"><span class="obj-num">OBJ 6</span><span class="obj-text">Partager, valoriser et documenter sa veille (dont traçabilité Qualiopi)</span></div>
+    </div>
+  </section>
+
+  <!-- S1 -->
+  <section id="s1">
+    <div class="section-label"><div class="icon">🔭</div><h2>S1 — C'est quoi la veille informationnelle ?</h2></div>
+    <div class="seq-block open">
+      <div class="seq-progress"><div class="seq-dot done"></div><div class="seq-dot"></div><div class="seq-dot"></div><div class="seq-dot"></div><div class="seq-dot"></div><div class="seq-dot"></div></div>
+      <div class="seq-header" onclick="toggleSeq(this)">
+        <span class="seq-badge">S1</span>
+        <span class="seq-title">Définition, types de veille et pourquoi c'est obligatoire pour un FPA</span>
+        <span class="seq-duration">1h</span>
+        <span class="seq-toggle">▾</span>
+      </div>
+      <div class="seq-body">
+        <div class="theory-block blue"><h4>📌 Définition</h4><p>La veille informationnelle est un <strong>processus continu, organisé et délibéré</strong> de surveillance de son environnement informationnel. Pour un formateur, c'est l'ensemble des actions qui permettent de rester à jour sur son domaine, ses méthodes, sa réglementation et ses outils.</p></div>
+
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:var(--text);margin:18px 0 10px;">Les 4 types de veille du formateur</h4>
+        <table class="data-table">
+          <thead><tr><th>Type</th><th>Définition</th><th>Exemples FPA</th><th>Sources prioritaires</th></tr></thead>
+          <tbody>
+            <tr><td><strong>🎓 Pédagogique</strong></td><td>Nouvelles méthodes, approches, outils d'animation</td><td>Classe inversée, pédagogie par le jeu, neurosciences, IA en formation</td><td>Thot Cursus, e-learning letter, podcasts</td></tr>
+            <tr><td><strong>⚖️ Juridique &amp; réglementaire</strong></td><td>Lois, décrets, référentiels, certifications</td><td>Réforme CPF, modifications Qualiopi, nouveaux RNCP, loi Avenir Pro</td><td>Légifrance, France Compétences, DREETS</td></tr>
+            <tr><td><strong>💻 Technologique</strong></td><td>Outils numériques, plateformes, LMS, IA</td><td>Nouveaux LMS, outils IA (ChatGPT en formation), plateformes collaboratives</td><td>Product Hunt, blogs EdTech, LinkedIn</td></tr>
+            <tr><td><strong>🏭 Sectorielle</strong></td><td>Actualités du secteur d'enseignement</td><td>Évolutions métiers, certifications sectorielles, tendances emploi</td><td>CARIF-OREF, OPCO, presse sectorielle</td></tr>
+          </tbody>
+        </table>
+
+        <div class="theory-block green"><h4>✅ Pourquoi c'est obligatoire pour un FPA</h4><ul><li><strong>Indicateur Qualiopi critère 2</strong> : actualisation des compétences du formateur</li><li><strong>Crédibilité</strong> auprès des apprenants : un formateur qui cite des exemples de 2019 perd sa légitimité</li><li><strong>Obligation déontologique</strong> : former avec des informations obsolètes nuit aux apprenants</li><li><strong>Employabilité personnelle</strong> : le marché de la formation évolue vite</li></ul></div>
+
+        <div class="theory-block red"><h4>❌ La veille n'est PAS</h4><ul><li>Lire tout ce qui passe dans son fil d'actu → <strong>surcharge cognitive</strong></li><li>Être connecté H24 → <strong>épuisement informationnel</strong></li><li>Partager sans vérifier → <strong>désinformation</strong></li><li>Une activité réservée aux « geeks » → c'est une <strong>compétence métier accessible à tous</strong></li></ul></div>
+
+        <div class="theory-block purple"><h4>💡 Veille active vs passive</h4><ul><li><strong>Passive</strong> : ce qui vient à vous sans effort (newsletters, alertes automatiques)</li><li><strong>Active</strong> : ce que vous allez chercher délibérément (recherches ciblées, exploration de sources)</li><li>L'idéal : <strong>70% passive bien paramétrée + 30% active ciblée</strong></li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S2 -->
+  <section id="s2">
+    <div class="section-label"><div class="icon">🌐</div><h2>S2 — Les sources d'information</h2></div>
+    <div class="seq-block">
+      <div class="seq-progress"><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot"></div><div class="seq-dot"></div><div class="seq-dot"></div><div class="seq-dot"></div></div>
+      <div class="seq-header" onclick="toggleSeq(this)">
+        <span class="seq-badge">S2</span>
+        <span class="seq-title">Sources primaires, secondaires et institutionnelles incontournables FPA</span>
+        <span class="seq-duration">1h</span>
+        <span class="seq-toggle">▾</span>
+      </div>
+      <div class="seq-body">
+        <div class="theory-block blue"><h4>📚 Sources primaires, secondaires, tertiaires</h4><ul><li><strong>Primaires</strong> : textes officiels, études originales, rapports d'institutions (Légifrance, France Compétences)</li><li><strong>Secondaires</strong> : articles qui commentent, analysent, résument les sources primaires (presse spécialisée, blogs)</li><li><strong>Tertiaires</strong> : agrégateurs, encyclopédies, Wikipedia — utiles pour s'orienter, <em>jamais comme référence finale</em></li></ul></div>
+
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:var(--text);margin:18px 0 10px;">Sources institutionnelles incontournables FPA</h4>
+        <table class="data-table">
+          <thead><tr><th>Source</th><th>URL</th><th>Contenu</th><th>Usage FPA</th></tr></thead>
+          <tbody>
+            <tr><td><strong>France Compétences</strong></td><td>francecompetences.fr</td><td>RNCP, certifications, tableaux de bord</td><td>Vérifier les référentiels, actualités CPF</td></tr>
+            <tr><td><strong>DREETS Hauts-de-France</strong></td><td>hauts-de-france.dreets.gouv.fr</td><td>Réglementation régionale, contrôle formation</td><td>Obligations légales, contrôles</td></tr>
+            <tr><td><strong>CARIF-OREF HdF</strong></td><td>c2rp.fr</td><td>Offre formation régionale, données emploi</td><td>Contexte régional, débouchés</td></tr>
+            <tr><td><strong>Légifrance</strong></td><td>legifrance.gouv.fr</td><td>Textes de loi, décrets, jurisprudence</td><td>Vérification réglementaire</td></tr>
+            <tr><td><strong>France Travail</strong></td><td>francetravail.fr</td><td>Offres emploi, statistiques, fiches métiers</td><td>Besoins terrain, débouchés apprenants</td></tr>
+            <tr><td><strong>Mon Compte Formation</strong></td><td>moncompteformation.gouv.fr</td><td>Catalogue CPF, certifications éligibles</td><td>Positionnement offre de formation</td></tr>
+            <tr><td><strong>Eduscol</strong></td><td>eduscol.education.fr</td><td>Ressources pédagogiques, référentiels</td><td>Méthodes pédagogiques</td></tr>
+            <tr><td><strong>AFPA / INFFP</strong></td><td>afpa.fr / inffp.com</td><td>Ressources formateurs, publications</td><td>Pratiques professionnelles FPA</td></tr>
+          </tbody>
+        </table>
+
+        <div class="theory-block"><h4>📰 Médias spécialisés formation</h4><ul><li><strong>Centre Inffo</strong> (centreinffo.fr) : actualité de la formation professionnelle, référence nationale</li><li><strong>Actualité de la Formation</strong> : newsletter hebdomadaire synthétique</li><li><strong>Thot Cursus</strong> (cursus.edu) : pédagogie numérique, ressources éducatives</li><li><strong>e-learning letter</strong> : outils et tendances e-learning</li><li><strong>Formateur Pro</strong> (formateurpro.fr) : blog pratique pour formateurs</li></ul></div>
+
+        <div class="theory-block green"><h4>✅ Critères de sélection d'une source</h4><ul><li>Auteur <strong>identifié et qualifié</strong></li><li>Date de publication <strong>récente</strong> ou mise à jour signalée</li><li>Institution ou éditeur <strong>reconnu</strong></li><li>Sources <strong>citées et vérifiables</strong></li><li>Absence de <strong>conflit d'intérêt</strong> apparent</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3 -->
+  <section id="s3">
+    <div class="section-label"><div class="icon">🛠️</div><h2>S3 — Les outils de veille</h2></div>
+    <div class="seq-block">
+      <div class="seq-progress"><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot"></div><div class="seq-dot"></div><div class="seq-dot"></div></div>
+      <div class="seq-header" onclick="toggleSeq(this)">
+        <span class="seq-badge">S3</span>
+        <span class="seq-title">Google Alertes, Feedly, LinkedIn, newsletters et podcasts</span>
+        <span class="seq-duration">1h</span>
+        <span class="seq-toggle">▾</span>
+      </div>
+      <div class="seq-body">
+        <div class="theory-block blue"><h4>🔔 Google Alertes — guide complet</h4><ul><li><strong>Accès :</strong> google.fr/alerts</li><li><strong>Principe :</strong> Google surveille le web et vous envoie un email dès qu'un nouveau contenu correspond à votre mot-clé</li><li><strong>Opérateurs avancés :</strong> <code>"formateur professionnel"</code> (exact), <code>formation -CPF</code> (exclusion), <code>site:legifrance.gouv.fr</code> (source précise)</li><li><strong>Alertes utiles FPA :</strong> "réforme formation professionnelle", "Qualiopi actualité", "ingénierie pédagogique", "IA en formation"</li><li><strong>Limite :</strong> couverture partielle du web → compléter avec d'autres outils</li></ul></div>
+
+        <div class="theory-block"><h4>📡 Feedly — agrégateur RSS</h4><ul><li><strong>Principe RSS :</strong> les sites publient un flux XML mis à jour automatiquement → Feedly lit tous vos flux en un seul endroit</li><li><strong>Créer un compte gratuit :</strong> feedly.com</li><li><strong>Organiser en Collections :</strong> "Réglementation", "Pédagogie", "Outils numériques", "Sectoriel"</li><li><strong>Flux RSS recommandés FPA :</strong> Centre Inffo, Thot Cursus, France Compétences, Légifrance (JO), blog AFPA</li><li><strong>Limite gratuit :</strong> 100 sources — largement suffisant pour débuter</li></ul></div>
+
+        <div class="theory-block purple"><h4>💼 LinkedIn — veille professionnelle</h4><ul><li><strong>Hashtags à suivre :</strong> #formation #FPA #Qualiopi #ingénieriepédagogique #elearning #EdTech #ForPro</li><li><strong>Groupes :</strong> "Formateurs Professionnels d'Adultes France", "E-learning &amp; Formation"</li><li><strong>Suivre des experts :</strong> chercher "formateur", "ingénieur pédagogique", "directeur formation"</li><li><strong>Créer ses propres posts de veille :</strong> partager et commenter renforce la mémorisation</li></ul></div>
+
+        <div class="theory-block green"><h4>✅ Newsletters spécialisées recommandées</h4><ul><li><strong>Centre Inffo Hebdo</strong> : synthèse réglementaire et actus formation — gratuite</li><li><strong>Thot Cursus</strong> : pédagogie numérique — hebdomadaire gratuite</li><li><strong>e-learning letter</strong> : outils e-learning — mensuelle</li><li><strong>FFP newsletter</strong> : actualités de la branche</li></ul></div>
+
+        <div class="theory-block"><h4>🎧 Podcasts formateurs (5 recommandés)</h4><ul><li><strong>"Apprendre à apprendre"</strong> (Yann Leroux) : neurosciences et pédagogie</li><li><strong>"Les Formateurs"</strong> : interviews de formateurs praticiens</li><li><strong>"Formation 2.0"</strong> : outils numériques en formation</li><li><strong>"Le Podcast Formation"</strong> (Centre Inffo) : actualités réglementaires</li><li><strong>"Work In Progress"</strong> : travail, formation, compétences</li></ul></div>
+
+        <div class="theory-block purple"><h4>💡 Outils de curation</h4><ul><li><strong>Pocket</strong> (getpocket.com) : sauvegarder des articles pour lecture différée, synchronisé mobile/desktop</li><li><strong>Scoop.it</strong> : créer une revue de presse thématique en ligne, partageable</li><li><strong>Pearltrees</strong> : organiser ses ressources web en arborescences visuelles</li><li><strong>Notion / OneNote</strong> : créer une base de connaissance personnelle organisée par thématique</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 -->
+  <section id="s4">
+    <div class="section-label"><div class="icon">📅</div><h2>S4 — Organiser sa veille</h2></div>
+    <div class="seq-block">
+      <div class="seq-progress"><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot"></div><div class="seq-dot"></div></div>
+      <div class="seq-header" onclick="toggleSeq(this)">
+        <span class="seq-badge">S4</span>
+        <span class="seq-title">Construire son système de veille : thématiques, sources, outils, fréquence</span>
+        <span class="seq-duration">45 min</span>
+        <span class="seq-toggle">▾</span>
+      </div>
+      <div class="seq-body">
+        <div class="theory-block blue"><h4>📌 Étape 1 — Définir ses thématiques (3 à 5 max)</h4><p>Trop large = surcharge · Trop étroit = manques importants. Exemple FPA : (1) Réglementation formation, (2) Pédagogie active et numérique, (3) Mon secteur d'enseignement. <strong>Revoir ses thématiques tous les 6 mois.</strong></p></div>
+
+        <div class="theory-block"><h4>🔍 Étape 2 — Sélectionner ses sources (5 à 10 max par thématique)</h4><p>Règle : <strong>1 source institutionnelle + 1 média spécialisé + 1 réseau pro</strong> par thématique minimum. Tester pendant 1 mois, désabonner si peu de valeur ajoutée.</p></div>
+
+        <div class="theory-block orange"><h4>⚠️ Étape 3 — Choisir ses outils (2 à 3 max)</h4><p>Ne pas multiplier les outils → dispersion. <strong>Combinaison recommandée débutant :</strong> Google Alertes + Feedly + 1 newsletter.</p></div>
+
+        <div class="theory-block green"><h4>✅ La règle des 3 niveaux de traitement</h4><ul><li><strong>Scanner</strong> (2-3 min/jour) : regarder les titres, ne garder que ce qui est pertinent</li><li><strong>Lire</strong> (15-20 min/semaine) : lire en diagonale ce qui a été retenu, annoter</li><li><strong>Archiver / Partager</strong> (30 min/mois) : classer, intégrer dans ses supports, partager en équipe</li></ul></div>
+
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:var(--text);margin:18px 0 10px;">Fréquence recommandée</h4>
+        <table class="data-table">
+          <thead><tr><th>Fréquence</th><th>Durée</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Quotidienne légère</strong></td><td>10 min</td><td>Scan des alertes et Feedly</td></tr>
+            <tr><td><strong>Hebdomadaire approfondie</strong></td><td>30 min</td><td>Lecture, annotations, partage</td></tr>
+            <tr><td><strong>Mensuelle stratégique</strong></td><td>1h</td><td>Bilan, mise à jour des sources, intégration dans les cours</td></tr>
+          </tbody>
+        </table>
+
+        <div class="theory-block red"><h4>🚫 Éviter la surcharge informationnelle</h4><ul><li>Limiter à <strong>30 min de veille par jour maximum</strong></li><li>Désabonnements réguliers (tous les 3 mois)</li><li>Accepter de <strong>ne pas tout lire</strong> : la veille parfaite n'existe pas</li><li>Différencier urgent / important / intéressant</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 -->
+  <section id="s5">
+    <div class="section-label"><div class="icon">🔬</div><h2>S5 — Évaluer et trier l'information</h2></div>
+    <div class="seq-block">
+      <div class="seq-progress"><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot"></div></div>
+      <div class="seq-header" onclick="toggleSeq(this)">
+        <span class="seq-badge">S5</span>
+        <span class="seq-title">Méthode CRAAP, biais cognitifs et droits d'auteur</span>
+        <span class="seq-duration">45 min</span>
+        <span class="seq-toggle">▾</span>
+      </div>
+      <div class="seq-body">
+        <h4 style="font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;color:var(--text);margin:10px 0 10px;">La méthode CRAAP — guide complet</h4>
+        <table class="data-table">
+          <thead><tr><th>Lettre</th><th>Critère</th><th>Questions à poser</th><th>Exemple FPA</th></tr></thead>
+          <tbody>
+            <tr><td><strong>C</strong></td><td>Currency (Actualité)</td><td>Quand a été publiée l'info ? A-t-elle été mise à jour ?</td><td>Un article sur le CPF de 2018 est obsolète depuis la réforme 2019</td></tr>
+            <tr><td><strong>R</strong></td><td>Relevance (Pertinence)</td><td>L'info répond-elle à mon besoin ? Est-ce le bon niveau de détail ?</td><td>Un article sur la formation en entreprise est-il pertinent pour mon contexte ?</td></tr>
+            <tr><td><strong>A</strong></td><td>Authority (Autorité)</td><td>Qui a écrit ? Quelle est son expertise ? Quelle institution ?</td><td>Article signé par un juriste en droit de la formation &gt; article anonyme</td></tr>
+            <tr><td><strong>A</strong></td><td>Accuracy (Exactitude)</td><td>Les sources sont-elles citées ? Peut-on vérifier les chiffres ?</td><td>"80% des formations sont efficaces" sans source = à rejeter</td></tr>
+            <tr><td><strong>P</strong></td><td>Purpose (Intention)</td><td>Pourquoi cette info a-t-elle été publiée ? Vend-on quelque chose ?</td><td>Article sur les LMS publié par un vendeur de LMS = biaisé</td></tr>
+          </tbody>
+        </table>
+
+        <div class="theory-block orange"><h4>⚠️ Biais cognitifs à connaître</h4><ul><li><strong>Biais de confirmation</strong> : on retient les infos qui confirment ce qu'on croit déjà. Ex : un formateur convaincu que la classe inversée ne marche pas ne retient que les articles négatifs</li><li><strong>Bulle de filtre</strong> : les algorithmes vous montrent ce que vous avez déjà aimé → vision déformée</li><li><strong>Effet de vérité illusoire</strong> : une info répétée souvent semble vraie même si elle est fausse</li><li><strong>Biais d'autorité</strong> : faire confiance à une info uniquement parce qu'elle vient d'un "expert"</li></ul></div>
+
+        <div class="theory-block green"><h4>✅ La règle des 3 sources</h4><p>Toute information importante doit être retrouvée dans <strong>au moins 3 sources indépendantes</strong>. Les 3 sources ne doivent pas toutes citer la même source primaire. Toujours remonter à la <strong>source primaire</strong> quand c'est possible.</p></div>
+
+        <div class="theory-block purple"><h4>💡 Droits d'auteur et citation</h4><ul><li>Toujours <strong>citer la source</strong> (auteur, titre, date, URL)</li><li><strong>Exception pédagogique</strong> : usage possible de courts extraits dans un cadre non commercial</li><li><strong>Images</strong> : utiliser des banques libres de droits (Unsplash, Pixabay, Freepik CC)</li><li>Ne jamais copier-coller un article entier dans ses supports</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6 -->
+  <section id="s6">
+    <div class="section-label"><div class="icon">📢</div><h2>S6 — Partager et valoriser sa veille</h2></div>
+    <div class="seq-block">
+      <div class="seq-progress"><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div><div class="seq-dot done"></div></div>
+      <div class="seq-header" onclick="toggleSeq(this)">
+        <span class="seq-badge">S6</span>
+        <span class="seq-title">Partager en équipe, intégrer dans ses cours et documenter pour Qualiopi</span>
+        <span class="seq-duration">30 min</span>
+        <span class="seq-toggle">▾</span>
+      </div>
+      <div class="seq-body">
+        <div class="theory-block"><h4>👥 Partager en équipe pédagogique</h4><ul><li><strong>Réunion de veille mensuelle</strong> (30 min) : chacun apporte 1 info pertinente</li><li>Canal Slack/Teams dédié "Veille formateurs" avec rubriques thématiques</li><li><strong>Newsletter interne</strong> mensuelle : synthèse des infos importantes du mois</li><li>Bibliothèque partagée de ressources (Google Drive, SharePoint, Notion)</li></ul></div>
+
+        <div class="theory-block blue"><h4>📚 Intégrer dans ses cours</h4><ul><li>Actualiser systématiquement les <strong>exemples et chiffres</strong> à chaque session</li><li>Créer une rubrique <strong>"Actualité du secteur"</strong> en début de chaque module</li><li>Partager des ressources avec les apprenants (liens, articles, podcasts)</li><li>Mettre à jour les <strong>études de cas</strong> avec des situations récentes</li></ul></div>
+
+        <div class="theory-block orange"><h4>⚠️ Traçabilité Qualiopi — indicateur 2</h4><ul><li><strong>Ce que l'auditeur vérifie :</strong> preuves que le formateur actualise ses compétences et ses contenus</li><li><strong>Preuves acceptées :</strong> attestations de formation, certifications, articles publiés, conférences, compte-rendu de veille documenté</li><li><strong>Comment documenter :</strong> journal de veille daté (tableur ou Notion), captures d'écran des sources consultées</li><li><strong>Fréquence recommandée :</strong> au moins 1 action de veille documentée par trimestre par formateur</li></ul></div>
+
+        <div class="theory-block purple"><h4>💡 Construire sa réputation d'expert</h4><ul><li>Partager sa veille sur <strong>LinkedIn</strong> : commentaires, articles, reposts avec valeur ajoutée</li><li>Contribuer à des <strong>forums professionnels</strong> (FFP, groupes LinkedIn)</li><li>Proposer des articles à des médias spécialisés (Thot Cursus accepte les contributions)</li><li>Créer un <strong>portefeuille de ressources public</strong> (Scoop.it, Pearltrees)</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="section-label"><div class="icon">❓</div><h2>Quiz — 10 questions</h2></div>
+    <div class="quiz-intro">
+      <span>Cliquez sur une question pour révéler la réponse. Testez vos connaissances avant de regarder.</span>
+      <span class="quiz-score-box" id="quizScore">0 / 10 révélées</span>
+    </div>
+    <div class="quiz-container" id="quizContainer">
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q1</span><div class="quiz-q-text">Donnez une définition complète de la veille informationnelle pour un formateur.<div class="quiz-hint">Source : S1 — C'est quoi la veille ?</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>La veille informationnelle est un <strong>processus continu, organisé et délibéré</strong> de surveillance de son environnement informationnel. Pour un formateur, c'est l'ensemble des actions qui permettent de rester à jour sur son <strong>domaine, ses méthodes, sa réglementation et ses outils</strong>.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q2</span><div class="quiz-q-text">Citez les 4 types de veille du formateur avec 1 exemple concret pour chacun.<div class="quiz-hint">Source : S1 — Les 4 types de veille</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>🎓 Pédagogique :</strong> classe inversée, neurosciences de l'apprentissage. <strong>⚖️ Juridique :</strong> réforme CPF, modifications Qualiopi. <strong>💻 Technologique :</strong> nouveaux LMS, outils IA en formation. <strong>🏭 Sectorielle :</strong> évolutions métiers, certifications sectorielles.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q3</span><div class="quiz-q-text">Quelle est la différence entre une source primaire et une source secondaire ? Donnez 2 exemples de chaque dans le contexte FPA.<div class="quiz-hint">Source : S2 — Les sources d'information</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>Primaires :</strong> textes officiels, études originales. Ex : Légifrance (texte de loi), France Compétences (rapport officiel). <strong>Secondaires :</strong> articles qui analysent les sources primaires. Ex : article Centre Inffo sur une réforme, blog d'un expert formation.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q4</span><div class="quiz-q-text">À quoi sert France Compétences ? Que peut-on y trouver concrètement ?<div class="quiz-hint">Source : S2 — Sources institutionnelles</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>France Compétences est l'<strong>autorité nationale de financement, de régulation, de contrôle et d'évaluation</strong> de la formation professionnelle. On y trouve : les fiches <strong>RNCP</strong> (référentiels de certification), les certifications éligibles au <strong>CPF</strong>, les <strong>tableaux de bord</strong> du marché de la formation et les actualités réglementaires.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q5</span><div class="quiz-q-text">Expliquez le principe d'un flux RSS et comment Feedly l'utilise.<div class="quiz-hint">Source : S3 — Les outils de veille</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>Un <strong>flux RSS</strong> est un fichier XML mis à jour automatiquement par un site dès qu'un nouveau contenu est publié. <strong>Feedly</strong> se connecte à plusieurs flux RSS simultanément et affiche tous les nouveaux articles en un seul endroit, comme une "revue de presse automatique". Il permet d'organiser ses sources en <strong>Collections thématiques</strong> et de sauvegarder des articles pour lecture différée.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q6</span><div class="quiz-q-text">Développez les 5 lettres de la méthode CRAAP et donnez la question à poser pour chacune.<div class="quiz-hint">Source : S5 — Évaluer l'information</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>C — Currency :</strong> Quand a été publiée l'info ? <strong>R — Relevance :</strong> L'info répond-elle à mon besoin ? <strong>A — Authority :</strong> Qui a écrit, quelle est son expertise ? <strong>A — Accuracy :</strong> Les sources sont-elles citées, les chiffres vérifiables ? <strong>P — Purpose :</strong> Pourquoi cette info a-t-elle été publiée, y a-t-il un intérêt commercial ?</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q7</span><div class="quiz-q-text">Définissez le biais de confirmation et donnez un exemple concret dans le travail d'un formateur.<div class="quiz-hint">Source : S5 — Biais cognitifs</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p>Le <strong>biais de confirmation</strong> est la tendance à chercher, interpréter et retenir les informations qui confirment ce que l'on croit déjà, en ignorant les preuves contraires. Exemple : un formateur <strong>convaincu que la classe inversée ne fonctionne pas</strong> ne retiendra que les articles négatifs sur cette méthode et ignorera les études positives, faussant sa veille et sa pratique.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q8</span><div class="quiz-q-text">Quel indicateur Qualiopi est lié à la veille ? Citez 3 preuves qu'un formateur peut apporter.<div class="quiz-hint">Source : S6 — Traçabilité Qualiopi</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>Indicateur 2</strong> — actualisation des compétences du personnel de formation. Preuves acceptées : <strong>attestations de formation</strong> suivie, <strong>journal de veille daté</strong> (tableur ou Notion), <strong>articles publiés</strong> ou contributions à des médias spécialisés, <strong>compte-rendu de réunion de veille</strong>, certifications obtenues.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q9</span><div class="quiz-q-text">Décrivez la règle des 3 niveaux de traitement de l'information (scanner/lire/archiver) avec le temps recommandé pour chaque niveau.<div class="quiz-hint">Source : S4 — Organiser sa veille</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>Scanner (2-3 min/jour) :</strong> regarder uniquement les titres et sous-titres, éliminer 80% du contenu, ne garder que ce qui est vraiment pertinent. <strong>Lire (15-20 min/semaine) :</strong> lire en diagonale les articles retenus, annoter les points clés. <strong>Archiver/Partager (30 min/mois) :</strong> classer, intégrer les informations importantes dans ses supports de formation, partager en équipe.</p></div>
+      </div>
+
+      <div class="quiz-item" onclick="revealQuiz(this)">
+        <div class="quiz-question"><span class="quiz-q-icon">Q10</span><div class="quiz-q-text">Comment intégrer concrètement sa veille dans ses cours ? Donnez 3 exemples pratiques.<div class="quiz-hint">Source : S6 — Intégrer dans ses cours</div></div></div>
+        <div class="quiz-reveal"><div class="answer-label">✅ Réponse</div><p><strong>1.</strong> Actualiser systématiquement les <strong>exemples et chiffres</strong> à chaque session (ne pas laisser des données de 2019 dans un cours de 2026). <strong>2.</strong> Créer une rubrique <strong>"Actualité du secteur"</strong> en début de chaque module (5 min d'actualité liée au thème). <strong>3.</strong> Mettre à jour les <strong>études de cas et scénarios</strong> avec des situations récentes issues de sa veille sectorielle.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CAS PRATIQUES -->
+  <section id="cas">
+    <div class="section-label"><div class="icon">💼</div><h2>Cas pratiques — 4 exercices</h2></div>
+
+    <div class="cas-block">
+      <div class="cas-header">
+        <span class="cas-num">CAS 1</span>
+        <span class="cas-title">L'apprenant et la fausse info</span>
+      </div>
+      <div class="cas-body">
+        <div class="scenario-box"><div class="scenario-label">📖 Situation</div>Vous animez un module sur le CPF. Un apprenant intervient et affirme avec conviction : « J'ai lu sur Facebook que le CPF va être supprimé en 2025, c'est officiel. » Plusieurs apprenants semblent le croire. L'info est fausse.</div>
+        <ul class="questions-list">
+          <li><span class="q-bullet">Q1</span>Comment réagissez-vous en direct sans humilier l'apprenant ni créer un conflit ?</li>
+          <li><span class="q-bullet">Q2</span>Comment vérifiez-vous l'information devant le groupe en temps réel ?</li>
+          <li><span class="q-bullet">Q3</span>Comment transformez-vous ce moment en apprentissage sur l'évaluation des sources ?</li>
+          <li><span class="q-bullet">Q4</span>Que faites-vous après la séance pour prévenir ce type de situation à l'avenir ?</li>
+        </ul>
+        <button class="toggle-solution-btn" onclick="toggleSolution(this)">🔍 Voir les éléments de réponse</button>
+        <div class="cas-solution">
+          <div class="solution-label">Éléments de réponse</div>
+          <div class="solution-item"><span class="sol-num">Q1</span><span>Valoriser la prise de parole : « Merci de partager ça. C'est exactement le genre d'information qui circule et qu'on doit vérifier ensemble. » Jamais de "c'est faux" frontal. <strong>Désamorcer en collectivisant</strong> : "Est-ce que d'autres ont vu cette information ?"</span></div>
+          <div class="solution-item"><span class="sol-num">Q2</span><span>Aller en direct sur <strong>francecompetences.fr</strong> et sur <strong>moncompteformation.gouv.fr</strong>. Montrer qu'aucune trace de suppression n'y figure. Expliquer pourquoi ces sources sont les référentes. <strong>Méthode CRAAP en 2 min</strong> : qui a publié sur Facebook ? Quelle autorité ? Quelle date ?</span></div>
+          <div class="solution-item"><span class="sol-num">Q3</span><span>Transformer en séquence d'apprentissage : <strong>"Ça tombe bien, on va voir exactement comment vérifier une information."</strong> Appliquer la méthode CRAAP sur l'info Facebook devant le groupe. C'est le meilleur cas pratique possible : réel, concret, impliquant.</span></div>
+          <div class="solution-item"><span class="sol-num">Q4</span><span>Créer une alerte Google sur "CPF suppression" pour monitorer les rumeurs futures. <strong>Intégrer dans le cours</strong> une séquence courte sur l'évaluation des sources. Préparer une liste de 3 sources officielles à donner aux apprenants.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cas-block">
+      <div class="cas-header">
+        <span class="cas-num">CAS 2</span>
+        <span class="cas-title">Construire une veille de A à Z</span>
+      </div>
+      <div class="cas-body">
+        <div class="scenario-box"><div class="scenario-label">📖 Situation</div>Vous êtes missionné pour créer un nouveau module sur l'intégration de l'IA dans les pratiques de formation. Vous partez de zéro sur ce sujet. Vous avez 2 semaines avant la première session.</div>
+        <ul class="questions-list">
+          <li><span class="q-bullet">Q1</span>Définissez vos 3 thématiques de veille prioritaires sur ce sujet</li>
+          <li><span class="q-bullet">Q2</span>Identifiez 5 sources pertinentes et expliquez pourquoi vous les choisissez</li>
+          <li><span class="q-bullet">Q3</span>Quels outils mettez-vous en place et comment les paramétrez-vous ?</li>
+          <li><span class="q-bullet">Q4</span>Au bout de 2 semaines, comment organisez-vous et intégrez-vous ce que vous avez trouvé ?</li>
+        </ul>
+        <button class="toggle-solution-btn" onclick="toggleSolution(this)">🔍 Voir les éléments de réponse</button>
+        <div class="cas-solution">
+          <div class="solution-label">Éléments de réponse</div>
+          <div class="solution-item"><span class="sol-num">Q1</span><span>Thématiques : <strong>(1) Outils IA en formation</strong> (ChatGPT, Midjourney, outils de création de contenu), <strong>(2) Cadre réglementaire IA</strong> (RGPD, règlement IA européen), <strong>(3) Retours d'expérience</strong> de formateurs ayant intégré l'IA.</span></div>
+          <div class="solution-item"><span class="sol-num">Q2</span><span>Sources : <strong>Thot Cursus</strong> (pédagogie numérique, articles réguliers sur l'IA), <strong>LinkedIn #EdTech</strong> (communauté active, cas pratiques), <strong>Blog OpenAI/Anthropic</strong> (sources primaires sur les outils), <strong>e-learning letter</strong> (outils pratiques), <strong>Educpros</strong> (actualité enseignement supérieur et formation).</span></div>
+          <div class="solution-item"><span class="sol-num">Q3</span><span>Créer <strong>3 alertes Google</strong> : "IA formation professionnelle", "ChatGPT formateur", "intelligence artificielle pédagogie". Ajouter Thot Cursus et e-learning letter dans <strong>Feedly</strong>, collection "IA Formation". S'abonner aux <strong>hashtags LinkedIn</strong> #IA #EdTech.</span></div>
+          <div class="solution-item"><span class="sol-num">Q4</span><span>Créer un <strong>tableau de synthèse dans Notion</strong> : colonne outil | cas d'usage | avantages | limites | source. Sélectionner 5 cas concrets à intégrer dans le module. Mettre à jour les objectifs pédagogiques avec les compétences réellement demandées sur le terrain.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cas-block">
+      <div class="cas-header">
+        <span class="cas-num">CAS 3</span>
+        <span class="cas-title">Convaincre un collègue réticent</span>
+      </div>
+      <div class="cas-body">
+        <div class="scenario-box"><div class="scenario-label">📖 Situation</div>Votre collègue formateur Jean-Pierre, 55 ans, 20 ans d'expérience, vous dit : « La veille c'est pour les jeunes et les geeks. Mes cours marchent très bien depuis 20 ans, j'ai pas besoin de ça. » Un audit Qualiopi approche.</div>
+        <ul class="questions-list">
+          <li><span class="q-bullet">Q1</span>Quels arguments factuels utilisez-vous pour le convaincre sans le braquer ?</li>
+          <li><span class="q-bullet">Q2</span>Comment lui montrez-vous que ses cours contiennent des informations obsolètes sans l'humilier ?</li>
+          <li><span class="q-bullet">Q3</span>Proposez-lui un plan de veille minimal et réaliste adapté à son profil</li>
+          <li><span class="q-bullet">Q4</span>Comment l'aidez-vous à documenter sa veille pour l'audit Qualiopi ?</li>
+        </ul>
+        <button class="toggle-solution-btn" onclick="toggleSolution(this)">🔍 Voir les éléments de réponse</button>
+        <div class="cas-solution">
+          <div class="solution-label">Éléments de réponse</div>
+          <div class="solution-item"><span class="sol-num">Q1</span><span>Arguments factuels : <strong>Qualiopi indicateur 2</strong> exige des preuves d'actualisation (risque de non-conformité). <strong>Le CPF a été réformé 3 fois en 5 ans</strong> — ses apprenants l'interrogent sur des données actuelles. <strong>Valoriser son expérience</strong> : "Ton vécu est une base solide, la veille c'est juste pour le maintenir à jour."</span></div>
+          <div class="solution-item"><span class="sol-num">Q2</span><span>Approche indirecte : <strong>"J'ai lu qu'il y avait eu une modification sur [sujet de son cours], tu en as entendu parler ?"</strong> S'il ne sait pas → moment d'ouverture sans humiliation. Lui montrer en comparant son support avec une source officielle récente, en mode <strong>"on découvre ensemble"</strong>.</span></div>
+          <div class="solution-item"><span class="sol-num">Q3</span><span>Plan minimal adapté : <strong>1 alerte Google hebdomadaire</strong> sur son domaine principal. Lecture de <strong>1 newsletter spécialisée</strong> par mois (5 min). Vérification de <strong>France Compétences</strong> tous les 3 mois pour les certifications qu'il dispense. Total : <strong>20 min par mois</strong>.</span></div>
+          <div class="solution-item"><span class="sol-num">Q4</span><span>Partir de ce qu'il fait déjà : <strong>formations continues suivies, conférences, échanges avec des collègues</strong> = déjà de la veille ! Créer avec lui un <strong>simple tableau Excel</strong> "Journal de veille" : date | source consultée | info retenue | modification apportée au cours. Rétrospectivement documenter les 12 derniers mois.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cas-block">
+      <div class="cas-header">
+        <span class="cas-num">CAS 4</span>
+        <span class="cas-title">Urgence Qualiopi</span>
+      </div>
+      <div class="cas-body">
+        <div class="scenario-box"><div class="scenario-label">📖 Situation</div>L'auditeur Qualiopi arrive dans 3 mois. Vous réalisez que vous n'avez aucune trace documentée de votre veille depuis 18 mois. Indicateur 2 : actualisation des compétences du personnel.</div>
+        <ul class="questions-list">
+          <li><span class="q-bullet">Q1</span>Faites le point : quelles preuves de veille avez-vous déjà sans le savoir ?</li>
+          <li><span class="q-bullet">Q2</span>Construisez un plan d'action sur 3 mois pour être en règle lors de l'audit</li>
+          <li><span class="q-bullet">Q3</span>Quel système simple de documentation mettez-vous en place immédiatement ?</li>
+          <li><span class="q-bullet">Q4</span>Le jour de l'audit, comment présentez-vous votre démarche de façon convaincante ?</li>
+        </ul>
+        <button class="toggle-solution-btn" onclick="toggleSolution(this)">🔍 Voir les éléments de réponse</button>
+        <div class="cas-solution">
+          <div class="solution-label">Éléments de réponse</div>
+          <div class="solution-item"><span class="sol-num">Q1</span><span>Preuves existantes sans le savoir : <strong>attestations de formations suivies</strong> (CPF, OPCO), <strong>emails</strong> d'inscription à des newsletters ou webinaires, <strong>certificats de participation</strong> à des conférences, <strong>historique LinkedIn</strong> (partages, commentaires sur des actus formation), <strong>modifications datées</strong> dans ses supports de cours.</span></div>
+          <div class="solution-item"><span class="sol-num">Q2</span><span>Plan 3 mois : <strong>Mois 1</strong> : collecter toutes les preuves existantes, créer le journal de veille, s'inscrire à 2 newsletters. <strong>Mois 2</strong> : suivre 1 webinaire ou formation courte (traçable), documenter 4 actions de veille. <strong>Mois 3</strong> : mettre à jour au moins 1 support de formation avec des données récentes, documenter la mise à jour.</span></div>
+          <div class="solution-item"><span class="sol-num">Q3</span><span>Système immédiat : <strong>tableur partagé</strong> "Journal de veille — [Nom]" avec 5 colonnes : Date | Type de veille (lecture, formation, webinaire) | Source consultée | Information retenue | Action suite à cette veille. Objectif : <strong>1 entrée par semaine minimum</strong>.</span></div>
+          <div class="solution-item"><span class="sol-num">Q4</span><span>Présentation à l'auditeur : <strong>Montrer le journal de veille</strong> et expliquer la démarche mise en place. Présenter <strong>1 exemple concret</strong> : "Suite à cette veille, j'ai mis à jour ce module sur ce point précis." Avoir <strong>2-3 documents</strong> : journal + 1 attestation + 1 support modifié avec date. L'auditeur veut voir une démarche structurée, pas la perfection.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FICHE MEMO -->
+  <section id="memo">
+    <div class="section-label"><div class="icon">📋</div><h2>Fiche mémo</h2></div>
+    <div class="memo-grid">
+      <div class="memo-card">
+        <h4>Les 4 types de veille</h4>
+        <ul>
+          <li>🎓 Pédagogique — méthodes, ingénierie</li>
+          <li>⚖️ Juridique — lois, Qualiopi, RNCP</li>
+          <li>💻 Technologique — IA, LMS, outils</li>
+          <li>🏭 Sectorielle — métiers, emploi</li>
+        </ul>
+      </div>
+      <div class="memo-card">
+        <h4>Méthode CRAAP</h4>
+        <ul>
+          <li>C — Currency (Actualité)</li>
+          <li>R — Relevance (Pertinence)</li>
+          <li>A — Authority (Autorité)</li>
+          <li>A — Accuracy (Exactitude)</li>
+          <li>P — Purpose (Intention)</li>
+        </ul>
+      </div>
+      <div class="memo-card">
+        <h4>Outils essentiels</h4>
+        <ul>
+          <li>Google Alertes — surveillance auto</li>
+          <li>Feedly — agrégateur RSS</li>
+          <li>LinkedIn — réseau pro</li>
+          <li>Pocket — lecture différée</li>
+          <li>Notion / Excel — archivage</li>
+        </ul>
+      </div>
+      <div class="memo-card">
+        <h4>Sources incontournables</h4>
+        <ul>
+          <li>francecompetences.fr — RNCP, CPF</li>
+          <li>legifrance.gouv.fr — textes de loi</li>
+          <li>centreinffo.fr — actus formation</li>
+          <li>c2rp.fr — formation HdF</li>
+          <li>cursus.edu — pédagogie numérique</li>
+        </ul>
+      </div>
+      <div class="memo-card">
+        <h4>3 règles d'or</h4>
+        <ul>
+          <li>Régularité &gt; Quantité</li>
+          <li>Vérifier avant de partager (CRAAP)</li>
+          <li>Documenter pour Qualiopi</li>
+        </ul>
+      </div>
+      <div class="memo-card">
+        <h4>Fréquences recommandées</h4>
+        <ul>
+          <li>10 min/jour — scan alertes</li>
+          <li>30 min/semaine — lecture</li>
+          <li>1h/mois — bilan stratégique</li>
+          <li>1 trace/trimestre — Qualiopi</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function toggleSeq(header) {
+  const block = header.closest('.seq-block');
+  block.classList.toggle('open');
+}
+
+let revealed = 0;
+function revealQuiz(item) {
+  if (!item.classList.contains('revealed')) {
+    item.classList.add('revealed');
+    revealed++;
+    document.getElementById('quizScore').textContent = revealed + ' / 10 révélées';
+  }
+}
+
+function toggleSolution(btn) {
+  const block = btn.closest('.cas-block');
+  const isOpen = block.classList.toggle('open');
+  btn.textContent = isOpen ? '🔍 Masquer les éléments de réponse' : '🔍 Voir les éléments de réponse';
+}
+
+// Scroll-spy
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = document.querySelectorAll('section[id]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

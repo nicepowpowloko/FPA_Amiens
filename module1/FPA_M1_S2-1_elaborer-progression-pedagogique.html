@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPA – M1 / S2.1 – Elaborer la progression pédagogique d'une formation multimodale</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #2C3F77;
+    --navy-dark: #1e2d57;
+    --navy-light: #3a518f;
+    --gold: #A0896A;
+    --gold-light: #c4a882;
+    --gold-pale: #f5efe6;
+    --white: #ffffff;
+    --gray-light: #f0f2f8;
+    --gray-mid: #d0d6e8;
+    --text: #1a2240;
+    --success: #2e7d52;
+    --error: #b93232;
+    --success-bg: #e8f5ee;
+    --error-bg: #fdeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--text); line-height: 1.7; }
+
+  header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    color: var(--white); padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .header-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .badge-module { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .badge-seq { background: rgba(255,255,255,0.15); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); }
+  .badge-reac { background: rgba(160,137,106,0.3); color: var(--gold-light); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  .badge-duree { margin-left: auto; background: rgba(255,255,255,0.1); color: var(--gold-light); font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  header h2 { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.7); }
+
+  .objectifs-bar { background: var(--white); border-left: 4px solid var(--gold); margin: 1.5rem 2rem; padding: 1.2rem 1.5rem; border-radius: 0 6px 6px 0; box-shadow: 0 2px 8px rgba(44,63,119,0.08); }
+  .objectifs-bar h3 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.8rem; }
+  .objectifs-bar ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .objectifs-bar ul li { background: var(--gold-pale); color: var(--navy); font-size: 0.85rem; font-weight: 500; padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid rgba(160,137,106,0.25); }
+  .objectifs-bar ul li::before { content: '✓ '; color: var(--gold); font-weight: 700; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+  .section-title { display: flex; align-items: center; gap: 0.8rem; margin: 2rem 0 1rem; }
+  .section-title .num { background: var(--navy); color: var(--white); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-title h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); }
+
+  .accordion { background: var(--white); border-radius: 8px; margin-bottom: 0.6rem; box-shadow: 0 2px 6px rgba(44,63,119,0.07); overflow: hidden; border: 1px solid var(--gray-mid); }
+  .accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem; cursor: pointer; user-select: none; transition: background 0.2s; }
+  .accordion-header:hover { background: var(--gray-light); }
+  .accordion-header.active { background: var(--navy); color: var(--white); }
+  .accordion-header h3 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+  .accordion-arrow { font-size: 0.8rem; transition: transform 0.3s; color: var(--gold); }
+  .accordion-header.active .accordion-arrow { transform: rotate(180deg); color: var(--gold-light); }
+  .accordion-body { display: none; padding: 1.3rem 1.5rem; border-top: 1px solid var(--gray-mid); }
+  .accordion-body.open { display: block; }
+  .accordion-body p { margin-bottom: 0.8rem; font-size: 0.93rem; }
+  .accordion-body ul, .accordion-body ol { margin: 0.5rem 0 0.8rem 1.2rem; font-size: 0.93rem; }
+  .accordion-body li { margin-bottom: 0.4rem; }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--navy); color: var(--white); padding: 0.7rem 1rem; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--gray-mid); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  tr:hover td { background: var(--gold-pale); }
+
+  .encadre { border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem; }
+  .encadre.info { background: #e8edf8; border-left: 4px solid var(--navy); }
+  .encadre.tip { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .encadre.warning { background: #fff8e6; border-left: 4px solid #e6a817; }
+  .encadre.reac { background: #f0edf8; border-left: 4px solid #6b52a8; }
+  .encadre strong { display: block; margin-bottom: 0.4rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+
+  /* PROGRESSION VISUELLE */
+  .progression-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1rem 0;
+    position: relative;
+  }
+  .progression-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    position: relative;
+  }
+  .step-num {
+    background: var(--navy);
+    color: var(--white);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .step-content {
+    flex: 1;
+    padding-top: 0.2rem;
+  }
+  .step-content strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--navy);
+    margin-bottom: 0.2rem;
+  }
+  .step-content span {
+    font-size: 0.85rem;
+    color: #555;
+  }
+  .progression-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 40px;
+    bottom: 0;
+    width: 2px;
+    background: var(--gray-mid);
+  }
+
+  /* MULTIMODALITE GRID */
+  .multi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+  .multi-card {
+    background: var(--white);
+    border: 1px solid var(--gray-mid);
+    border-radius: 8px;
+    padding: 1rem;
+    border-top: 3px solid var(--navy);
+  }
+  .multi-card.gold { border-top-color: var(--gold); }
+  .multi-card h4 {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .multi-card.gold h4 { color: var(--gold); }
+  .multi-card p { font-size: 0.83rem; color: #555; margin-bottom: 0.4rem; }
+  .multi-card ul { list-style: none; font-size: 0.82rem; }
+  .multi-card ul li { padding: 0.15rem 0; }
+  .multi-card ul li::before { content: '→ '; color: var(--gold); font-weight: 700; }
+
+  /* TABLEAU PROGRESSION */
+  .prog-table-wrapper {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+  .prog-table-header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.8rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cas-pratique { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); color: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0 1rem; }
+  .cas-pratique .cp-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
+  .cas-pratique .cp-badge { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .cas-pratique h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .cas-pratique .scenario { background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6; }
+  .cas-pratique .consignes p { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 0.5rem; }
+  .cas-pratique ol { margin-left: 1.2rem; font-size: 0.9rem; }
+  .cas-pratique ol li { margin-bottom: 0.4rem; }
+  .toggle-correction { background: var(--gold); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 1rem; }
+  .toggle-correction:hover { background: var(--gold-light); }
+  .correction { display: none; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+  .correction.open { display: block; }
+  .correction h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 0.7rem; }
+  .correction ul { margin-left: 1.2rem; }
+  .correction li { margin-bottom: 0.5rem; }
+  .correction table { font-size: 0.82rem; margin-top: 0.5rem; }
+  .correction th { background: rgba(255,255,255,0.2); color: var(--white); padding: 0.5rem 0.8rem; font-size: 0.78rem; }
+  .correction td { padding: 0.5rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--white); background: transparent; }
+  .correction tr:nth-child(even) td { background: rgba(255,255,255,0.05); }
+  .correction tr:hover td { background: rgba(255,255,255,0.08); }
+
+  .quiz-section { background: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0; box-shadow: 0 2px 10px rgba(44,63,119,0.1); border: 1px solid var(--gray-mid); }
+  .quiz-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--gray-light); }
+  .quiz-badge { background: var(--navy); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .quiz-section h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); }
+  .question { margin-bottom: 1.5rem; }
+  .question p { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.7rem; color: var(--navy); }
+  .option { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.4rem; cursor: pointer; border: 2px solid var(--gray-mid); transition: all 0.2s; font-size: 0.9rem; }
+  .option:hover { border-color: var(--navy); background: var(--gray-light); }
+  .option input[type="radio"] { margin-top: 2px; accent-color: var(--navy); }
+  .option.correct { border-color: var(--success); background: var(--success-bg); }
+  .option.incorrect { border-color: var(--error); background: var(--error-bg); }
+  .feedback { display: none; font-size: 0.85rem; padding: 0.6rem 0.8rem; border-radius: 4px; margin-top: 0.3rem; }
+  .feedback.correct { background: var(--success-bg); color: var(--success); display: block; }
+  .feedback.incorrect { background: var(--error-bg); color: var(--error); display: block; }
+  .quiz-btn { background: var(--navy); color: var(--white); border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; transition: background 0.2s; }
+  .quiz-btn:hover { background: var(--navy-light); }
+  .quiz-score { display: none; margin-top: 1rem; padding: 1rem; border-radius: 6px; text-align: center; font-weight: 600; font-size: 1rem; }
+  .quiz-score.show { display: block; }
+  .quiz-score.good { background: var(--success-bg); color: var(--success); }
+  .quiz-score.bad { background: var(--error-bg); color: var(--error); }
+
+  footer { text-align: center; padding: 2rem; color: rgba(44,63,119,0.4); font-size: 0.8rem; border-top: 1px solid var(--gray-mid); margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .objectifs-bar { margin: 1rem; }
+    main { padding: 0 1rem 2rem; }
+    .multi-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge-module">FPA – M1</span>
+    <span class="badge-seq">Séquence S2.1</span>
+    <span class="badge-reac">CP1 REAC RNCP37275</span>
+    <span class="badge-duree">⏱ 1 h</span>
+  </div>
+  <h1>Elaborer la progression pédagogique d'une formation multimodale</h1>
+  <h2>Elaborer la progression pédagogique d'une formation multimodale à partir d'une demande</h2>
+</header>
+
+<div class="objectifs-bar">
+  <h3>Objectifs pédagogiques</h3>
+  <ul>
+    <li>Définir et structurer une progression pédagogique</li>
+    <li>Décliner les objectifs de formation en objectifs pédagogiques</li>
+    <li>Intégrer la multimodalité dans la progression</li>
+    <li>Construire un tableau de progression complet</li>
+    <li>Respecter le cahier des charges et soumettre la progression</li>
+  </ul>
+</div>
+
+<main>
+
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>Apports théoriques</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📐</span> Qu'est-ce qu'une progression pédagogique ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La <strong>progression pédagogique</strong> est le document qui structure l'ensemble d'une formation de manière logique et progressive. Elle organise les apprentissages dans un ordre qui permet aux apprenants de construire leurs compétences pas à pas, du niveau actuel au niveau cible.</p>
+      <p>Selon le REAC FPA (CP1), elle constitue le livrable central attendu du formateur en amont de toute animation. Elle est soumise au responsable de formation ou au commanditaire avant le démarrage.</p>
+      <div class="encadre reac">
+        <strong>📋 Attendu REAC – CP1</strong>
+        Le formateur "structure l'ensemble de la formation sous forme d'une <strong>progression pédagogique et d'un plan d'accompagnement</strong>", en s'appuyant sur les objectifs de formation définis à partir de l'analyse de la demande. Le dossier technique présenté au jury FPA comprend entre 8 et 12 pages sur cette seule compétence.
+      </div>
+      <p>Une progression pédagogique bien construite répond à 5 questions fondamentales :</p>
+      <div class="progression-steps">
+        <div class="progression-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Quoi ? — Les objectifs</strong>
+            <span>Que doit savoir/faire/être l'apprenant à l'issue de chaque étape ?</span>
+          </div>
+        </div>
+        <div class="progression-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Dans quel ordre ? — La séquence</strong>
+            <span>Du plus simple au plus complexe, du connu vers l'inconnu, du général au particulier</span>
+          </div>
+        </div>
+        <div class="progression-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Comment ? — Les modalités</strong>
+            <span>Présentiel, distanciel synchrone/asynchrone, AFEST, hybride… justifiés par le contexte</span>
+          </div>
+        </div>
+        <div class="progression-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Combien de temps ? — Les durées</strong>
+            <span>Répartition cohérente entre découverte, pratique, évaluation et accompagnement</span>
+          </div>
+        </div>
+        <div class="progression-step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <strong>Comment savoir si c'est acquis ? — L'évaluation</strong>
+            <span>Évaluation diagnostique, formative et sommative intégrées à la progression</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🔗</span> Des objectifs de formation aux objectifs pédagogiques</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La progression pédagogique repose sur une <strong>déclinaison en cascade</strong> des objectifs : du plus global (objectif de formation) au plus opérationnel (objectif pédagogique de séquence).</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Niveau</th><th>Définition</th><th>Exemple concret</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Objectif de formation</strong></td>
+              <td>Compétence globale visée, définie avec le commanditaire à partir du référentiel</td>
+              <td>"Être capable de manager une équipe de chantier de 5 à 10 personnes"</td>
+            </tr>
+            <tr>
+              <td><strong>Objectif général</strong></td>
+              <td>Grande thématique qui contribue à l'objectif de formation</td>
+              <td>"Maîtriser les fondamentaux de la communication managériale"</td>
+            </tr>
+            <tr>
+              <td><strong>Objectif spécifique</strong></td>
+              <td>Résultat attendu d'un bloc ou d'une journée de formation</td>
+              <td>"Conduire un entretien de recadrage en appliquant une méthode structurée"</td>
+            </tr>
+            <tr>
+              <td><strong>Objectif pédagogique (OPO)</strong></td>
+              <td>Comportement observable attendu à l'issue d'une séquence (formule Mager)</td>
+              <td>"Appliquer la méthode DESC lors d'un jeu de rôle, en maintenant une posture non-conflictuelle"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre tip">
+        <strong>💡 Alignement pédagogique (Biggs)</strong>
+        Le principe d'<strong>alignement pédagogique</strong> (John Biggs) stipule que les objectifs, les activités d'apprentissage et les évaluations doivent être cohérents entre eux. Un objectif formulé au niveau N3 (Appliquer) doit être travaillé par une activité pratique et évalué par une mise en situation, pas par un QCM de restitution.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🔀</span> Intégrer la multimodalité dans la progression</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le REAC FPA met fortement l'accent sur la <strong>multimodalité</strong> : le formateur doit être capable de concevoir des progressions qui combinent plusieurs modalités de manière cohérente et justifiée. Ce n'est pas un choix esthétique mais une réponse aux besoins des apprenants et aux contraintes du contexte.</p>
+
+      <div class="multi-grid">
+        <div class="multi-card">
+          <h4>🏫 Présentiel</h4>
+          <p>Idéal pour les savoir-être, la pratique supervisée, la cohésion de groupe</p>
+          <ul>
+            <li>Jeux de rôle, mises en situation</li>
+            <li>Travaux de groupe, débriefing</li>
+            <li>Démonstrations techniques</li>
+          </ul>
+        </div>
+        <div class="multi-card gold">
+          <h4>💻 Distanciel synchrone</h4>
+          <p>Classe virtuelle, maintient l'interaction à distance</p>
+          <ul>
+            <li>Cours magistraux interactifs</li>
+            <li>Questions/réponses en direct</li>
+            <li>Groupes de travail en sous-salles</li>
+          </ul>
+        </div>
+        <div class="multi-card">
+          <h4>📱 Distanciel asynchrone</h4>
+          <p>E-learning, capsules vidéo, quiz en ligne — à son rythme</p>
+          <ul>
+            <li>Apports théoriques (LCMS, SCORM)</li>
+            <li>Exercices d'auto-évaluation</li>
+            <li>Ressources complémentaires</li>
+          </ul>
+        </div>
+        <div class="multi-card gold">
+          <h4>🏭 AFEST</h4>
+          <p>Action de Formation en Situation de Travail — sur le poste réel</p>
+          <ul>
+            <li>Observation de gestes professionnels</li>
+            <li>Séquence réflexive obligatoire</li>
+            <li>Traçabilité spécifique requise</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>Dans une progression multimodale, chaque modalité remplit un rôle précis :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Phase de la progression</th><th>Modalité recommandée</th><th>Justification</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Positionnement / diagnostic</td>
+              <td>Distanciel asynchrone</td>
+              <td>Quiz de positionnement accessible avant le démarrage, sans contrainte de groupe</td>
+            </tr>
+            <tr>
+              <td>Apports de savoirs théoriques</td>
+              <td>Distanciel asynchrone ou synchrone</td>
+              <td>Capsules vidéo, lectures guidées — peut se faire à son rythme ou en classe virtuelle</td>
+            </tr>
+            <tr>
+              <td>Pratique et ancrage</td>
+              <td>Présentiel ou AFEST</td>
+              <td>Nécessite une interaction, une observation et une rétroaction immédiate du formateur</td>
+            </tr>
+            <tr>
+              <td>Évaluation formative</td>
+              <td>Toutes modalités</td>
+              <td>Quiz en ligne (async), exercices corrigés en présentiel, observation en AFEST</td>
+            </tr>
+            <tr>
+              <td>Évaluation sommative</td>
+              <td>Présentiel ou synchrone supervisé</td>
+              <td>Garantit l'authenticité de la production et l'identification du candidat</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📋</span> Structure type d'une progression pédagogique</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le tableau de progression pédagogique est le document formalisé qui organise toutes ces informations. Il constitue une partie essentielle du <strong>dossier technique FPA (8 à 12 pages)</strong> présenté au jury.</p>
+      <p>Il comprend obligatoirement :</p>
+      <ul>
+        <li><strong>La colonne Séquence / Module</strong> : numérotation et intitulé de chaque étape</li>
+        <li><strong>Les objectifs pédagogiques (OPO)</strong> : formulés avec un verbe observable (Mager)</li>
+        <li><strong>Les contenus</strong> : savoirs, savoir-faire, savoir-être travaillés</li>
+        <li><strong>Les modalités</strong> : présentiel, distanciel sync/async, AFEST, hybride</li>
+        <li><strong>Les méthodes et activités</strong> : exposé, atelier, jeu de rôle, e-learning, étude de cas…</li>
+        <li><strong>Les ressources</strong> : supports, outils numériques, équipements</li>
+        <li><strong>La durée</strong> : en heures pour chaque séquence</li>
+        <li><strong>L'évaluation</strong> : type (diagnostique, formative, sommative) et modalité</li>
+      </ul>
+
+      <div class="prog-table-wrapper">
+        <div class="prog-table-header">📊 Exemple de tableau de progression pédagogique — Formation management (extrait)</div>
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Séquence</th>
+                <th>OPO</th>
+                <th>Contenu</th>
+                <th>Modalité</th>
+                <th>Méthode</th>
+                <th>Durée</th>
+                <th>Évaluation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>S0 — Positionnement</strong></td>
+                <td>Identifier son niveau de départ</td>
+                <td>Savoirs et pratiques managériales existants</td>
+                <td>Distanciel async</td>
+                <td>Quiz de positionnement en ligne</td>
+                <td>0,5h</td>
+                <td>Diagnostique</td>
+              </tr>
+              <tr>
+                <td><strong>S1 — Rôle du manager</strong></td>
+                <td>Distinguer les missions du manager de celles du technicien</td>
+                <td>Posture managériale, délégation, autorité</td>
+                <td>Distanciel async + synchrone</td>
+                <td>Capsule vidéo + classe virtuelle</td>
+                <td>1,5h</td>
+                <td>Quiz formatif</td>
+              </tr>
+              <tr>
+                <td><strong>S2 — Communication</strong></td>
+                <td>Appliquer la technique d'écoute active lors d'un entretien simulé</td>
+                <td>Écoute active, reformulation, CNV</td>
+                <td>Présentiel</td>
+                <td>Jeu de rôle par binômes + débriefing</td>
+                <td>3h</td>
+                <td>Observation grille critères</td>
+              </tr>
+              <tr>
+                <td><strong>S3 — Gestion de conflits</strong></td>
+                <td>Utiliser la méthode DESC pour traiter un désaccord professionnel</td>
+                <td>Méthode DESC, types de conflits</td>
+                <td>Présentiel + AFEST</td>
+                <td>Étude de cas + mise en situation réelle</td>
+                <td>4h</td>
+                <td>Mise en situation évaluée</td>
+              </tr>
+              <tr>
+                <td><strong>S4 — Évaluation finale</strong></td>
+                <td>Conduire un entretien de recadrage en autonomie</td>
+                <td>Synthèse des compétences acquises</td>
+                <td>Présentiel</td>
+                <td>Mise en situation individuelle + bilan</td>
+                <td>2h</td>
+                <td>Sommative — grille d'évaluation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="encadre info">
+        <strong>📌 Soumission au responsable de formation</strong>
+        Selon le REAC, le formateur "soumet la progression pédagogique au responsable de formation" avant de démarrer. Cette validation garantit la conformité avec le cahier des charges du commanditaire et les exigences Qualiopi.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">⚖️</span> Les principes pédagogiques qui guident la progression</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La construction d'une progression pédagogique efficace s'appuie sur plusieurs principes fondamentaux issus des sciences de l'éducation et de la formation des adultes.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Principe</th><th>Auteur/Concept</th><th>Application dans la progression</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Du simple au complexe</strong></td>
+              <td>Principe universel de pédagogie</td>
+              <td>Commencer par les notions de base avant les cas complexes ou les exceptions</td>
+            </tr>
+            <tr>
+              <td><strong>Du connu à l'inconnu</strong></td>
+              <td>Ausubel — apprentissage significatif</td>
+              <td>Partir des représentations et expériences des apprenants pour y rattacher les nouveaux savoirs</td>
+            </tr>
+            <tr>
+              <td><strong>Pédagogie active</strong></td>
+              <td>Dewey, Freinet, Kolb</td>
+              <td>Favoriser l'action, l'expérimentation et la réflexivité plutôt que la réception passive</td>
+            </tr>
+            <tr>
+              <td><strong>Alignement pédagogique</strong></td>
+              <td>Biggs (1996)</td>
+              <td>Cohérence obligatoire entre objectifs, activités et évaluations</td>
+            </tr>
+            <tr>
+              <td><strong>Andragogie</strong></td>
+              <td>Knowles (1970)</td>
+              <td>L'adulte apprend mieux si l'apprentissage fait sens pour lui et s'ancre dans son vécu professionnel</td>
+            </tr>
+            <tr>
+              <td><strong>Courbe d'apprentissage</strong></td>
+              <td>Ebbinghaus</td>
+              <td>Prévoir des révisions, des récapitulatifs et des mises en pratique régulières pour lutter contre l'oubli</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre tip">
+        <strong>💡 Andragogie — l'adulte apprenant</strong>
+        Malcolm Knowles identifie 6 caractéristiques de l'apprenant adulte : il est autonome, riche d'expériences, orienté vers des objectifs pratiques, motivé par des apprentissages utiles immédiatement, résistant aux changements d'identité, et porté par une motivation intrinsèque. La progression pédagogique doit en tenir compte en intégrant des activités ancrées dans le réel professionnel.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">✅</span> Conformité au cahier des charges et traçabilité</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La progression pédagogique ne peut pas être conçue en dehors du <strong>cadre contractuel</strong> fixé par le commanditaire et le financeur. Le REAC précise que le formateur "se conforme au cahier des charges de la formation" en toutes circonstances.</p>
+      <p>Points de vigilance lors de la conception :</p>
+      <ul>
+        <li><strong>Durée totale</strong> : la somme des séquences doit correspondre exactement à la durée contractuelle prévue dans la convention de formation</li>
+        <li><strong>Objectifs de formation</strong> : chaque OPO doit être rattachable à un objectif de formation validé avec le commanditaire</li>
+        <li><strong>Modalités prévues</strong> : si la convention prévoit du distanciel, la progression doit l'intégrer explicitement</li>
+        <li><strong>Prise en compte du handicap</strong> : si des aménagements ont été prévus, ils doivent apparaître dans la progression (durées adaptées, supports accessibles)</li>
+        <li><strong>Traçabilité Qualiopi</strong> : la progression soumise et validée constitue une preuve documentaire pour les indicateurs 2 et 3 du référentiel Qualiopi</li>
+      </ul>
+      <div class="encadre warning">
+        <strong>⚠️ Modification en cours de formation</strong>
+        Si la progression doit être modifiée en cours de formation (apprenant absent, difficulté imprévue, besoin émergent), le formateur doit en informer le responsable de formation et adapter le scénario pédagogique. Toute modification significative doit être tracée.
+      </div>
+    </div>
+  </div>
+
+  <!-- CAS PRATIQUE -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Cas pratique</h2>
+  </div>
+
+  <div class="cas-pratique">
+    <div class="cp-header">
+      <span class="cp-badge">Cas pratique</span>
+      <h3>Construire la progression pédagogique d'une formation multimodale</h3>
+    </div>
+    <div class="scenario">
+      <strong style="display:block; margin-bottom:0.5rem; color:var(--gold-light); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">Mise en situation</strong>
+      Vous êtes formateur dans un organisme de formation certifié Qualiopi. Un EHPAD (établissement d'hébergement pour personnes âgées dépendantes) vous commande une formation pour 10 aides-soignants sur la "Prévention et gestion des situations d'agressivité des résidents". Voici le cahier des charges :
+      <br><br>
+      <ul style="margin-left:1.2rem; margin-top:0.5rem; margin-bottom:0.5rem;">
+        <li>Durée totale : 14 heures (2 jours)</li>
+        <li>Public : aides-soignants, expérience terrain 2 à 15 ans, groupe hétérogène</li>
+        <li>Contraintes : 1 journée en présentiel dans l'établissement, 1 journée en distanciel (équipe de nuit non disponible en journée)</li>
+        <li>Objectif global : "Être capable de prévenir et désamorcer les situations d'agressivité des résidents en préservant leur propre sécurité et la dignité du résident"</li>
+        <li>Exigence Qualiopi : traçabilité complète, feuilles d'émargement, évaluation à chaud</li>
+      </ul>
+    </div>
+    <div class="consignes">
+      <p>Consignes de travail</p>
+      <ol>
+        <li>Déclinez l'objectif global en 3 objectifs spécifiques cohérents avec le contexte.</li>
+        <li>Construisez un tableau de progression pédagogique complet (minimum 5 séquences) en précisant pour chacune : OPO, contenu, modalité, méthode, durée et type d'évaluation.</li>
+        <li>Justifiez en 3-4 phrases le choix de la combinaison présentiel/distanciel dans cette progression.</li>
+        <li>Identifiez 2 éléments de traçabilité que vous devrez produire pour répondre aux exigences Qualiopi.</li>
+      </ol>
+    </div>
+    <button class="toggle-correction" onclick="toggleCorrection(this)">Afficher la correction</button>
+    <div class="correction">
+      <h4>Éléments de correction</h4>
+      <p><strong>1. Objectifs spécifiques :</strong></p>
+      <ul>
+        <li>OS1 : Identifier les causes et mécanismes de l'agressivité chez les résidents atteints de troubles cognitifs</li>
+        <li>OS2 : Appliquer des techniques de communication désamorçantes adaptées aux situations d'agressivité verbale et physique</li>
+        <li>OS3 : Adopter une posture professionnelle préservant la dignité du résident et la sécurité du soignant dans les situations à risque</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>2. Tableau de progression :</strong></p>
+      <table>
+        <thead>
+          <tr><th>Séq.</th><th>OPO</th><th>Contenu</th><th>Modalité</th><th>Méthode</th><th>Durée</th><th>Éval.</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S0</td><td>Identifier son niveau de départ</td><td>Représentations, vécu terrain</td><td>Distanciel async</td><td>Quiz positionnement</td><td>0,5h</td><td>Diag.</td></tr>
+          <tr><td>S1</td><td>Expliquer les mécanismes de l'agressivité liée aux troubles cognitifs</td><td>Physiopathologie, types d'agressivité</td><td>Distanciel sync (CV)</td><td>Exposé interactif + vidéos</td><td>2h</td><td>Quiz formatif</td></tr>
+          <tr><td>S2</td><td>Analyser une situation d'agressivité à partir d'un cas clinique</td><td>Facteurs déclenchants, grille d'observation</td><td>Distanciel sync</td><td>Étude de cas en sous-groupes</td><td>2,5h</td><td>Restitution orale</td></tr>
+          <tr><td>S3</td><td>Appliquer les techniques de désamorçage verbal en jeu de rôle</td><td>CNV, écoute active, posture corporelle</td><td>Présentiel</td><td>Jeux de rôle + débriefing</td><td>4h</td><td>Obs. grille critères</td></tr>
+          <tr><td>S4</td><td>Mettre en oeuvre une procédure de gestion d'agressivité physique</td><td>Techniques de dégagement, protocole établissement</td><td>Présentiel</td><td>Démonstration + pratique supervisée</td><td>4h</td><td>Mise en situation évaluée</td></tr>
+          <tr><td>S5</td><td>Évaluer ses acquis et définir ses axes de progrès</td><td>Bilan, auto-évaluation, plan d'action</td><td>Présentiel</td><td>Bilan collectif + éval. à chaud</td><td>1h</td><td>Somm. + questionnaire satisfaction</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.8rem;"><strong>3. Justification de la combinaison multimodale :</strong></p>
+      <ul>
+        <li>La partie distancielle (S0, S1, S2 = 5h) permet d'intégrer l'équipe de nuit qui ne peut pas se libérer en journée, tout en transmettant les savoirs théoriques et l'analyse de situations sans nécessiter de présence physique.</li>
+        <li>Le présentiel (S3, S4, S5 = 9h) est indispensable pour les apprentissages gestuels et posturaux qui nécessitent une pratique supervisée, une rétroaction immédiate et un ancrage corporel impossible à distance.</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>4. Traçabilité Qualiopi :</strong></p>
+      <ul>
+        <li>Feuilles d'émargement signées par chaque participant à chaque demi-journée (présentiel) + captures d'écran ou logs de connexion (distanciel)</li>
+        <li>Questionnaire d'évaluation à chaud rempli en fin de S5, conservé dans le dossier administratif de la formation</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Quiz de vérification</h2>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <span class="quiz-badge">Quiz</span>
+      <h3>Vérifier ses acquis – S2.1</h3>
+    </div>
+
+    <div class="question" id="q1">
+      <p>1. Selon le REAC FPA, la progression pédagogique est soumise à :</p>
+      <label class="option"><input type="radio" name="q1" value="a"> L'OPCO financeur avant tout démarrage</label>
+      <label class="option"><input type="radio" name="q1" value="b"> Le responsable de formation ou le commanditaire</label>
+      <label class="option"><input type="radio" name="q1" value="c"> Les apprenants pour validation collective</label>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <p>2. Le principe d'alignement pédagogique (Biggs) stipule que :</p>
+      <label class="option"><input type="radio" name="q2" value="a"> Le formateur doit toujours partir des besoins exprimés par les apprenants</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Les objectifs, les activités d'apprentissage et les évaluations doivent être cohérents entre eux</label>
+      <label class="option"><input type="radio" name="q2" value="c"> La formation doit s'aligner sur les horaires de travail des apprenants</label>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <p>3. L'andragogie (Knowles) recommande notamment de :</p>
+      <label class="option"><input type="radio" name="q3" value="a"> Imposer un rythme identique à tous les apprenants pour garantir l'équité</label>
+      <label class="option"><input type="radio" name="q3" value="b"> Ancrer les apprentissages dans les expériences et le vécu professionnel de l'apprenant adulte</label>
+      <label class="option"><input type="radio" name="q3" value="c"> Privilégier les exposés magistraux pour transmettre efficacement les savoirs</label>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <p>4. Dans la déclinaison des objectifs, lequel est le plus opérationnel ?</p>
+      <label class="option"><input type="radio" name="q4" value="a"> L'objectif de formation</label>
+      <label class="option"><input type="radio" name="q4" value="b"> L'objectif général</label>
+      <label class="option"><input type="radio" name="q4" value="c"> L'objectif pédagogique (OPO)</label>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <p>5. La modalité AFEST est particulièrement recommandée pour quelle phase de la progression ?</p>
+      <label class="option"><input type="radio" name="q5" value="a"> La transmission de savoirs théoriques en amont</label>
+      <label class="option"><input type="radio" name="q5" value="b"> La pratique et l'ancrage des gestes professionnels en situation réelle de travail</label>
+      <label class="option"><input type="radio" name="q5" value="c"> L'évaluation sommative en fin de parcours</label>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <p>6. Ebbinghaus et sa courbe d'apprentissage implique que la progression pédagogique doit :</p>
+      <label class="option"><input type="radio" name="q6" value="a"> Concentrer tous les apprentissages en une seule session intensive</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Prévoir des révisions, récapitulatifs et mises en pratique régulières pour lutter contre l'oubli</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Commencer par les notions les plus complexes pour mieux retenir les bases ensuite</label>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <p>7. Quelle information N'est PAS obligatoire dans un tableau de progression pédagogique ?</p>
+      <label class="option"><input type="radio" name="q7" value="a"> Les objectifs pédagogiques (OPO)</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Le CV du formateur responsable de la séquence</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Les modalités pédagogiques utilisées</label>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <p>8. Pourquoi le distanciel asynchrone est-il recommandé pour la phase de positionnement ?</p>
+      <label class="option"><input type="radio" name="q8" value="a"> Car c'est la modalité la moins coûteuse à produire</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Car il permet à chaque apprenant de répondre à son rythme, sans contrainte de groupe, avant le démarrage</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Car Qualiopi l'exige pour toute action de formation</label>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <p>9. Si un apprenant absent fait prendre du retard à la progression, le formateur doit :</p>
+      <label class="option"><input type="radio" name="q9" value="a"> Continuer la progression sans modification et rattraper seul avec l'apprenant</label>
+      <label class="option"><input type="radio" name="q9" value="b"> En informer le responsable de formation, adapter le scénario et tracer la modification</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Supprimer la séquence concernée pour respecter le calendrier</label>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <p>10. La durée totale des séquences d'une progression pédagogique doit :</p>
+      <label class="option"><input type="radio" name="q10" value="a"> Être supérieure à la durée contractuelle pour prévoir des imprévus</label>
+      <label class="option"><input type="radio" name="q10" value="b"> Correspondre exactement à la durée prévue dans la convention de formation</label>
+      <label class="option"><input type="radio" name="q10" value="c"> Être laissée à l'appréciation du formateur selon le niveau du groupe</label>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+
+    <div class="question" id="q11">
+      <p>11. Le dossier technique FPA portant sur la CP1 (progression pédagogique) doit faire :</p>
+      <label class="option"><input type="radio" name="q11" value="a"> Entre 3 et 5 pages</label>
+      <label class="option"><input type="radio" name="q11" value="b"> Entre 8 et 12 pages</label>
+      <label class="option"><input type="radio" name="q11" value="c"> Exactement 20 pages</label>
+      <div class="feedback" id="fb-q11"></div>
+    </div>
+
+    <div class="question" id="q12">
+      <p>12. La progression pédagogique soumise et validée par le responsable de formation est une preuve pour :</p>
+      <label class="option"><input type="radio" name="q12" value="a"> Les indicateurs 2 et 3 du référentiel Qualiopi</label>
+      <label class="option"><input type="radio" name="q12" value="b"> Uniquement l'indicateur 7 (évaluation des apprenants)</label>
+      <label class="option"><input type="radio" name="q12" value="c"> Le bilan pédagogique et financier annuel de l'organisme</label>
+      <div class="feedback" id="fb-q12"></div>
+    </div>
+
+    <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
+    <div class="quiz-score" id="quiz-score"></div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Synthèse à retenir</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💡</span> Les 6 points clés de la séquence S2.1</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <ol>
+        <li><strong>La progression = 5 questions</strong> : Quoi (objectifs) ? Dans quel ordre (séquence) ? Comment (modalités) ? Combien de temps (durées) ? Comment évaluer ?</li>
+        <li><strong>Cascade des objectifs</strong> : objectif de formation → objectif général → objectif spécifique → OPO. Chaque niveau est plus précis et opérationnel que le précédent.</li>
+        <li><strong>Alignement pédagogique (Biggs)</strong> : objectifs, activités et évaluations doivent être cohérents. Un OPO au niveau N3 (Appliquer) se travaille en pratique, pas en QCM.</li>
+        <li><strong>Multimodalité justifiée</strong> : chaque modalité sert un rôle précis (théorie → async, pratique → présentiel/AFEST, évaluation → supervisé). Le choix s'argumente par rapport au contexte et aux apprenants.</li>
+        <li><strong>Andragogie</strong> : l'adulte apprend mieux quand l'apprentissage est ancré dans son vécu professionnel et répond à un besoin concret immédiat.</li>
+        <li><strong>Conformité et traçabilité</strong> : la progression doit respecter le cahier des charges, être soumise au responsable, et constituer une preuve documentaire pour Qualiopi.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Real Conseil – Formation Professionnelle · FPA RNCP37275 · Module M1 – Séquence S2.1 · CP1 REAC<br>
+  Support pédagogique à usage interne
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isActive = header.classList.contains('active');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isActive) {
+      header.classList.add('active');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleCorrection(btn) {
+    const correction = btn.nextElementSibling;
+    if (correction.classList.contains('open')) {
+      correction.classList.remove('open');
+      btn.textContent = 'Afficher la correction';
+    } else {
+      correction.classList.add('open');
+      btn.textContent = 'Masquer la correction';
+    }
+  }
+
+  const reponses = { q1: 'b', q2: 'b', q3: 'b', q4: 'c', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'b', q10: 'b', q11: 'b', q12: 'a' };
+  const feedbacks = {
+    q1: { b: 'Exact ! Le REAC précise que le formateur soumet la progression au responsable de formation ou au commanditaire avant tout démarrage.', a: 'L\'OPCO est le financeur, pas le valideur de la progression pédagogique.', c: 'La validation par les apprenants n\'est pas prévue dans le cadre REAC pour la progression.' },
+    q2: { b: 'Exact ! L\'alignement pédagogique (Biggs) impose la cohérence entre les trois éléments : objectifs, activités et évaluations.', a: 'L\'andragogie part des besoins des apprenants, pas l\'alignement pédagogique de Biggs.', c: 'L\'alignement concerne la cohérence pédagogique, pas les horaires.' },
+    q3: { b: 'Correct ! Knowles insiste sur l\'importance de l\'ancrage dans le vécu professionnel pour que l\'adulte donne du sens à ses apprentissages.', a: 'Imposer un rythme unique va à l\'encontre du principe d\'individualisation cher à Knowles.', c: 'Les exposés magistraux sont précisément ce que l\'andragogie cherche à dépasser.' },
+    q4: { c: 'Exact ! L\'OPO est le niveau le plus précis : comportement observable, conditions, critères — directement utilisable par le formateur.', a: 'L\'objectif de formation est global et peu opérationnel seul.', b: 'L\'objectif général est intermédiaire, plus précis que l\'objectif de formation mais moins que l\'OPO.' },
+    q5: { b: 'Exact ! L\'AFEST forme directement sur le poste réel avec observation et séquence réflexive — idéal pour ancrer les gestes professionnels.', a: 'Les savoirs théoriques relèvent plutôt du distanciel asynchrone ou des exposés.', c: 'L\'évaluation sommative doit être supervisée mais n\'implique pas nécessairement l\'AFEST.' },
+    q6: { b: 'Correct ! La courbe d\'Ebbinghaus montre que l\'oubli est rapide sans révision — la progression doit intégrer des temps de rappel réguliers.', a: 'La concentration intensive accélère l\'oubli selon Ebbinghaus — c\'est l\'inverse du bon principe.', c: 'Commencer par le complexe irait à l\'encontre du principe du "simple au complexe".' },
+    q7: { b: 'Exact ! Le CV du formateur est un document administratif personnel, il n\'a pas sa place dans le tableau de progression.', a: 'Les OPO sont indispensables dans le tableau — sans eux, les séquences ne sont pas évaluables.', c: 'Les modalités sont une colonne obligatoire du tableau de progression multimodale.' },
+    q8: { b: 'Correct ! Le positionnement asynchrone permet à chaque apprenant de répondre à son propre rythme avant le démarrage collectif.', a: 'Le coût de production n\'est pas le critère pédagogique principal.', c: 'Qualiopi n\'impose pas le distanciel asynchrone pour le positionnement.' },
+    q9: { b: 'Correct ! Toute modification significative de la progression doit être tracée et validée avec le responsable de formation.', a: 'Continuer sans adaptation expose à un écart par rapport au cahier des charges contractuel.', c: 'Supprimer une séquence sans validation peut créer un non-respect du programme contractuel.' },
+    q10: { b: 'Exact ! La durée totale doit correspondre à ce qui est prévu dans la convention de formation — c\'est une exigence contractuelle et Qualiopi.', a: 'Dépasser la durée contractuelle sans accord du commanditaire est une violation du cahier des charges.', c: 'Laisser la durée à l\'appréciation du formateur sans cadre contractuel n\'est pas conforme.' },
+    q11: { b: 'Exact ! Le RE FPA précise que le premier chapitre du dossier technique (CP1) doit faire entre 8 et 12 pages.', a: '3 à 5 pages ne suffisent pas pour couvrir l\'analyse d\'une demande et la progression complète.', c: '20 pages n\'est pas le format prescrit par le RE FPA.' },
+    q12: { a: 'Correct ! La progression soumise et validée constitue une preuve pour les indicateurs 2 (objectifs définis) et 3 (programme communiqué) de Qualiopi.', b: 'L\'indicateur 7 concerne l\'évaluation des apprenants, pas la progression pédagogique en tant que document.', c: 'Le bilan pédagogique et financier est un document distinct de la progression pédagogique.' }
+  };
+
+  function corrigerQuiz() {
+    let score = 0;
+    Object.keys(reponses).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById(`fb-${q}`);
+      const options = document.querySelectorAll(`input[name="${q}"]`);
+      options.forEach(opt => opt.closest('.option').classList.remove('correct', 'incorrect'));
+      if (selected) {
+        const val = selected.value;
+        const correct = reponses[q];
+        selected.closest('.option').classList.add(val === correct ? 'correct' : 'incorrect');
+        if (val === correct) {
+          score++;
+          fb.className = 'feedback correct';
+          fb.textContent = '✓ ' + feedbacks[q][val];
+        } else {
+          fb.className = 'feedback incorrect';
+          fb.textContent = '✗ ' + feedbacks[q][val] + ' — Bonne réponse : ' + feedbacks[q][correct];
+          document.querySelector(`input[name="${q}"][value="${correct}"]`).closest('.option').classList.add('correct');
+        }
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = '⚠ Aucune réponse sélectionnée.';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.className = `quiz-score show ${score >= 9 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/12 — ${score === 12 ? '🎉 Parfait !' : score >= 10 ? '👍 Très bien !' : score >= 7 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPA – M1 / S2.2 – Concevoir un scénario pédagogique et d'accompagnement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #2C3F77;
+    --navy-dark: #1e2d57;
+    --navy-light: #3a518f;
+    --gold: #A0896A;
+    --gold-light: #c4a882;
+    --gold-pale: #f5efe6;
+    --white: #ffffff;
+    --gray-light: #f0f2f8;
+    --gray-mid: #d0d6e8;
+    --text: #1a2240;
+    --success: #2e7d52;
+    --error: #b93232;
+    --success-bg: #e8f5ee;
+    --error-bg: #fdeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--text); line-height: 1.7; }
+
+  header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    color: var(--white); padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .header-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .badge-module { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .badge-seq { background: rgba(255,255,255,0.15); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); }
+  .badge-reac { background: rgba(160,137,106,0.3); color: var(--gold-light); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  .badge-duree { margin-left: auto; background: rgba(255,255,255,0.1); color: var(--gold-light); font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  header h2 { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.7); }
+
+  .objectifs-bar { background: var(--white); border-left: 4px solid var(--gold); margin: 1.5rem 2rem; padding: 1.2rem 1.5rem; border-radius: 0 6px 6px 0; box-shadow: 0 2px 8px rgba(44,63,119,0.08); }
+  .objectifs-bar h3 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.8rem; }
+  .objectifs-bar ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .objectifs-bar ul li { background: var(--gold-pale); color: var(--navy); font-size: 0.85rem; font-weight: 500; padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid rgba(160,137,106,0.25); }
+  .objectifs-bar ul li::before { content: '✓ '; color: var(--gold); font-weight: 700; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+  .section-title { display: flex; align-items: center; gap: 0.8rem; margin: 2rem 0 1rem; }
+  .section-title .num { background: var(--navy); color: var(--white); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-title h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); }
+
+  .accordion { background: var(--white); border-radius: 8px; margin-bottom: 0.6rem; box-shadow: 0 2px 6px rgba(44,63,119,0.07); overflow: hidden; border: 1px solid var(--gray-mid); }
+  .accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem; cursor: pointer; user-select: none; transition: background 0.2s; }
+  .accordion-header:hover { background: var(--gray-light); }
+  .accordion-header.active { background: var(--navy); color: var(--white); }
+  .accordion-header h3 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+  .accordion-arrow { font-size: 0.8rem; transition: transform 0.3s; color: var(--gold); }
+  .accordion-header.active .accordion-arrow { transform: rotate(180deg); color: var(--gold-light); }
+  .accordion-body { display: none; padding: 1.3rem 1.5rem; border-top: 1px solid var(--gray-mid); }
+  .accordion-body.open { display: block; }
+  .accordion-body p { margin-bottom: 0.8rem; font-size: 0.93rem; }
+  .accordion-body ul, .accordion-body ol { margin: 0.5rem 0 0.8rem 1.2rem; font-size: 0.93rem; }
+  .accordion-body li { margin-bottom: 0.4rem; }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--navy); color: var(--white); padding: 0.7rem 1rem; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--gray-mid); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  tr:hover td { background: var(--gold-pale); }
+
+  .encadre { border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem; }
+  .encadre.info { background: #e8edf8; border-left: 4px solid var(--navy); }
+  .encadre.tip { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .encadre.warning { background: #fff8e6; border-left: 4px solid #e6a817; }
+  .encadre.reac { background: #f0edf8; border-left: 4px solid #6b52a8; }
+  .encadre strong { display: block; margin-bottom: 0.4rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+
+  /* SCENARIO TIMELINE */
+  .scenario-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin: 1rem 0;
+  }
+  .scenario-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+    background: var(--white);
+    border: 1px solid var(--gray-mid);
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+  }
+  .scenario-step .timing {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.3rem;
+  }
+  .scenario-step .details strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--navy);
+    margin-bottom: 0.2rem;
+  }
+  .scenario-step .details span {
+    font-size: 0.82rem;
+    color: #555;
+    display: block;
+  }
+  .scenario-step .tags {
+    margin-top: 0.3rem;
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .scenario-step .tag {
+    font-size: 0.72rem;
+    background: var(--gold-pale);
+    color: var(--gold);
+    padding: 0.15rem 0.6rem;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* STORYBOARD GRID */
+  .storyboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+  .storyboard-card {
+    background: var(--white);
+    border: 2px dashed var(--gray-mid);
+    border-radius: 8px;
+    padding: 0.9rem;
+    font-size: 0.82rem;
+  }
+  .storyboard-card .sb-num {
+    background: var(--gold);
+    color: var(--white);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .storyboard-card strong { display: block; color: var(--navy); margin-bottom: 0.3rem; font-size: 0.85rem; }
+
+  .cas-pratique { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); color: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0 1rem; }
+  .cas-pratique .cp-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
+  .cas-pratique .cp-badge { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .cas-pratique h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .cas-pratique .scenario { background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6; }
+  .cas-pratique .consignes p { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 0.5rem; }
+  .cas-pratique ol { margin-left: 1.2rem; font-size: 0.9rem; }
+  .cas-pratique ol li { margin-bottom: 0.4rem; }
+  .toggle-correction { background: var(--gold); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 1rem; }
+  .toggle-correction:hover { background: var(--gold-light); }
+  .correction { display: none; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+  .correction.open { display: block; }
+  .correction h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 0.7rem; }
+  .correction ul { margin-left: 1.2rem; }
+  .correction li { margin-bottom: 0.5rem; }
+  .correction table { font-size: 0.82rem; margin-top: 0.5rem; }
+  .correction th { background: rgba(255,255,255,0.2); color: var(--white); padding: 0.5rem 0.8rem; font-size: 0.78rem; }
+  .correction td { padding: 0.5rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--white); background: transparent; }
+  .correction tr:nth-child(even) td { background: rgba(255,255,255,0.05); }
+
+  .quiz-section { background: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0; box-shadow: 0 2px 10px rgba(44,63,119,0.1); border: 1px solid var(--gray-mid); }
+  .quiz-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--gray-light); }
+  .quiz-badge { background: var(--navy); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .quiz-section h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); }
+  .question { margin-bottom: 1.5rem; }
+  .question p { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.7rem; color: var(--navy); }
+  .option { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.4rem; cursor: pointer; border: 2px solid var(--gray-mid); transition: all 0.2s; font-size: 0.9rem; }
+  .option:hover { border-color: var(--navy); background: var(--gray-light); }
+  .option input[type="radio"] { margin-top: 2px; accent-color: var(--navy); }
+  .option.correct { border-color: var(--success); background: var(--success-bg); }
+  .option.incorrect { border-color: var(--error); background: var(--error-bg); }
+  .feedback { display: none; font-size: 0.85rem; padding: 0.6rem 0.8rem; border-radius: 4px; margin-top: 0.3rem; }
+  .feedback.correct { background: var(--success-bg); color: var(--success); display: block; }
+  .feedback.incorrect { background: var(--error-bg); color: var(--error); display: block; }
+  .quiz-btn { background: var(--navy); color: var(--white); border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; transition: background 0.2s; }
+  .quiz-btn:hover { background: var(--navy-light); }
+  .quiz-score { display: none; margin-top: 1rem; padding: 1rem; border-radius: 6px; text-align: center; font-weight: 600; font-size: 1rem; }
+  .quiz-score.show { display: block; }
+  .quiz-score.good { background: var(--success-bg); color: var(--success); }
+  .quiz-score.bad { background: var(--error-bg); color: var(--error); }
+
+  footer { text-align: center; padding: 2rem; color: rgba(44,63,119,0.4); font-size: 0.8rem; border-top: 1px solid var(--gray-mid); margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .objectifs-bar { margin: 1rem; }
+    main { padding: 0 1rem 2rem; }
+    .scenario-step { grid-template-columns: 1fr; }
+    .storyboard-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge-module">FPA – M1</span>
+    <span class="badge-seq">Séquence S2.2</span>
+    <span class="badge-reac">CP1 REAC RNCP37275</span>
+    <span class="badge-duree">⏱ 1 h</span>
+  </div>
+  <h1>Concevoir un scénario pédagogique et d'accompagnement</h1>
+  <h2>Concevoir un scénario pédagogique et d'accompagnement en intégrant la multimodalité</h2>
+</header>
+
+<div class="objectifs-bar">
+  <h3>Objectifs pédagogiques</h3>
+  <ul>
+    <li>Décliner les objectifs de formation en objectifs pédagogiques</li>
+    <li>Construire un scénario pédagogique et d'accompagnement détaillé</li>
+    <li>Concevoir un scénario alternatif</li>
+    <li>Intégrer les situations d'apprentissage, d'évaluation et d'accompagnement</li>
+    <li>Concevoir le storyboard d'une capsule pédagogique</li>
+  </ul>
+</div>
+
+<main>
+
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>Apports théoriques</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🎬</span> Qu'est-ce qu'un scénario pédagogique et d'accompagnement ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le <strong>scénario pédagogique et d'accompagnement</strong> est le document opérationnel qui décrit, étape par étape, comment une séquence (ou un ensemble de séquences) sera concrètement mise en œuvre. Contrairement à la progression pédagogique qui donne la vue d'ensemble, le scénario entre dans le détail de chaque moment de formation.</p>
+      <div class="encadre reac">
+        <strong>📋 Attendu RE – Examen FPA</strong>
+        Le candidat doit présenter "un scénario pédagogique et d'accompagnement qu'il a conçu" correspondant à un ou plusieurs objectifs pédagogiques cohérents, s'inscrivant dans une progression plus large et <strong>nécessitant plusieurs modalités pédagogiques</strong>. Cette partie de l'épreuve dure 20 minutes de présentation + 10 minutes de questionnement.
+      </div>
+      <p>Le scénario pédagogique répond à des questions plus fines que la progression :</p>
+      <ul>
+        <li>Quelles consignes précises donner aux apprenants à chaque étape ?</li>
+        <li>Quel timing exact pour chaque activité ?</li>
+        <li>Quels supports et outils mobiliser à quel moment ?</li>
+        <li>Comment l'accompagnement s'articule-t-il avec les temps d'apprentissage ?</li>
+        <li>Quelles transitions entre les modalités (présentiel → distanciel, individuel → collectif) ?</li>
+      </ul>
+      <div class="encadre tip">
+        <strong>💡 Progression ≠ Scénario</strong>
+        La progression pédagogique (S2.1) donne la vue macro de toute la formation. Le scénario pédagogique zoome sur une ou plusieurs séquences précises de cette progression pour en détailler le déroulé minute par minute.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🧩</span> Les 3 types de situations à intégrer</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le RE FPA exige que le scénario décrive précisément trois types de situations, qui doivent toutes être présentes et articulées entre elles :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Type de situation</th><th>Définition</th><th>Exemple</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Situation d'apprentissage</strong></td>
+              <td>Moment où l'apprenant acquiert ou s'exerce sur un savoir, savoir-faire ou savoir-être</td>
+              <td>Atelier pratique en sous-groupes sur la prise de parole</td>
+            </tr>
+            <tr>
+              <td><strong>Situation d'évaluation</strong></td>
+              <td>Moment où l'on mesure les acquis, formatif ou sommatif</td>
+              <td>Mise en situation filmée et analysée collectivement avec grille de critères</td>
+            </tr>
+            <tr>
+              <td><strong>Situation d'accompagnement</strong></td>
+              <td>Moment de soutien individualisé, de régulation ou de suivi du parcours</td>
+              <td>Point individuel de 10 min avec chaque apprenant en milieu de journée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre info">
+        <strong>📌 Articulation, pas juxtaposition</strong>
+        Ces trois situations doivent être <strong>articulées</strong> dans le scénario, pas simplement listées les unes après les autres. Par exemple : une situation d'apprentissage en sous-groupe peut être suivie d'une situation d'évaluation par les pairs, puis d'un temps d'accompagnement individuel pour les apprenants en difficulté repérés pendant l'activité.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🔁</span> Le scénario alternatif : une exigence du RE</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le référentiel d'évaluation FPA est explicite : le candidat doit "proposer également <strong>un scénario alternatif</strong>". Cette exigence traduit une réalité du métier : un formateur doit toujours anticiper que les choses ne se déroulent pas comme prévu.</p>
+      <p>Les situations qui justifient un scénario alternatif :</p>
+      <ul>
+        <li><strong>Problème technique</strong> : panne de matériel, connexion internet défaillante en distanciel</li>
+        <li><strong>Groupe plus petit ou plus grand que prévu</strong> : adaptation des sous-groupes, du timing</li>
+        <li><strong>Niveau du groupe différent des attentes</strong> : besoin de renforcer ou d'accélérer certaines parties</li>
+        <li><strong>Difficulté ou résistance imprévue</strong> : un exercice qui ne fonctionne pas, un groupe peu participatif</li>
+        <li><strong>Contrainte de temps</strong> : retard, séquence précédente qui a pris plus de temps que prévu</li>
+      </ul>
+      <div class="encadre warning">
+        <strong>⚠️ Erreur fréquente au dossier technique</strong>
+        Beaucoup de candidats oublient le scénario alternatif ou le traitent de façon trop vague ("si ça ne marche pas, je m'adapte"). Le jury attend une alternative concrète et argumentée : quelle activité de remplacement, pour quelle raison, avec quel impact sur les objectifs.
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Scénario initial</th><th>Aléa possible</th><th>Scénario alternatif</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Classe virtuelle avec sous-groupes en visio</td>
+              <td>Panne de connexion internet chez plusieurs apprenants</td>
+              <td>Basculer sur un travail individuel asynchrone avec consignes écrites, débriefing différé</td>
+            </tr>
+            <tr>
+              <td>Jeu de rôle en binômes (8 apprenants)</td>
+              <td>Seuls 3 apprenants présents ce jour-là</td>
+              <td>Jeu de rôle avec le formateur en alternance, ou travail en trinômes avec rotation des rôles</td>
+            </tr>
+            <tr>
+              <td>Étude de cas complexe en 45 minutes</td>
+              <td>Le groupe peine à démarrer, niveau plus faible qu'anticipé</td>
+              <td>Découper l'étude de cas en sous-questions guidées, allonger le temps, réduire l'autonomie demandée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">📝</span> Construire le déroulé détaillé d'un scénario</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le scénario pédagogique se formalise généralement sous forme de déroulé minuté, indiquant pour chaque étape : le timing, l'activité, la modalité, les moyens et le rôle du formateur.</p>
+
+      <div class="scenario-timeline">
+        <div class="scenario-step">
+          <div class="timing">0–10 min</div>
+          <div class="details">
+            <strong>Accueil et lancement</strong>
+            <span>Présentation des objectifs de la séquence, recueil des attentes</span>
+            <div class="tags"><span class="tag">Présentiel</span><span class="tag">Collectif</span></div>
+          </div>
+        </div>
+        <div class="scenario-step">
+          <div class="timing">10–30 min</div>
+          <div class="details">
+            <strong>Apport théorique</strong>
+            <span>Exposé interactif sur la méthode DESC avec exemples concrets</span>
+            <div class="tags"><span class="tag">Présentiel</span><span class="tag">Apprentissage</span></div>
+          </div>
+        </div>
+        <div class="scenario-step">
+          <div class="timing">30–70 min</div>
+          <div class="details">
+            <strong>Atelier pratique en binômes</strong>
+            <span>Jeu de rôle : application de la méthode sur un cas concret fourni par le formateur</span>
+            <div class="tags"><span class="tag">Présentiel</span><span class="tag">Apprentissage</span><span class="tag">Accompagnement</span></div>
+          </div>
+        </div>
+        <div class="scenario-step">
+          <div class="timing">70–90 min</div>
+          <div class="details">
+            <strong>Débriefing collectif et évaluation par les pairs</strong>
+            <span>Restitution des binômes, grille d'observation croisée, synthèse du formateur</span>
+            <div class="tags"><span class="tag">Présentiel</span><span class="tag">Évaluation</span></div>
+          </div>
+        </div>
+        <div class="scenario-step">
+          <div class="timing">+ J7</div>
+          <div class="details">
+            <strong>Suivi individualisé à distance</strong>
+            <span>Questionnaire de mise en pratique en situation réelle, retour individualisé du formateur</span>
+            <div class="tags"><span class="tag">Distanciel async</span><span class="tag">Accompagnement</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="encadre tip">
+        <strong>💡 Le rôle du formateur à chaque étape</strong>
+        Un bon scénario précise aussi la posture attendue du formateur : transmetteur (apport théorique), facilitateur (animation d'atelier), observateur (pendant la mise en situation), évaluateur (grille de critères), accompagnateur (suivi individualisé). Cette explicitation aide à anticiper la charge cognitive et organisationnelle de l'animation.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🎥</span> Concevoir une capsule pédagogique et son storyboard</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le RE FPA exige spécifiquement que le candidat conçoive <strong>une capsule pédagogique</strong> dans le cadre d'une des situations présentées, avec un <strong>storyboard</strong> à l'appui. C'est un attendu précis et incontournable du dossier technique.</p>
+      <div class="encadre reac">
+        <strong>📋 Attendu RE – Capsule et storyboard</strong>
+        "Le candidat diffuse également au jury une capsule pédagogique qu'il a conçue [...]. A partir de son état des lieux initial, il décrit sa démarche de conception, il <strong>compare le storyboard au résultat final</strong> et précise les modalités d'utilisation par des apprenants et par des formateurs."
+      </div>
+      <p>Le <strong>storyboard</strong> est le plan détaillé d'une ressource numérique avant sa production : il anticipe chaque écran, chaque message, chaque interaction.</p>
+
+      <div class="storyboard-grid">
+        <div class="storyboard-card">
+          <div class="sb-num">1</div>
+          <strong>Écran/séquence</strong>
+          Titre, durée estimée, objectif pédagogique de ce passage
+        </div>
+        <div class="storyboard-card">
+          <div class="sb-num">2</div>
+          <strong>Contenu visuel</strong>
+          Description ou croquis de ce qui sera affiché (texte, image, schéma, vidéo)
+        </div>
+        <div class="storyboard-card">
+          <div class="sb-num">3</div>
+          <strong>Voix off / narration</strong>
+          Script exact du texte qui sera dit ou écrit à l'écran
+        </div>
+        <div class="storyboard-card">
+          <div class="sb-num">4</div>
+          <strong>Interactions</strong>
+          Boutons, quiz, choix proposés à l'apprenant (si applicable)
+        </div>
+        <div class="storyboard-card">
+          <div class="sb-num">5</div>
+          <strong>Durée</strong>
+          Temps estimé pour cet écran/cette partie
+        </div>
+        <div class="storyboard-card">
+          <div class="sb-num">6</div>
+          <strong>Transition</strong>
+          Lien logique vers l'écran ou la partie suivante
+        </div>
+      </div>
+
+      <div class="encadre tip">
+        <strong>💡 Comparer storyboard et résultat final</strong>
+        Le jury attend une analyse réflexive : qu'est-ce qui a changé entre le plan initial et la capsule terminée ? Pourquoi (contrainte technique, simplification nécessaire, retour d'un test utilisateur) ? Cette comparaison démontre la capacité du formateur à itérer et ajuster sa conception.
+      </div>
+      <div class="encadre info">
+        <strong>📌 Modalités d'utilisation</strong>
+        Le candidat doit préciser comment la capsule sera utilisée : en autonomie par l'apprenant avant la séance (classe inversée), en support pendant un cours, en révision après la séquence, ou réutilisable par d'autres formateurs de l'équipe pédagogique.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">👥</span> Prendre en compte l'hétérogénéité dans le scénario</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Le RE précise que le candidat doit argumenter "la manière dont il prend en compte l'hétérogénéité des publics" dans son scénario. Ce n'est pas une option : c'est une compétence évaluée explicitement.</p>
+      <p>Leviers concrets pour différencier au sein d'un même scénario :</p>
+      <ul>
+        <li><strong>Groupes de niveau</strong> : constituer des sous-groupes homogènes pour adapter la difficulté des cas pratiques</li>
+        <li><strong>Tutorat entre pairs</strong> : faire travailler ensemble un apprenant à l'aise et un apprenant en difficulté</li>
+        <li><strong>Supports différenciés</strong> : fiches d'aide, grilles guidées pour certains, autonomie complète pour d'autres</li>
+        <li><strong>Temps modulables</strong> : prévoir des activités "bonus" pour les plus rapides, du temps supplémentaire pour les autres</li>
+        <li><strong>Choix de modalités</strong> : proposer une activité en présentiel ET une version asynchrone pour ceux qui ont besoin de revoir à leur rythme</li>
+      </ul>
+      <div class="encadre warning">
+        <strong>⚠️ Au-delà du niveau scolaire</strong>
+        L'hétérogénéité ne se limite pas au niveau de compétence : elle concerne aussi l'âge, le rapport à la formation, les situations de handicap, le niveau de maîtrise numérique, ou encore le rythme d'apprentissage. Le scénario doit anticiper cette diversité, pas seulement la subir.
+      </div>
+    </div>
+  </div>
+
+  <!-- CAS PRATIQUE -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Cas pratique</h2>
+  </div>
+
+  <div class="cas-pratique">
+    <div class="cp-header">
+      <span class="cp-badge">Cas pratique</span>
+      <h3>Concevoir un scénario pédagogique multimodal avec alternative</h3>
+    </div>
+    <div class="scenario">
+      <strong style="display:block; margin-bottom:0.5rem; color:var(--gold-light); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">Mise en situation</strong>
+      Dans le cadre de la progression pédagogique vue en S2.1 (formation aides-soignants EHPAD), vous devez maintenant concevoir le scénario détaillé de la séquence S3 : "Appliquer les techniques de désamorçage verbal en jeu de rôle" (4h, présentiel, groupe de 10 apprenants hétérogènes en expérience).
+    </div>
+    <div class="consignes">
+      <p>Consignes de travail</p>
+      <ol>
+        <li>Construisez le déroulé minuté de cette séquence de 4h en précisant pour chaque étape : timing, activité, modalité (apprentissage/évaluation/accompagnement) et moyens.</li>
+        <li>Proposez un scénario alternatif pour un aléa probable dans ce contexte (EHPAD, équipe soignante).</li>
+        <li>Indiquez 2 leviers de différenciation pour ce groupe hétérogène (2 à 15 ans d'expérience).</li>
+        <li>Décrivez en quelques lignes une capsule pédagogique courte qui pourrait compléter cette séquence, avec 3 éléments de son storyboard.</li>
+      </ol>
+    </div>
+    <button class="toggle-correction" onclick="toggleCorrection(this)">Afficher la correction</button>
+    <div class="correction">
+      <h4>Éléments de correction</h4>
+      <p><strong>1. Déroulé minuté (4h = 240 min) :</strong></p>
+      <table>
+        <thead><tr><th>Timing</th><th>Activité</th><th>Type</th><th>Moyens</th></tr></thead>
+        <tbody>
+          <tr><td>0–20 min</td><td>Accueil, rappel des objectifs, recueil du vécu terrain récent</td><td>Lancement</td><td>Paperboard, tour de table</td></tr>
+          <tr><td>20–50 min</td><td>Démonstration du formateur : technique de communication désamorçante</td><td>Apprentissage</td><td>Démonstration filmée, fiche technique</td></tr>
+          <tr><td>50–140 min</td><td>Jeux de rôle en binômes (3 rotations de 30 min : aidant / résident agressif / observateur)</td><td>Apprentissage + Accompagnement</td><td>Fiches de cas, grille d'observation</td></tr>
+          <tr><td>140–160 min</td><td>Pause</td><td>—</td><td>—</td></tr>
+          <tr><td>160–210 min</td><td>Débriefing collectif filmé, analyse croisée des pratiques</td><td>Évaluation formative</td><td>Extraits vidéo, grille de critères partagée</td></tr>
+          <tr><td>210–230 min</td><td>Entretiens individuels courts (5 min/apprenant) pour les plus en difficulté repérés</td><td>Accompagnement</td><td>Grille de suivi individuel</td></tr>
+          <tr><td>230–240 min</td><td>Synthèse collective et consignes pour la suite (S4)</td><td>Clôture</td><td>Support de synthèse remis</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:0.8rem;"><strong>2. Scénario alternatif :</strong></p>
+      <ul>
+        <li><em>Aléa probable :</em> des aides-soignants rappelés en urgence sur leur service pendant la formation (réalité fréquente en EHPAD)</li>
+        <li><em>Alternative :</em> prévoir des rotations de binômes plus courtes et flexibles (15 min au lieu de 30), permettant de réintégrer un apprenant qui revient en cours de séquence sans perturber tout le groupe. Conserver une trame d'observation simplifiée utilisable même en sous-effectif.</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>3. Leviers de différenciation :</strong></p>
+      <ul>
+        <li><strong>Binômes mixtes expérience :</strong> associer un aide-soignant junior (moins de 5 ans) avec un senior (plus de 10 ans) pour favoriser le transfert de pratiques terrain pendant les jeux de rôle</li>
+        <li><strong>Cas gradués :</strong> proposer des fiches de cas à 2 niveaux de difficulté (situation simple vs situation complexe avec trouble cognitif sévère), au choix du binôme selon son aisance</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>4. Capsule pédagogique complémentaire :</strong></p>
+      <p style="font-style:italic; opacity:0.9;">Une capsule vidéo de 3 minutes "Les 3 signaux d'alerte avant l'agressivité", utilisable en révision après la formation ou en intégration pour les nouveaux arrivants.</p>
+      <ul>
+        <li><strong>Écran 1 :</strong> Titre + objectif ("Reconnaître les signaux avant qu'ils n'escaladent") — 10 sec</li>
+        <li><strong>Écran 2 :</strong> 3 signaux illustrés par des courtes saynètes filmées (crispation, élévation de la voix, retrait) — 90 sec</li>
+        <li><strong>Écran 3 :</strong> Quiz interactif "Que faites-vous à ce stade ?" avec feedback immédiat — 60 sec</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Quiz de vérification</h2>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <span class="quiz-badge">Quiz</span>
+      <h3>Vérifier ses acquis – S2.2</h3>
+    </div>
+
+    <div class="question" id="q1">
+      <p>1. Quelle est la différence principale entre la progression pédagogique et le scénario pédagogique ?</p>
+      <label class="option"><input type="radio" name="q1" value="a"> Ce sont deux termes identiques désignant le même document</label>
+      <label class="option"><input type="radio" name="q1" value="b"> La progression donne la vue d'ensemble, le scénario détaille le déroulé minute par minute d'une ou plusieurs séquences</label>
+      <label class="option"><input type="radio" name="q1" value="c"> Le scénario concerne uniquement le distanciel, la progression uniquement le présentiel</label>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <p>2. Selon le RE FPA, combien de modalités pédagogiques différentes le scénario présenté à l'examen doit-il nécessiter ?</p>
+      <label class="option"><input type="radio" name="q2" value="a"> Une seule, pour garantir la cohérence</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Plusieurs modalités pédagogiques</label>
+      <label class="option"><input type="radio" name="q2" value="c"> Le nombre de modalités n'est pas précisé par le RE</label>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <p>3. Les 3 types de situations à intégrer dans un scénario pédagogique et d'accompagnement sont :</p>
+      <label class="option"><input type="radio" name="q3" value="a"> Apprentissage, évaluation, accompagnement</label>
+      <label class="option"><input type="radio" name="q3" value="b"> Présentiel, distanciel, hybride</label>
+      <label class="option"><input type="radio" name="q3" value="c"> Diagnostic, formatif, sommatif</label>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <p>4. Pourquoi le RE FPA exige-t-il un scénario alternatif ?</p>
+      <label class="option"><input type="radio" name="q4" value="a"> Pour augmenter artificiellement le nombre de pages du dossier technique</label>
+      <label class="option"><input type="radio" name="q4" value="b"> Pour démontrer la capacité du formateur à anticiper les aléas et s'adapter</label>
+      <label class="option"><input type="radio" name="q4" value="c"> Pour proposer un choix au commanditaire entre deux options de prix</label>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <p>5. "Le groupe est plus petit que prévu le jour J" est un exemple de :</p>
+      <label class="option"><input type="radio" name="q5" value="a"> Situation d'évaluation sommative</label>
+      <label class="option"><input type="radio" name="q5" value="b"> Aléa nécessitant un scénario alternatif</label>
+      <label class="option"><input type="radio" name="q5" value="c"> Objectif pédagogique à reformuler</label>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <p>6. Le storyboard d'une capsule pédagogique sert à :</p>
+      <label class="option"><input type="radio" name="q6" value="a"> Remplacer la progression pédagogique de la formation</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Planifier en détail chaque écran, contenu et interaction avant de produire la ressource</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Évaluer les acquis des apprenants en fin de capsule uniquement</label>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <p>7. Selon le RE, que doit faire le candidat concernant le storyboard et le résultat final de sa capsule ?</p>
+      <label class="option"><input type="radio" name="q7" value="a"> Présenter uniquement le résultat final, le storyboard n'étant qu'un brouillon</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Comparer le storyboard initial et le résultat final, en analysant les écarts</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Détruire le storyboard une fois la capsule terminée pour ne pas surcharger le dossier</label>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <p>8. Pour prendre en compte l'hétérogénéité dans un scénario, quel levier est pertinent ?</p>
+      <label class="option"><input type="radio" name="q8" value="a"> Imposer le même rythme et les mêmes exercices à tous, sans exception</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Constituer des binômes mixtes en niveau pour favoriser le tutorat entre pairs</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Exclure les apprenants en difficulté des activités pratiques</label>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <p>9. Une situation d'accompagnement dans un scénario pédagogique correspond à :</p>
+      <label class="option"><input type="radio" name="q9" value="a"> Un moment de soutien individualisé, de régulation ou de suivi du parcours</label>
+      <label class="option"><input type="radio" name="q9" value="b"> Un exposé théorique du formateur devant le groupe</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Un test de positionnement en début de formation</label>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <p>10. À l'examen FPA, combien de temps dure la présentation orale du scénario pédagogique (chapitre 1) ?</p>
+      <label class="option"><input type="radio" name="q10" value="a"> 10 minutes</label>
+      <label class="option"><input type="radio" name="q10" value="b"> 20 minutes</label>
+      <label class="option"><input type="radio" name="q10" value="c"> 45 minutes</label>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+
+    <div class="question" id="q11">
+      <p>11. Pourquoi est-il important de préciser le rôle du formateur à chaque étape du scénario (transmetteur, facilitateur, observateur…) ?</p>
+      <label class="option"><input type="radio" name="q11" value="a"> Pour respecter une exigence purement administrative sans valeur pédagogique</label>
+      <label class="option"><input type="radio" name="q11" value="b"> Pour anticiper la charge organisationnelle et cognitive de l'animation</label>
+      <label class="option"><input type="radio" name="q11" value="c"> Pour permettre au commanditaire de facturer chaque rôle séparément</label>
+      <div class="feedback" id="fb-q11"></div>
+    </div>
+
+    <div class="question" id="q12">
+      <p>12. Les modalités d'utilisation d'une capsule pédagogique (autonomie, classe inversée, révision) doivent être :</p>
+      <label class="option"><input type="radio" name="q12" value="a"> Laissées à l'appréciation de chaque apprenant sans consigne</label>
+      <label class="option"><input type="radio" name="q12" value="b"> Précisées explicitement par le formateur dans sa conception</label>
+      <label class="option"><input type="radio" name="q12" value="c"> Définies uniquement après la diffusion de la capsule</label>
+      <div class="feedback" id="fb-q12"></div>
+    </div>
+
+    <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
+    <div class="quiz-score" id="quiz-score"></div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Synthèse à retenir</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💡</span> Les 6 points clés de la séquence S2.2</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <ol>
+        <li><strong>Le scénario zoome sur le détail</strong> : là où la progression donne la vue d'ensemble, le scénario décrit minute par minute le déroulé d'une ou plusieurs séquences.</li>
+        <li><strong>3 situations à articuler</strong> : apprentissage, évaluation, accompagnement — elles doivent s'enchaîner logiquement, pas être juxtaposées.</li>
+        <li><strong>Le scénario alternatif est obligatoire</strong> : anticiper les aléas (technique, niveau du groupe, effectif) avec une vraie alternative argumentée.</li>
+        <li><strong>La capsule pédagogique et son storyboard</strong> : attendu spécifique du RE FPA, avec comparaison entre le plan initial et le résultat final.</li>
+        <li><strong>L'hétérogénéité se traite dans le scénario</strong> : groupes mixtes, supports différenciés, temps modulables — pas seulement subie.</li>
+        <li><strong>Le rôle du formateur change à chaque étape</strong> : transmetteur, facilitateur, observateur, évaluateur, accompagnateur — l'expliciter aide à mieux préparer l'animation.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Real Conseil – Formation Professionnelle · FPA RNCP37275 · Module M1 – Séquence S2.2 · CP1 REAC<br>
+  Support pédagogique à usage interne
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isActive = header.classList.contains('active');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isActive) {
+      header.classList.add('active');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleCorrection(btn) {
+    const correction = btn.nextElementSibling;
+    if (correction.classList.contains('open')) {
+      correction.classList.remove('open');
+      btn.textContent = 'Afficher la correction';
+    } else {
+      correction.classList.add('open');
+      btn.textContent = 'Masquer la correction';
+    }
+  }
+
+  const reponses = { q1: 'b', q2: 'b', q3: 'a', q4: 'b', q5: 'b', q6: 'b', q7: 'b', q8: 'b', q9: 'a', q10: 'b', q11: 'b', q12: 'b' };
+  const feedbacks = {
+    q1: { b: 'Exact ! La progression structure l\'ensemble de la formation, le scénario détaille concrètement le déroulé d\'une ou plusieurs séquences précises.', a: 'Ce sont deux documents distincts et complémentaires, pas un seul.', c: 'Les deux documents peuvent intégrer toutes les modalités, la distinction n\'est pas liée au présentiel/distanciel.' },
+    q2: { b: 'Correct ! Le RE exige explicitement que le scénario nécessite plusieurs modalités pédagogiques différentes.', a: 'Une seule modalité ne permettrait pas de valider la compétence "intégrant la multimodalité".', c: 'Le RE est explicite sur ce point : plusieurs modalités sont requises.' },
+    q3: { a: 'Exact ! Apprentissage, évaluation et accompagnement sont les 3 types de situations à intégrer et articuler dans le scénario.', b: 'Présentiel/distanciel/hybride sont des modalités, pas des types de situations pédagogiques.', c: 'Diagnostic/formatif/sommatif sont des types d\'évaluation, une sous-catégorie des situations d\'évaluation.' },
+    q4: { b: 'Correct ! Le scénario alternatif démontre la capacité d\'anticipation et d\'adaptation, compétence clé du formateur professionnel.', a: 'Le scénario alternatif a une vraie valeur pédagogique, ce n\'est pas du remplissage.', c: 'Le scénario alternatif concerne l\'animation pédagogique, pas une négociation commerciale.' },
+    q5: { b: 'Exact ! Un effectif différent de prévu est un aléa typique qui justifie un scénario alternatif anticipé.', a: 'Ce n\'est pas une situation d\'évaluation mais un imprévu organisationnel.', c: 'Cela ne remet pas en cause l\'objectif pédagogique lui-même, mais la mise en œuvre.' },
+    q6: { b: 'Correct ! Le storyboard anticipe chaque écran, contenu et interaction avant la production de la ressource numérique.', a: 'Le storyboard concerne une ressource précise, pas l\'ensemble de la progression.', c: 'Le storyboard couvre tout le déroulé de la capsule, pas seulement son évaluation finale.' },
+    q7: { b: 'Exact ! Le RE exige une comparaison entre le storyboard initial et le résultat final, avec analyse des écarts.', a: 'Le RE exige explicitement de présenter et comparer les deux, pas seulement le résultat final.', c: 'Le storyboard doit être conservé et annexé, pas détruit.' },
+    q8: { b: 'Exact ! Les binômes mixtes favorisent le tutorat entre pairs et l\'entraide, un levier de différenciation efficace.', a: 'Imposer un rythme uniforme ignore précisément l\'hétérogénéité à prendre en compte.', c: 'Exclure des apprenants serait contraire à l\'esprit d\'inclusion attendu du formateur FPA.' },
+    q9: { a: 'Correct ! L\'accompagnement est un soutien individualisé, de la régulation ou un suivi de parcours — distinct de l\'apprentissage collectif ou de l\'évaluation.', b: 'Un exposé théorique relève de la situation d\'apprentissage, pas d\'accompagnement.', c: 'Le positionnement initial relève davantage de l\'évaluation diagnostique.' },
+    q10: { b: 'Correct ! Le RE prévoit 20 minutes de présentation orale pour le chapitre 1 (concevoir et préparer la formation), suivies de 10 minutes de questionnement.', a: '10 minutes correspond à la durée de questionnement, pas à la présentation elle-même.', c: '45 minutes correspond à la durée de préparation de la mise en situation professionnelle (analyse de pratiques), pas à cette partie.' },
+    q11: { b: 'Exact ! Préciser le rôle du formateur à chaque étape permet d\'anticiper la charge réelle de l\'animation et de mieux s\'organiser.', a: 'Cette explicitation a une vraie valeur pédagogique et organisationnelle, ce n\'est pas une formalité.', c: 'Le rôle du formateur n\'a pas de lien avec la facturation au commanditaire.' },
+    q12: { b: 'Correct ! Le RE exige que le candidat précise explicitement les modalités d\'utilisation prévues par les apprenants et par les formateurs.', a: 'Laisser sans consigne va à l\'encontre de la conception intentionnelle exigée.', c: 'Les modalités d\'utilisation doivent être anticipées dès la conception, pas après diffusion.' }
+  };
+
+  function corrigerQuiz() {
+    let score = 0;
+    Object.keys(reponses).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById(`fb-${q}`);
+      const options = document.querySelectorAll(`input[name="${q}"]`);
+      options.forEach(opt => opt.closest('.option').classList.remove('correct', 'incorrect'));
+      if (selected) {
+        const val = selected.value;
+        const correct = reponses[q];
+        selected.closest('.option').classList.add(val === correct ? 'correct' : 'incorrect');
+        if (val === correct) {
+          score++;
+          fb.className = 'feedback correct';
+          fb.textContent = '✓ ' + feedbacks[q][val];
+        } else {
+          fb.className = 'feedback incorrect';
+          fb.textContent = '✗ ' + feedbacks[q][val] + ' — Bonne réponse : ' + feedbacks[q][correct];
+          document.querySelector(`input[name="${q}"][value="${correct}"]`).closest('.option').classList.add('correct');
+        }
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = '⚠ Aucune réponse sélectionnée.';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.className = `quiz-score show ${score >= 9 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/12 — ${score === 12 ? '🎉 Parfait !' : score >= 10 ? '👍 Très bien !' : score >= 7 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+  }
+</script>
+
+</body>
+</html>

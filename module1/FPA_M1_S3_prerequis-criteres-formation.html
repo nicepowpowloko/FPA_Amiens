@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FPA – M1 / S3 – Identifier les prérequis et les critères d'une formation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --navy: #2C3F77;
+    --navy-dark: #1e2d57;
+    --navy-light: #3a518f;
+    --gold: #A0896A;
+    --gold-light: #c4a882;
+    --gold-pale: #f5efe6;
+    --white: #ffffff;
+    --gray-light: #f0f2f8;
+    --gray-mid: #d0d6e8;
+    --text: #1a2240;
+    --success: #2e7d52;
+    --error: #b93232;
+    --success-bg: #e8f5ee;
+    --error-bg: #fdeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-light); color: var(--text); line-height: 1.7; }
+
+  header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-light) 100%);
+    color: var(--white); padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .header-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .badge-module { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .badge-seq { background: rgba(255,255,255,0.15); color: var(--white); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(255,255,255,0.3); }
+  .badge-reac { background: rgba(160,137,106,0.3); color: var(--gold-light); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  .badge-duree { margin-left: auto; background: rgba(255,255,255,0.1); color: var(--gold-light); font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 2px; border: 1px solid rgba(160,137,106,0.4); }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.5rem; }
+  header h2 { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.7); }
+
+  .objectifs-bar { background: var(--white); border-left: 4px solid var(--gold); margin: 1.5rem 2rem; padding: 1.2rem 1.5rem; border-radius: 0 6px 6px 0; box-shadow: 0 2px 8px rgba(44,63,119,0.08); }
+  .objectifs-bar h3 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.8rem; }
+  .objectifs-bar ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .objectifs-bar ul li { background: var(--gold-pale); color: var(--navy); font-size: 0.85rem; font-weight: 500; padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid rgba(160,137,106,0.25); }
+  .objectifs-bar ul li::before { content: '✓ '; color: var(--gold); font-weight: 700; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+  .section-title { display: flex; align-items: center; gap: 0.8rem; margin: 2rem 0 1rem; }
+  .section-title .num { background: var(--navy); color: var(--white); font-size: 0.75rem; font-weight: 700; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-title h2 { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--navy); }
+
+  .accordion { background: var(--white); border-radius: 8px; margin-bottom: 0.6rem; box-shadow: 0 2px 6px rgba(44,63,119,0.07); overflow: hidden; border: 1px solid var(--gray-mid); }
+  .accordion-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.3rem; cursor: pointer; user-select: none; transition: background 0.2s; }
+  .accordion-header:hover { background: var(--gray-light); }
+  .accordion-header.active { background: var(--navy); color: var(--white); }
+  .accordion-header h3 { font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+  .accordion-arrow { font-size: 0.8rem; transition: transform 0.3s; color: var(--gold); }
+  .accordion-header.active .accordion-arrow { transform: rotate(180deg); color: var(--gold-light); }
+  .accordion-body { display: none; padding: 1.3rem 1.5rem; border-top: 1px solid var(--gray-mid); }
+  .accordion-body.open { display: block; }
+  .accordion-body p { margin-bottom: 0.8rem; font-size: 0.93rem; }
+  .accordion-body ul, .accordion-body ol { margin: 0.5rem 0 0.8rem 1.2rem; font-size: 0.93rem; }
+  .accordion-body li { margin-bottom: 0.4rem; }
+
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--navy); color: var(--white); padding: 0.7rem 1rem; text-align: left; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--gray-mid); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--gray-light); }
+  tr:hover td { background: var(--gold-pale); }
+
+  .encadre { border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0; font-size: 0.9rem; }
+  .encadre.info { background: #e8edf8; border-left: 4px solid var(--navy); }
+  .encadre.tip { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .encadre.warning { background: #fff8e6; border-left: 4px solid #e6a817; }
+  .encadre.reac { background: #f0edf8; border-left: 4px solid #6b52a8; }
+  .encadre strong { display: block; margin-bottom: 0.4rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+
+  /* PREREQUIS GRID */
+  .prereq-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    margin: 1rem 0;
+  }
+  .prereq-card {
+    background: var(--white);
+    border: 1px solid var(--gray-mid);
+    border-radius: 8px;
+    padding: 1rem;
+    border-top: 3px solid var(--navy);
+    font-size: 0.85rem;
+  }
+  .prereq-card.gold { border-top-color: var(--gold); }
+  .prereq-card h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 0.4rem;
+  }
+  .prereq-card.gold h4 { color: var(--gold); }
+  .prereq-card p { font-size: 0.82rem; color: #555; }
+
+  /* CRITERES TABLE COLOREE */
+  .criteres-wrapper {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+  .criteres-header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.8rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .cas-pratique { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); color: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0 1rem; }
+  .cas-pratique .cp-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
+  .cas-pratique .cp-badge { background: var(--gold); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .cas-pratique h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .cas-pratique .scenario { background: rgba(255,255,255,0.08); border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.6; }
+  .cas-pratique .consignes p { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 0.5rem; }
+  .cas-pratique ol { margin-left: 1.2rem; font-size: 0.9rem; }
+  .cas-pratique ol li { margin-bottom: 0.4rem; }
+  .toggle-correction { background: var(--gold); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 1rem; }
+  .toggle-correction:hover { background: var(--gold-light); }
+  .correction { display: none; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.9rem; }
+  .correction.open { display: block; }
+  .correction h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 0.7rem; }
+  .correction ul { margin-left: 1.2rem; }
+  .correction li { margin-bottom: 0.5rem; }
+  .correction table { font-size: 0.82rem; margin-top: 0.5rem; }
+  .correction th { background: rgba(255,255,255,0.2); color: var(--white); padding: 0.5rem 0.8rem; font-size: 0.78rem; }
+  .correction td { padding: 0.5rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--white); background: transparent; }
+  .correction tr:nth-child(even) td { background: rgba(255,255,255,0.05); }
+
+  .quiz-section { background: var(--white); border-radius: 10px; padding: 1.5rem; margin: 2rem 0; box-shadow: 0 2px 10px rgba(44,63,119,0.1); border: 1px solid var(--gray-mid); }
+  .quiz-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--gray-light); }
+  .quiz-badge { background: var(--navy); color: var(--white); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 2px; }
+  .quiz-section h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--navy); }
+  .question { margin-bottom: 1.5rem; }
+  .question p { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.7rem; color: var(--navy); }
+  .option { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 6px; margin-bottom: 0.4rem; cursor: pointer; border: 2px solid var(--gray-mid); transition: all 0.2s; font-size: 0.9rem; }
+  .option:hover { border-color: var(--navy); background: var(--gray-light); }
+  .option input[type="radio"] { margin-top: 2px; accent-color: var(--navy); }
+  .option.correct { border-color: var(--success); background: var(--success-bg); }
+  .option.incorrect { border-color: var(--error); background: var(--error-bg); }
+  .feedback { display: none; font-size: 0.85rem; padding: 0.6rem 0.8rem; border-radius: 4px; margin-top: 0.3rem; }
+  .feedback.correct { background: var(--success-bg); color: var(--success); display: block; }
+  .feedback.incorrect { background: var(--error-bg); color: var(--error); display: block; }
+  .quiz-btn { background: var(--navy); color: var(--white); border: none; padding: 0.7rem 1.5rem; border-radius: 4px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; transition: background 0.2s; }
+  .quiz-btn:hover { background: var(--navy-light); }
+  .quiz-score { display: none; margin-top: 1rem; padding: 1rem; border-radius: 6px; text-align: center; font-weight: 600; font-size: 1rem; }
+  .quiz-score.show { display: block; }
+  .quiz-score.good { background: var(--success-bg); color: var(--success); }
+  .quiz-score.bad { background: var(--error-bg); color: var(--error); }
+
+  footer { text-align: center; padding: 2rem; color: rgba(44,63,119,0.4); font-size: 0.8rem; border-top: 1px solid var(--gray-mid); margin-top: 2rem; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3rem; }
+    .objectifs-bar { margin: 1rem; }
+    main { padding: 0 1rem 2rem; }
+    .prereq-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-meta">
+    <span class="badge-module">FPA – M1</span>
+    <span class="badge-seq">Séquence S3</span>
+    <span class="badge-reac">CP1 REAC RNCP37275 – Synthèse</span>
+    <span class="badge-duree">⏱ 1 h</span>
+  </div>
+  <h1>Identifier les prérequis et les critères d'une formation</h1>
+  <h2>Synthèse du bloc « Elaborer la progression pédagogique d'une formation multimodale à partir d'une demande »</h2>
+</header>
+
+<div class="objectifs-bar">
+  <h3>Objectifs pédagogiques</h3>
+  <ul>
+    <li>Distinguer prérequis et objectifs de formation</li>
+    <li>Formuler des prérequis exploitables</li>
+    <li>Définir des critères de réussite mesurables</li>
+    <li>Relier prérequis, critères et positionnement</li>
+    <li>Consolider l'ensemble des notions du bloc M1</li>
+  </ul>
+</div>
+
+<main>
+
+  <div class="section-title">
+    <div class="num">1</div>
+    <h2>Apports théoriques</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🚪</span> Qu'est-ce qu'un prérequis ?</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Un <strong>prérequis</strong> est une condition d'entrée : ce que l'apprenant doit déjà savoir, savoir-faire ou posséder (matériel, statut, diplôme) <strong>avant</strong> de pouvoir suivre la formation dans de bonnes conditions.</p>
+      <p>Les prérequis se distinguent nettement des objectifs de formation :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Prérequis</th><th>Objectif de formation</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Moment</strong></td>
+              <td>Avant l'entrée en formation</td>
+              <td>À l'issue de la formation</td>
+            </tr>
+            <tr>
+              <td><strong>Rôle</strong></td>
+              <td>Condition d'accès, point de départ</td>
+              <td>Résultat attendu, point d'arrivée</td>
+            </tr>
+            <tr>
+              <td><strong>Exemple</strong></td>
+              <td>Savoir lire et écrire le français, posséder le permis B</td>
+              <td>Être capable de conduire un entretien de recadrage</td>
+            </tr>
+            <tr>
+              <td><strong>Qui les fixe ?</strong></td>
+              <td>Le formateur, en cohérence avec le référentiel et le cahier des charges</td>
+              <td>Le formateur, à partir de l'analyse de la demande</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Les prérequis peuvent porter sur plusieurs dimensions :</p>
+      <div class="prereq-grid">
+        <div class="prereq-card">
+          <h4>📚 Savoirs</h4>
+          <p>Connaissances de base nécessaires (ex : notions de calcul pour une formation comptabilité)</p>
+        </div>
+        <div class="prereq-card gold">
+          <h4>🛠️ Savoir-faire</h4>
+          <p>Compétences techniques déjà maîtrisées (ex : usage basique d'un ordinateur)</p>
+        </div>
+        <div class="prereq-card">
+          <h4>📄 Administratifs</h4>
+          <p>Diplôme, statut, autorisation (ex : permis de conduire, habilitation préalable)</p>
+        </div>
+        <div class="prereq-card gold">
+          <h4>💻 Matériels</h4>
+          <p>Équipement nécessaire (ex : ordinateur, connexion internet pour le distanciel)</p>
+        </div>
+        <div class="prereq-card">
+          <h4>🗣️ Linguistiques</h4>
+          <p>Niveau de langue requis (ex : niveau B1 en français pour suivre les échanges)</p>
+        </div>
+        <div class="prereq-card gold">
+          <h4>🧠 Expérientiels</h4>
+          <p>Expérience professionnelle minimale dans le métier ou le secteur visé</p>
+        </div>
+      </div>
+      <div class="encadre warning">
+        <strong>⚠️ Ne pas confondre exigence et prérequis excluant</strong>
+        Un prérequis trop strict peut écarter injustement des publics éligibles (ex : exiger un niveau de français trop élevé pour une formation d'insertion). Le formateur doit distinguer ce qui est réellement indispensable de ce qui relève d'un confort pédagogique, et proposer des solutions (remédiation, FOAD préparatoire) plutôt que d'exclure.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🎯</span> Définir des critères de réussite mesurables</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Un <strong>critère de réussite</strong> est un indicateur observable qui permet de dire si un objectif pédagogique est atteint ou non. Sans critère, un objectif même bien formulé reste impossible à évaluer objectivement.</p>
+      <p>Reprenons la formule de Mager (vue en S1.3) : un objectif pédagogique complet comprend toujours un critère de réussite. Les critères se déclinent généralement selon 3 dimensions :</p>
+      <div class="criteres-wrapper">
+        <div class="criteres-header">📊 Les 3 dimensions d'un critère de réussite</div>
+        <div class="table-wrap" style="margin:0;">
+          <table>
+            <thead>
+              <tr><th>Dimension</th><th>Question</th><th>Exemple</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Quantité</strong></td>
+                <td>Combien d'éléments, d'erreurs tolérées, de réussites attendues ?</td>
+                <td>"Sans erreur sur 8 critères sur 10"</td>
+              </tr>
+              <tr>
+                <td><strong>Qualité</strong></td>
+                <td>Avec quel niveau de précision, de conformité ?</td>
+                <td>"En respectant scrupuleusement le protocole de sécurité"</td>
+              </tr>
+              <tr>
+                <td><strong>Temps</strong></td>
+                <td>Dans quel délai, à quelle vitesse ?</td>
+                <td>"En moins de 15 minutes"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="encadre tip">
+        <strong>💡 Exemple complet</strong>
+        Objectif : "Conduire un entretien de recadrage en appliquant la méthode DESC." <br>
+        Critère de réussite associé : <strong>"En respectant les 4 étapes de la méthode (qualité), sans en omettre aucune (quantité), en moins de 10 minutes (temps)."</strong>
+      </div>
+      <div class="encadre info">
+        <strong>📌 Critères et grilles d'évaluation</strong>
+        Les critères de réussite définis en amont deviennent la base des grilles d'évaluation utilisées pendant et après la formation (cf. S2.1 et S2.2 — situations d'évaluation). Sans critères clairs définis à l'avance, l'évaluation reste subjective et difficilement défendable face à un commanditaire ou un jury.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🔍</span> Le positionnement : vérifier les prérequis avant l'entrée</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>La vérification des prérequis se fait concrètement via un <strong>test ou entretien de positionnement</strong>, réalisé avant le démarrage de la formation. C'est une étape clé que l'on retrouve dans la progression pédagogique (S2.1, séquence S0) comme évaluation diagnostique.</p>
+      <p>Le positionnement permet de :</p>
+      <ul>
+        <li>Vérifier que les prérequis sont réellement maîtrisés par chaque apprenant</li>
+        <li>Identifier les écarts entre apprenants pour anticiper la différenciation (cf. S2.2)</li>
+        <li>Orienter vers un parcours adapté si besoin (remédiation, dispense partielle)</li>
+        <li>Sécuriser juridiquement l'organisme de formation en cas de litige sur l'adéquation du public</li>
+      </ul>
+      <div class="encadre reac">
+        <strong>📋 Lien avec la réglementation</strong>
+        La réforme de la formation professionnelle impose une évaluation préalable des compétences des apprenants avant l'entrée en formation. Cette obligation justifie la généralisation des tests de positionnement, dont le contenu s'appuie directement sur les objectifs pédagogiques et les prérequis identifiés.
+      </div>
+      <p>Formes possibles de positionnement :</p>
+      <ul>
+        <li><strong>Questionnaire écrit</strong> (papier ou en ligne) : rapide, standardisé, adapté aux grands groupes</li>
+        <li><strong>Entretien individuel</strong> : plus fin, permet de cerner motivations et freins, mais plus coûteux en temps</li>
+        <li><strong>Test pratique</strong> : mise en situation courte pour vérifier un savoir-faire (ex : test de frappe pour une formation bureautique)</li>
+        <li><strong>Auto-évaluation</strong> : l'apprenant s'auto-positionne, à croiser avec d'autres sources pour fiabiliser</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">🧷</span> Synthèse du bloc M1 : de la demande aux prérequis</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>Cette séquence clôture le bloc M1 portant sur la CP1 du REAC FPA. Voici comment les notions vues s'articulent entre elles :</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Séquence</th><th>Ce qu'on a appris</th><th>Lien avec S3</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>S1.1 à S1.4</td>
+              <td>Analyser la demande (formelle/informelle), identifier le public, les écarts de compétences, contextualiser</td>
+              <td>Les prérequis découlent directement de l'analyse du public cible (S1.2) et des écarts identifiés (S1.3)</td>
+            </tr>
+            <tr>
+              <td>S2.1</td>
+              <td>Construire la progression pédagogique avec les objectifs en cascade</td>
+              <td>Les critères de réussite sont intégrés aux OPO formulés selon Mager</td>
+            </tr>
+            <tr>
+              <td>S2.2</td>
+              <td>Concevoir le scénario pédagogique détaillé et la capsule</td>
+              <td>Le positionnement (test de prérequis) est lui-même une situation d'évaluation à scénariser</td>
+            </tr>
+            <tr>
+              <td><strong>S3</strong></td>
+              <td><strong>Formaliser prérequis et critères de réussite</strong></td>
+              <td>Boucle la chaîne : de la demande analysée à des critères mesurables et vérifiables</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="encadre tip">
+        <strong>💡 Vision d'ensemble pour le dossier technique FPA</strong>
+        Au moment de rédiger le chapitre 1 du dossier technique (8-12 pages), ces 7 séquences (S1.1 à S3) constituent ensemble la matière première : analyse de la demande, public, écarts, contexte, progression, scénario et prérequis/critères. C'est l'ensemble cohérent qui permet de répondre à la compétence "Elaborer la progression pédagogique d'une formation multimodale à partir d'une demande".
+      </div>
+    </div>
+  </div>
+
+  <!-- CAS PRATIQUE -->
+  <div class="section-title">
+    <div class="num">2</div>
+    <h2>Cas pratique</h2>
+  </div>
+
+  <div class="cas-pratique">
+    <div class="cp-header">
+      <span class="cp-badge">Cas pratique</span>
+      <h3>Formaliser prérequis et critères de réussite</h3>
+    </div>
+    <div class="scenario">
+      <strong style="display:block; margin-bottom:0.5rem; color:var(--gold-light); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;">Mise en situation</strong>
+      Vous finalisez la formation "Prévention et gestion des situations d'agressivité des résidents" pour les 10 aides-soignants de l'EHPAD (cf. cas pratiques S2.1 et S2.2). Il vous reste à formaliser les prérequis d'entrée et les critères de réussite globaux de cette formation de 14h.
+    </div>
+    <div class="consignes">
+      <p>Consignes de travail</p>
+      <ol>
+        <li>Listez 3 prérequis pertinents pour cette formation (en distinguant leur nature : savoir, matériel, expérientiel…).</li>
+        <li>Identifiez un prérequis qui pourrait être problématique pour l'inclusion du public et proposez une solution alternative.</li>
+        <li>Formulez 2 critères de réussite globaux pour cette formation en précisant la dimension quantité/qualité/temps de chacun.</li>
+        <li>Proposez la forme de positionnement la plus adaptée à ce public et justifiez votre choix.</li>
+      </ol>
+    </div>
+    <button class="toggle-correction" onclick="toggleCorrection(this)">Afficher la correction</button>
+    <div class="correction">
+      <h4>Éléments de correction</h4>
+      <p><strong>1. Prérequis identifiés :</strong></p>
+      <ul>
+        <li><strong>Expérientiel :</strong> Exercer une activité d'aide-soignant en EHPAD ou structure similaire (le contenu s'appuie sur du vécu terrain)</li>
+        <li><strong>Matériel :</strong> Pour la partie distancielle, disposer d'un accès à un ordinateur ou smartphone avec connexion internet</li>
+        <li><strong>Savoir-être :</strong> Aucun prérequis de diplôme spécifique en gestion de conflit, la formation part du niveau débutant sur ce sujet précis</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>2. Prérequis problématique et solution :</strong></p>
+      <ul>
+        <li><em>Problème :</em> le prérequis "accès à un ordinateur/smartphone" pour la partie distancielle peut exclure certains aides-soignants peu équipés ou peu à l'aise avec le numérique (cf. S1.4)</li>
+        <li><em>Solution :</em> proposer un accès aux supports distanciels sur les postes informatiques de l'établissement (salle de pause, bureau infirmier) à des horaires dédiés, et prévoir un appui ponctuel d'un collègue plus à l'aise numériquement (tutorat entre pairs, cf. S2.2)</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>3. Critères de réussite globaux :</strong></p>
+      <ul>
+        <li><strong>Critère 1 :</strong> "À l'issue de la formation, l'apprenant applique au moins 2 des 3 techniques de désamorçage verbal vues en formation (quantité), dans le respect de la dignité du résident (qualité), lors d'une mise en situation observée (temps : séance de 10 min)."</li>
+        <li><strong>Critère 2 :</strong> "L'apprenant identifie sans erreur les 3 signaux d'alerte précédant une situation d'agressivité (quantité et qualité), en moins de 5 minutes lors du quiz de validation (temps)."</li>
+      </ul>
+      <p style="margin-top:0.8rem;"><strong>4. Forme de positionnement recommandée :</strong></p>
+      <p style="font-style:italic; opacity:0.9;">Un <strong>questionnaire court en ligne (5-10 questions)</strong>, complété si possible d'un bref échange oral avec le formateur ou la responsable de service. Justification : le public est expérimenté sur le terrain mais hétérogène (2 à 15 ans d'ancienneté) — le questionnaire permet un repérage rapide et standardisé du vécu de chacun face à l'agressivité, sans alourdir le planning déjà contraint du service continu 7j/7.</p>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-title">
+    <div class="num">3</div>
+    <h2>Quiz de vérification</h2>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-header">
+      <span class="quiz-badge">Quiz</span>
+      <h3>Vérifier ses acquis – S3</h3>
+    </div>
+
+    <div class="question" id="q1">
+      <p>1. Un prérequis se définit comme :</p>
+      <label class="option"><input type="radio" name="q1" value="a"> Le résultat attendu à l'issue de la formation</label>
+      <label class="option"><input type="radio" name="q1" value="b"> Une condition d'entrée que l'apprenant doit posséder avant la formation</label>
+      <label class="option"><input type="radio" name="q1" value="c"> Le contenu détaillé du programme de formation</label>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question" id="q2">
+      <p>2. Lequel de ces exemples est un prérequis matériel ?</p>
+      <label class="option"><input type="radio" name="q2" value="a"> Savoir lire et écrire</label>
+      <label class="option"><input type="radio" name="q2" value="b"> Disposer d'un ordinateur avec connexion internet pour suivre le distanciel</label>
+      <label class="option"><input type="radio" name="q2" value="c"> Avoir 2 ans d'expérience dans le métier</label>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question" id="q3">
+      <p>3. Pourquoi un prérequis trop strict peut-il être problématique ?</p>
+      <label class="option"><input type="radio" name="q3" value="a"> Il rend la formation plus chère à produire</label>
+      <label class="option"><input type="radio" name="q3" value="b"> Il peut écarter injustement des publics éligibles à la formation</label>
+      <label class="option"><input type="radio" name="q3" value="c"> Il oblige le formateur à rédiger un cahier des charges plus long</label>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="question" id="q4">
+      <p>4. Les 3 dimensions d'un critère de réussite sont :</p>
+      <label class="option"><input type="radio" name="q4" value="a"> Présentiel, distanciel, hybride</label>
+      <label class="option"><input type="radio" name="q4" value="b"> Quantité, qualité, temps</label>
+      <label class="option"><input type="radio" name="q4" value="c"> Diagnostic, formatif, sommatif</label>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question" id="q5">
+      <p>5. "En moins de 10 minutes" dans un critère de réussite correspond à la dimension :</p>
+      <label class="option"><input type="radio" name="q5" value="a"> Quantité</label>
+      <label class="option"><input type="radio" name="q5" value="b"> Qualité</label>
+      <label class="option"><input type="radio" name="q5" value="c"> Temps</label>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <p>6. Sans critère de réussite, un objectif pédagogique :</p>
+      <label class="option"><input type="radio" name="q6" value="a"> Reste utilisable mais difficile à évaluer objectivement</label>
+      <label class="option"><input type="radio" name="q6" value="b"> Doit obligatoirement être reformulé en objectif de formation</label>
+      <label class="option"><input type="radio" name="q6" value="c"> Ne concerne pas la progression pédagogique</label>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <p>7. Le test de positionnement intervient à quel moment ?</p>
+      <label class="option"><input type="radio" name="q7" value="a"> Uniquement à la fin de la formation</label>
+      <label class="option"><input type="radio" name="q7" value="b"> Avant le démarrage de la formation</label>
+      <label class="option"><input type="radio" name="q7" value="c"> Pendant chaque pause de la formation</label>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question" id="q8">
+      <p>8. Quel est l'un des intérêts principaux du positionnement ?</p>
+      <label class="option"><input type="radio" name="q8" value="a"> Remplacer l'évaluation sommative finale</label>
+      <label class="option"><input type="radio" name="q8" value="b"> Identifier les écarts entre apprenants pour anticiper la différenciation</label>
+      <label class="option"><input type="radio" name="q8" value="c"> Décider du tarif de la formation</label>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+
+    <div class="question" id="q9">
+      <p>9. Pour un public hétérogène avec un planning contraint (service continu), quelle forme de positionnement est la plus adaptée ?</p>
+      <label class="option"><input type="radio" name="q9" value="a"> Un entretien individuel d'1h avec chaque apprenant</label>
+      <label class="option"><input type="radio" name="q9" value="b"> Un questionnaire court, rapide à compléter, éventuellement complété d'un bref échange</label>
+      <label class="option"><input type="radio" name="q9" value="c"> Aucun positionnement, pour ne pas alourdir le planning</label>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <p>10. Les critères de réussite définis en amont servent de base à :</p>
+      <label class="option"><input type="radio" name="q10" value="a"> La grille d'évaluation utilisée pendant et après la formation</label>
+      <label class="option"><input type="radio" name="q10" value="b"> Le calcul du tarif horaire du formateur</label>
+      <label class="option"><input type="radio" name="q10" value="c"> Le choix du lieu de formation</label>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+
+    <button class="quiz-btn" onclick="corrigerQuiz()">Valider mes réponses</button>
+    <div class="quiz-score" id="quiz-score"></div>
+  </div>
+
+  <!-- SYNTHESE -->
+  <div class="section-title">
+    <div class="num">4</div>
+    <h2>Synthèse à retenir</h2>
+  </div>
+
+  <div class="accordion">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <h3><span class="icon">💡</span> Les 5 points clés de la séquence S3 — et de tout le bloc M1</h3>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <ol>
+        <li><strong>Prérequis ≠ Objectif</strong> : le prérequis est un point de départ (avant), l'objectif est un point d'arrivée (après).</li>
+        <li><strong>6 types de prérequis</strong> : savoirs, savoir-faire, administratifs, matériels, linguistiques, expérientiels. Tous ne sont pas toujours nécessaires, mais tous doivent être questionnés.</li>
+        <li><strong>Critères = Quantité + Qualité + Temps</strong> : un critère de réussite complet précise combien, comment et en combien de temps.</li>
+        <li><strong>Le positionnement vérifie les prérequis</strong> : questionnaire, entretien, test pratique — la forme s'adapte au public et aux contraintes.</li>
+        <li><strong>Le bloc M1 forme une chaîne complète</strong> : demande analysée → public et écarts identifiés → contexte pris en compte → progression construite → scénario détaillé → prérequis et critères formalisés. C'est cette chaîne cohérente que le dossier technique FPA doit démontrer.</li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Real Conseil – Formation Professionnelle · FPA RNCP37275 · Module M1 – Séquence S3 (clôture du bloc CP1)<br>
+  Support pédagogique à usage interne
+</footer>
+
+<script>
+  function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isActive = header.classList.contains('active');
+    document.querySelectorAll('.accordion-header').forEach(h => {
+      h.classList.remove('active');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isActive) {
+      header.classList.add('active');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleCorrection(btn) {
+    const correction = btn.nextElementSibling;
+    if (correction.classList.contains('open')) {
+      correction.classList.remove('open');
+      btn.textContent = 'Afficher la correction';
+    } else {
+      correction.classList.add('open');
+      btn.textContent = 'Masquer la correction';
+    }
+  }
+
+  const reponses = { q1: 'b', q2: 'b', q3: 'b', q4: 'b', q5: 'c', q6: 'a', q7: 'b', q8: 'b', q9: 'b', q10: 'a' };
+  const feedbacks = {
+    q1: { b: 'Exact ! Le prérequis est une condition d\'entrée, à distinguer de l\'objectif qui est un résultat de sortie.', a: 'C\'est la définition de l\'objectif de formation, pas du prérequis.', c: 'Le programme décrit le contenu de la formation, ce n\'est pas un prérequis.' },
+    q2: { b: 'Exact ! L\'accès à un ordinateur et une connexion internet est typiquement un prérequis matériel, indispensable pour le distanciel.', a: 'Savoir lire et écrire est un prérequis de savoir, pas matériel.', c: 'L\'expérience professionnelle est un prérequis expérientiel, pas matériel.' },
+    q3: { b: 'Correct ! Un prérequis trop strict peut exclure injustement des publics qui pourraient bénéficier de la formation avec un accompagnement adapté.', a: 'Le coût de production n\'est pas directement lié à la sévérité des prérequis.', c: 'La longueur du cahier des charges n\'est pas le problème principal soulevé par des prérequis trop stricts.' },
+    q4: { b: 'Correct ! Quantité, qualité et temps sont les 3 dimensions classiques d\'un critère de réussite mesurable.', a: 'Ce sont des modalités pédagogiques, pas des dimensions de critère.', c: 'Ce sont des types d\'évaluation, pas les dimensions internes d\'un critère.' },
+    q5: { c: 'Exact ! "En moins de 10 minutes" précise un délai, donc la dimension temps du critère.', a: 'La quantité porte sur le nombre d\'éléments ou d\'erreurs tolérées, pas sur la durée.', b: 'La qualité porte sur le niveau de précision ou de conformité, pas sur le délai.' },
+    q6: { a: 'Correct ! Sans critère, l\'objectif reste formulable mais son évaluation devient subjective et difficile à défendre.', b: 'Le problème n\'est pas le niveau de l\'objectif (formation vs pédagogique) mais l\'absence de critère mesurable.', c: 'Au contraire, l\'objectif pédagogique fait pleinement partie de la progression, avec ou sans critère.' },
+    q7: { b: 'Exact ! Le positionnement se réalise avant le démarrage, pour vérifier les prérequis et orienter le parcours.', a: 'Un positionnement en fin de formation serait une évaluation sommative, pas un positionnement.', c: 'Le positionnement n\'est pas répété à chaque pause, c\'est une étape d\'entrée unique.' },
+    q8: { b: 'Correct ! Identifier les écarts entre apprenants permet d\'anticiper la différenciation pédagogique dans le scénario.', a: 'Le positionnement est un diagnostic d\'entrée, distinct de l\'évaluation sommative finale.', c: 'Le tarif de la formation n\'est pas déterminé par le positionnement pédagogique.' },
+    q9: { b: 'Exact ! Le questionnaire court est rapide à administrer et s\'adapte aux contraintes de planning d\'un public en service continu.', a: 'Un entretien d\'1h par apprenant serait trop lourd à organiser pour ce contexte de service continu.', c: 'Supprimer le positionnement priverait le formateur d\'informations essentielles sur le public, contraire à l\'esprit du REAC.' },
+    q10: { a: 'Correct ! Les critères de réussite définis en amont structurent directement les grilles d\'évaluation formative et sommative.', b: 'Le tarif horaire dépend d\'autres facteurs (marché, expérience, statut), pas des critères de réussite pédagogiques.', c: 'Le choix du lieu relève de la logistique, pas des critères de réussite pédagogiques.' }
+  };
+
+  function corrigerQuiz() {
+    let score = 0;
+    Object.keys(reponses).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const fb = document.getElementById(`fb-${q}`);
+      const options = document.querySelectorAll(`input[name="${q}"]`);
+      options.forEach(opt => opt.closest('.option').classList.remove('correct', 'incorrect'));
+      if (selected) {
+        const val = selected.value;
+        const correct = reponses[q];
+        selected.closest('.option').classList.add(val === correct ? 'correct' : 'incorrect');
+        if (val === correct) {
+          score++;
+          fb.className = 'feedback correct';
+          fb.textContent = '✓ ' + feedbacks[q][val];
+        } else {
+          fb.className = 'feedback incorrect';
+          fb.textContent = '✗ ' + feedbacks[q][val] + ' — Bonne réponse : ' + feedbacks[q][correct];
+          document.querySelector(`input[name="${q}"][value="${correct}"]`).closest('.option').classList.add('correct');
+        }
+      } else {
+        fb.className = 'feedback incorrect';
+        fb.textContent = '⚠ Aucune réponse sélectionnée.';
+      }
+    });
+    const scoreEl = document.getElementById('quiz-score');
+    scoreEl.className = `quiz-score show ${score >= 7 ? 'good' : 'bad'}`;
+    scoreEl.textContent = `Score : ${score}/10 — ${score === 10 ? '🎉 Parfait !' : score >= 8 ? '👍 Très bien !' : score >= 6 ? '⚠ À revoir partiellement.' : '❌ Relire le cours avant de continuer.'}`;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mise à niveau PowerPoint — Module FPA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#2C3F77;
+  --navy-dark:#2D4279;
+  --navy-soft:#3C5294;
+  --gold:#A0896A;
+  --gold-light:#A28A70;
+  --gold-pale:#EDE6DC;
+  --bg:#F6F7FB;
+  --white:#FFFFFF;
+  --text:#1F2937;
+  --text-light:#6B7280;
+  --border:#E4E6EE;
+  --green:#2E7D5B;
+  --red:#B3463F;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  display:flex;
+  min-height:100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  width:280px;
+  background:var(--navy);
+  color:#fff;
+  position:fixed;
+  top:0;left:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:28px 0 28px 0;
+  flex-shrink:0;
+  z-index:50;
+}
+.sidebar-brand{
+  padding:0 24px 20px 24px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  margin-bottom:18px;
+}
+.sidebar-brand .tag{
+  display:inline-block;
+  background:var(--gold);
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  padding:3px 9px;
+  border-radius:20px;
+  margin-bottom:10px;
+  text-transform:uppercase;
+}
+.sidebar-brand h1{
+  font-family:'Poppins',sans-serif;
+  font-size:17px;
+  font-weight:700;
+  line-height:1.35;
+  margin:0;
+}
+.sidebar nav{padding:0 12px;}
+.sidebar nav a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:rgba(255,255,255,0.75);
+  text-decoration:none;
+  font-size:13.5px;
+  font-weight:500;
+  padding:9px 12px;
+  border-radius:8px;
+  margin-bottom:2px;
+  transition:.15s;
+}
+.sidebar nav a .num{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  font-size:11px;
+  font-weight:700;
+  flex-shrink:0;
+}
+.sidebar nav a:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.sidebar nav a.active{background:var(--gold);color:#fff;}
+.sidebar nav a.active .num{background:rgba(255,255,255,0.25);}
+.sidebar nav .group-label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:rgba(255,255,255,0.4);
+  padding:14px 12px 6px 12px;
+  font-weight:700;
+}
+
+/* ---------- MAIN ---------- */
+.main{margin-left:280px;width:calc(100% - 280px);}
+
+.hero{
+  background:linear-gradient(120deg,var(--navy) 0%, var(--navy-dark) 60%, var(--navy-soft) 100%);
+  color:#fff;
+  padding:64px 60px 56px 60px;
+}
+.hero .tag{
+  display:inline-block;
+  background:var(--gold);
+  padding:5px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+.hero h1{
+  font-family:'Poppins',sans-serif;
+  font-size:36px;
+  font-weight:800;
+  margin:0 0 14px 0;
+  max-width:780px;
+  line-height:1.25;
+}
+.hero p.lead{
+  font-size:16px;
+  color:rgba(255,255,255,0.82);
+  max-width:680px;
+  line-height:1.6;
+  margin:0 0 28px 0;
+}
+.hero-meta{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.hero-meta .chip{
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:10px;
+  padding:10px 16px;
+  font-size:13px;
+}
+.hero-meta .chip b{display:block;font-size:15px;font-family:'Poppins',sans-serif;margin-top:2px;}
+
+section.block{
+  padding:48px 60px;
+  border-bottom:1px solid var(--border);
+}
+section.block:nth-of-type(even){background:#FBFBFD;}
+
+.seq-header{
+  display:flex;
+  align-items:flex-start;
+  gap:18px;
+  margin-bottom:24px;
+}
+.seq-badge{
+  width:46px;height:46px;
+  border-radius:12px;
+  background:var(--gold-pale);
+  color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Poppins',sans-serif;
+  font-weight:800;
+  font-size:18px;
+  flex-shrink:0;
+}
+.seq-header h2{
+  font-family:'Poppins',sans-serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--navy-dark);
+  margin:0 0 6px 0;
+}
+.seq-header .duree{
+  font-size:13px;
+  color:var(--gold);
+  font-weight:700;
+}
+
+.objectifs-box{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 22px;
+  margin-bottom:26px;
+}
+.objectifs-box h4{
+  margin:0 0 10px 0;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--navy-dark);
+  font-weight:700;
+}
+.objectifs-box ul{margin:0;padding-left:20px;}
+.objectifs-box li{margin-bottom:5px;font-size:14.5px;line-height:1.5;}
+
+/* accordion */
+.accordion{margin-bottom:14px;}
+.acc-item{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:10px;
+  overflow:hidden;
+}
+.acc-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:15px;
+  color:var(--navy-dark);
+}
+.acc-head .icon-wrap{
+  width:30px;height:30px;
+  border-radius:8px;
+  background:var(--gold-pale);
+  color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;
+  margin-right:12px;
+  flex-shrink:0;
+}
+.acc-head .title-line{display:flex;align-items:center;}
+.acc-head .chevron{
+  transition:.2s;
+  color:var(--text-light);
+  font-size:13px;
+}
+.acc-item.open .chevron{transform:rotate(180deg);}
+.acc-body{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .25s ease;
+  padding:0 20px;
+}
+.acc-item.open .acc-body{padding:0 20px 18px 20px;}
+.acc-body p, .acc-body li{font-size:14.5px;line-height:1.65;color:var(--text);}
+.acc-body ul{padding-left:20px;margin:8px 0;}
+.acc-body .astuce{
+  background:var(--gold-pale);
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:13.5px;
+  margin-top:10px;
+  color:#5b4a36;
+}
+.acc-body .astuce b{color:var(--gold);}
+
+.practice-box{
+  background:#EEF2FB;
+  border:1px dashed var(--navy-soft);
+  border-radius:12px;
+  padding:18px 22px;
+  margin-top:18px;
+}
+.practice-box h4{
+  margin:0 0 8px 0;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:var(--navy-dark);
+  font-weight:700;
+}
+.practice-box p{margin:0;font-size:14.5px;line-height:1.6;}
+
+.key-point{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  background:var(--navy-dark);
+  color:#fff;
+  border-radius:12px;
+  padding:18px 22px;
+  margin-top:18px;
+}
+.key-point .kp-icon{
+  width:32px;height:32px;
+  background:var(--gold);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-weight:800;
+}
+.key-point p{margin:0;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,0.92);}
+.key-point b{color:var(--gold);}
+
+/* table comparison */
+.compare-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:14px;
+  font-size:14px;
+}
+.compare-table th{
+  background:var(--navy);
+  color:#fff;
+  text-align:left;
+  padding:10px 14px;
+  font-weight:600;
+}
+.compare-table td{
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  background:var(--white);
+}
+.compare-table tr:nth-child(even) td{background:#FAFAFC;}
+
+/* Quiz */
+.quiz-question{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20px 22px;
+  margin-bottom:16px;
+}
+.quiz-question p.q-text{
+  font-weight:600;
+  font-size:15px;
+  margin:0 0 12px 0;
+  color:var(--navy-dark);
+}
+.quiz-question label{
+  display:block;
+  padding:10px 14px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  margin-bottom:8px;
+  font-size:14px;
+  cursor:pointer;
+  transition:.15s;
+}
+.quiz-question label:hover{border-color:var(--gold);background:#FAF7F2;}
+.quiz-question input{margin-right:10px;}
+.quiz-question label.correct{border-color:var(--green);background:#EAF6EF;}
+.quiz-question label.incorrect{border-color:var(--red);background:#FCEBEA;}
+
+#quiz-submit{
+  background:var(--gold);
+  color:#fff;
+  border:none;
+  padding:14px 28px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  margin-top:8px;
+}
+#quiz-submit:hover{background:#8f7a5e;}
+#quiz-result{
+  margin-top:18px;
+  padding:18px 22px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:16px;
+  display:none;
+}
+#quiz-result.show{display:block;}
+#quiz-result.good{background:#EAF6EF;color:var(--green);}
+#quiz-result.mid{background:#FFF6E5;color:#8a6d1f;}
+#quiz-result.low{background:#FCEBEA;color:var(--red);}
+
+footer{
+  padding:36px 60px;
+  background:var(--navy);
+  color:rgba(255,255,255,0.7);
+  font-size:13px;
+  text-align:center;
+}
+footer b{color:#fff;}
+
+@media (max-width:900px){
+  .sidebar{display:none;}
+  .main{margin-left:0;width:100%;}
+  section.block, .hero{padding:32px 22px;}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span class="tag">FPA · RNCP37275</span>
+    <h1>Mise à niveau<br>PowerPoint</h1>
+  </div>
+  <nav id="navlinks">
+    <div class="group-label">Cadrage</div>
+    <a href="#intro"><span class="num">i</span> Présentation du module</a>
+    <div class="group-label">Séquences pédagogiques</div>
+    <a href="#seq1"><span class="num">1</span> Découvrir l'interface</a>
+    <a href="#seq2"><span class="num">2</span> Diapositives &amp; mises en page</a>
+    <a href="#seq3"><span class="num">3</span> Texte &amp; mise en forme</a>
+    <a href="#seq4"><span class="num">4</span> Images, formes, SmartArt</a>
+    <a href="#seq5"><span class="num">5</span> Tableaux &amp; graphiques</a>
+    <a href="#seq6"><span class="num">6</span> Animations &amp; transitions</a>
+    <a href="#seq7"><span class="num">7</span> Thèmes &amp; masques</a>
+    <a href="#seq8"><span class="num">8</span> Multimédia &amp; présentateur</a>
+    <a href="#seq9"><span class="num">9</span> Finaliser &amp; exporter</a>
+    <a href="#seq10"><span class="num">10</span> Réussir son oral</a>
+    <div class="group-label">Validation</div>
+    <a href="#quiz"><span class="num">✓</span> Quiz de validation</a>
+    <a href="#ressources"><span class="num">+</span> Pour aller plus loin</a>
+  </nav>
+</aside>
+
+<div class="main">
+
+  <header class="hero">
+    <span class="tag">Module de mise à niveau bureautique</span>
+    <h1>PowerPoint : de la découverte à la présentation professionnelle</h1>
+    <p class="lead">Ce module permet aux apprenants FPA de maîtriser PowerPoint pour concevoir, mettre en forme et présenter un support — en vue de leur épreuve de certification et de leur futur métier de formateur professionnel d'adultes.</p>
+    <div class="hero-meta">
+      <div class="chip">Durée<b>6h30 (1 journée)</b></div>
+      <div class="chip">Public<b>Débutants complets</b></div>
+      <div class="chip">Modalité<b>Présentiel, alternance théorie / pratique</b></div>
+      <div class="chip">Outil<b>Microsoft PowerPoint (365 / 2021)</b></div>
+    </div>
+  </header>
+
+  <section class="block" id="intro">
+    <div class="seq-header">
+      <div class="seq-badge">i</div>
+      <div>
+        <h2>Présentation du module</h2>
+        <div class="duree">Cadrage pédagogique</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs pédagogiques</h4>
+      <ul>
+        <li>Se repérer dans l'environnement PowerPoint et utiliser les fonctions essentielles du logiciel.</li>
+        <li>Construire une présentation structurée, lisible et visuellement cohérente.</li>
+        <li>Mobiliser les outils visuels (images, tableaux, graphiques, SmartArt) pour servir un message.</li>
+        <li>Utiliser les animations et le mode présentateur de façon professionnelle, sans effets superflus.</li>
+        <li>Exporter, imprimer et présenter son support à l'oral dans des conditions proches de l'épreuve de certification.</li>
+      </ul>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Prérequis</h4>
+      <ul>
+        <li>Savoir utiliser un ordinateur (souris, clavier, gestion de fichiers/dossiers).</li>
+        <li>Aucune connaissance préalable de PowerPoint n'est nécessaire.</li>
+      </ul>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Déroulé de la journée</h4>
+      <table class="compare-table">
+        <tr><th>Horaire</th><th>Séquence</th><th>Durée</th></tr>
+        <tr><td>9h00 – 9h45</td><td>1. Découvrir l'interface PowerPoint</td><td>45 min</td></tr>
+        <tr><td>9h45 – 10h45</td><td>2. Diapositives et mises en page</td><td>1h</td></tr>
+        <tr><td>10h45 – 11h00</td><td>Pause</td><td>15 min</td></tr>
+        <tr><td>11h00 – 12h00</td><td>3. Texte et mise en forme</td><td>1h</td></tr>
+        <tr><td>12h00 – 13h00</td><td>Pause déjeuner</td><td>1h</td></tr>
+        <tr><td>13h00 – 14h15</td><td>4. Images, formes et SmartArt</td><td>1h15</td></tr>
+        <tr><td>14h15 – 15h00</td><td>5. Tableaux et graphiques</td><td>45 min</td></tr>
+        <tr><td>15h00 – 15h15</td><td>Pause</td><td>15 min</td></tr>
+        <tr><td>15h15 – 16h00</td><td>6 et 7. Animations, thèmes et masques</td><td>45 min</td></tr>
+        <tr><td>16h00 – 16h45</td><td>8 et 9. Multimédia, export et mode présentateur</td><td>45 min</td></tr>
+        <tr><td>16h45 – 17h15</td><td>10. Réussir son oral + Quiz de validation</td><td>30 min</td></tr>
+      </table>
+    </div>
+
+    <div class="key-point">
+      <div class="kp-icon">!</div>
+      <p><b>Pourquoi ce module compte pour vous :</b> l'épreuve de certification FPA repose sur une présentation orale appuyée par un support — souvent PowerPoint. Au-delà de l'examen, savoir construire un diaporama clair est une compétence que vous utiliserez à chaque animation de formation dans votre futur métier.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 1 ===================== -->
+  <section class="block" id="seq1">
+    <div class="seq-header">
+      <div class="seq-badge">1</div>
+      <div>
+        <h2>Découvrir l'interface PowerPoint</h2>
+        <div class="duree">45 minutes</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs de la séquence</h4>
+      <ul>
+        <li>Identifier à quoi sert PowerPoint et dans quels contextes professionnels il est utilisé.</li>
+        <li>Se repérer dans le ruban, les onglets et les vues du logiciel.</li>
+        <li>Créer, enregistrer et ouvrir un fichier de présentation.</li>
+      </ul>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>À quoi sert PowerPoint ?</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>PowerPoint est un logiciel de Présentation Assistée par Ordinateur (PAO). Il permet de construire un support visuel — diaporama — destiné à accompagner une prise de parole : soutenance, formation, réunion, vente, rapport d'activité.</p>
+          <p>Dans le métier de formateur, le diaporama sert de fil conducteur à l'animation : il structure le déroulé, illustre les notions abordées et facilite la mémorisation des apprenants.</p>
+          <ul>
+            <li>Présentations professionnelles (réunions, bilans, projets)</li>
+            <li>Supports de formation et d'animation pédagogique</li>
+            <li>Soutenances et épreuves de certification</li>
+            <li>Supports commerciaux ou de communication</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Le ruban et les onglets</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Le ruban regroupe l'ensemble des outils, organisés par onglets thématiques :</p>
+          <ul>
+            <li><b>Accueil</b> : police, paragraphe, mise en forme du texte</li>
+            <li><b>Insertion</b> : images, formes, tableaux, graphiques, vidéos, SmartArt</li>
+            <li><b>Dessin</b> : outils de surlignage et d'annotation à main levée</li>
+            <li><b>Création</b> : thèmes, variantes de couleurs, mise en forme de l'arrière-plan</li>
+            <li><b>Transitions</b> : effets entre les diapositives</li>
+            <li><b>Animations</b> : effets appliqués aux éléments d'une diapositive</li>
+            <li><b>Diaporama</b> : lancement, paramètres, mode présentateur</li>
+            <li><b>Révision</b> : orthographe, commentaires, comparaison</li>
+            <li><b>Affichage</b> : changer de vue, afficher le quadrillage, les repères</li>
+          </ul>
+          <div class="astuce"><b>Astuce :</b> la barre d'outils Accès rapide (en haut à gauche) peut être personnalisée pour y placer les commandes que vous utilisez le plus souvent (Enregistrer, Annuler, Aperçu...).</div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">3</span>Les différents modes d'affichage</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <table class="compare-table">
+            <tr><th>Mode</th><th>Usage</th></tr>
+            <tr><td>Normal</td><td>Mode de travail principal : édition diapositive par diapositive</td></tr>
+            <tr><td>Trieuse de diapositives</td><td>Vue d'ensemble en miniatures, pratique pour réorganiser l'ordre</td></tr>
+            <tr><td>Mode Plan</td><td>Affiche uniquement les titres et textes, pour structurer ses idées</td></tr>
+            <tr><td>Page de notes</td><td>Permet de rédiger des notes du présentateur sous chaque diapositive</td></tr>
+            <tr><td>Diaporama / Présentateur</td><td>Lancement de la présentation en plein écran, avec ou sans vue présentateur</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">4</span>Créer, enregistrer, ouvrir un fichier</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Les formats les plus courants :</p>
+          <ul>
+            <li><b>.pptx</b> : format natif PowerPoint (recommandé)</li>
+            <li><b>.ppt</b> : ancien format (versions antérieures à 2007)</li>
+            <li><b>.pdf</b> : pour diffuser sans modification possible</li>
+            <li><b>.odp</b> : format ouvert, compatible LibreOffice Impress</li>
+            <li><b>.potx</b> : modèle de présentation réutilisable</li>
+          </ul>
+          <div class="astuce"><b>Réflexe pro :</b> activez l'enregistrement automatique (AutoSave) si vous travaillez sur OneDrive, et pensez à enregistrer régulièrement avec <b>Ctrl + S</b>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Ouvrez PowerPoint, créez un nouveau fichier vierge, explorez chaque onglet du ruban pendant 1 minute, puis enregistrez le fichier sous le nom <i>Prenom_Decouverte_PowerPoint.pptx</i> dans votre dossier de travail.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 2 ===================== -->
+  <section class="block" id="seq2">
+    <div class="seq-header">
+      <div class="seq-badge">2</div>
+      <div>
+        <h2>Construire sa présentation : diapositives et mises en page</h2>
+        <div class="duree">1 heure</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs de la séquence</h4>
+      <ul>
+        <li>Ajouter, dupliquer, déplacer et supprimer des diapositives.</li>
+        <li>Choisir une mise en page adaptée au contenu à présenter.</li>
+        <li>Organiser un diaporama long grâce aux sections.</li>
+      </ul>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Gérer ses diapositives</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li><b>Ajouter</b> : Insertion > Nouvelle diapositive, ou Ctrl + M</li>
+            <li><b>Dupliquer</b> : clic droit > Dupliquer la diapositive, utile pour garder une mise en forme</li>
+            <li><b>Déplacer</b> : glisser-déposer dans le volet des miniatures ou en mode Trieuse</li>
+            <li><b>Supprimer</b> : clic droit > Supprimer la diapositive</li>
+            <li><b>Masquer</b> une diapositive sans la supprimer (utile pour préparer plusieurs versions d'un même diaporama)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Choisir la bonne mise en page</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Chaque mise en page propose des zones réservées (placeholders) adaptées à un type de contenu : titre seul, titre et contenu, deux contenus, comparaison, vide, etc.</p>
+          <table class="compare-table">
+            <tr><th>Mise en page</th><th>Quand l'utiliser</th></tr>
+            <tr><td>Diapositive de titre</td><td>Ouverture / fermeture de la présentation</td></tr>
+            <tr><td>Titre et contenu</td><td>La majorité des diapositives (texte, image ou liste)</td></tr>
+            <tr><td>Deux contenus</td><td>Comparer deux idées, ou texte + image côte à côte</td></tr>
+            <tr><td>Titre de section</td><td>Annoncer une nouvelle partie du diaporama</td></tr>
+            <tr><td>Vide</td><td>Créer une composition entièrement personnalisée</td></tr>
+          </table>
+          <div class="astuce"><b>Règle d'or :</b> une idée = une diapositive. Évitez de surcharger un seul écran avec plusieurs messages.</div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">3</span>Utiliser les sections</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Pour un diaporama long (épreuve de certification, formation complète), les sections permettent de regrouper les diapositives par grande partie (ex : Introduction / Contexte / Démarche / Résultats / Conclusion).</p>
+          <p>Clic droit dans le volet des miniatures > Ajouter une section. Les sections peuvent être repliées pour naviguer plus facilement pendant la construction.</p>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">4</span>Le mode Plan</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Le mode Plan (onglet Affichage > Mode Plan) affiche uniquement les titres et le texte des diapositives, sans la mise en forme. C'est l'outil idéal pour structurer rapidement ses idées avant de soigner le visuel — une étape souvent sous-estimée mais qui fait gagner un temps précieux.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>En mode Plan, structurez le squelette d'une présentation de 8 diapositives sur un sujet de votre choix (votre parcours, votre futur métier, un loisir). Ajoutez ensuite 2 sections pour regrouper ces diapositives.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 3 ===================== -->
+  <section class="block" id="seq3">
+    <div class="seq-header">
+      <div class="seq-badge">3</div>
+      <div>
+        <h2>Mettre en forme texte et contenu</h2>
+        <div class="duree">1 heure</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs de la séquence</h4>
+      <ul>
+        <li>Appliquer une mise en forme de texte lisible et cohérente.</li>
+        <li>Utiliser listes, alignements et hiérarchie visuelle à bon escient.</li>
+      </ul>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Polices, tailles, couleurs</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Limitez-vous à 1 ou 2 polices maximum dans toute la présentation</li>
+            <li>Titre : 28 à 44 pt — Texte courant : 18 à 24 pt (jamais en dessous de 18 pt à l'oral)</li>
+            <li>Préférez les polices sans empattement (Calibri, Arial, Segoe UI) pour la lisibilité à distance</li>
+            <li>Contraste fort entre texte et fond (texte sombre sur fond clair, ou inverse)</li>
+          </ul>
+          <div class="astuce"><b>Astuce :</b> sélectionnez votre texte puis utilisez le raccourci <b>Ctrl + Maj + &lt;</b> ou <b>&gt;</b> pour ajuster rapidement la taille de police.</div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Listes à puces et numérotées</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Les listes structurent l'information mais ne doivent pas remplacer un texte rédigé entier projeté à l'écran.</p>
+          <ul>
+            <li>La règle du <b>6x6</b> : maximum 6 lignes par diapositive, 6 mots par ligne</li>
+            <li>Listes numérotées pour une suite d'étapes (process, chronologie)</li>
+            <li>Listes à puces pour des éléments non ordonnés</li>
+            <li>Onglet Accueil > Paragraphe pour ajuster les niveaux (Tab / Maj+Tab)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">3</span>Alignement et zones de texte</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Les outils d'alignement (onglet Format de forme > Aligner) permettent de positionner précisément les zones de texte les unes par rapport aux autres ou par rapport à la diapositive.</p>
+          <ul>
+            <li>Aligner à gauche / centrer / aligner à droite</li>
+            <li>Distribuer verticalement / horizontalement plusieurs objets</li>
+            <li>Utiliser les repères (Affichage > Repères) et le quadrillage pour un alignement précis sans effort</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">4</span>Hiérarchie visuelle</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Une diapositive efficace guide l'œil : le titre attire en premier, puis le contenu principal, puis les détails. Cela se construit avec la taille, la couleur, la position et le poids (gras) du texte — jamais avec plusieurs polices ou couleurs criardes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Reprenez le squelette créé en séquence 2. Appliquez une mise en forme cohérente : 1 police pour les titres, 1 police pour le texte, une liste à puces respectant la règle du 6x6 sur au moins 2 diapositives.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 4 ===================== -->
+  <section class="block" id="seq4">
+    <div class="seq-header">
+      <div class="seq-badge">4</div>
+      <div>
+        <h2>Enrichir avec des visuels : images, formes et SmartArt</h2>
+        <div class="duree">1h15</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs de la séquence</h4>
+      <ul>
+        <li>Insérer, recadrer et habiller des images.</li>
+        <li>Utiliser formes et icônes pour illustrer un propos.</li>
+        <li>Transformer une liste de texte en SmartArt pour la rendre plus visuelle.</li>
+      </ul>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Insérer et retoucher des images</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Insertion > Images : depuis un fichier, une banque d'images en ligne, ou une capture d'écran</li>
+            <li>Recadrage : Format de l'image > Rogner (recadrage simple ou en forme)</li>
+            <li>Outils Image : luminosité, contraste, suppression d'arrière-plan</li>
+            <li>Habillage du texte autour d'une image via le positionnement libre</li>
+          </ul>
+          <div class="astuce"><b>Droit à l'image :</b> utilisez des images libres de droits (banques intégrées à PowerPoint, ou sites comme Unsplash/Pexels) — particulièrement important dans un usage professionnel.</div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Formes et icônes</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Insertion > Formes (rectangles, flèches, bulles) et Insertion > Icônes (pictogrammes vectoriels modifiables en couleur). Les formes permettent de créer des encadrés, séparateurs visuels ou schémas simples sans dépendre d'un graphiste.</p>
+          <ul>
+            <li>Fusionner des formes (Format de forme > Fusionner les formes) pour créer des icônes personnalisées</li>
+            <li>Dupliquer une forme mise en forme (Ctrl + D) pour gagner du temps sur un schéma répétitif</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">3</span>SmartArt : transformer du texte en schéma</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Insertion > SmartArt propose des modèles de schémas prêts à l'emploi : processus, hiérarchie, cycle, liste graphique, relation. Idéal pour présenter une chronologie, une organisation ou des étapes.</p>
+          <ul>
+            <li>Convertir une liste à puces existante en SmartArt : sélectionner le texte > clic droit > Convertir en SmartArt</li>
+            <li>Modifier les couleurs et le style via l'onglet Création SmartArt</li>
+          </ul>
+          <div class="astuce"><b>Quand l'utiliser :</b> dès qu'une liste décrit une logique (étapes, niveaux, relations) plutôt qu'une simple énumération, un SmartArt la rend immédiatement plus lisible qu'une liste à puces.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Ajoutez une image illustrant votre sujet et habillez le texte autour. Sur une autre diapositive, transformez une liste de 4 étapes en SmartArt de type "Processus".</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 5 ===================== -->
+  <section class="block" id="seq5">
+    <div class="seq-header">
+      <div class="seq-badge">5</div>
+      <div>
+        <h2>Tableaux et graphiques</h2>
+        <div class="duree">45 minutes</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs de la séquence</h4>
+      <ul>
+        <li>Créer et mettre en forme un tableau de données.</li>
+        <li>Insérer un graphique adapté au message à transmettre.</li>
+      </ul>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Créer un tableau</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Insertion > Tableau, ou copier-coller depuis Excel pour conserver des données déjà existantes. Les styles de tableau (onglet Création) permettent d'appliquer une mise en forme cohérente avec la charte de couleurs en un clic.</p>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Insérer et choisir un graphique</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Insertion > Graphique ouvre une feuille de données type Excel pour saisir ses chiffres. Bien choisir le type de graphique selon le message à transmettre :</p>
+          <table class="compare-table">
+            <tr><th>Type de graphique</th><th>Pour montrer...</th></tr>
+            <tr><td>Histogramme / Colonnes</td><td>Comparer des valeurs entre catégories</td></tr>
+            <tr><td>Courbes</td><td>Une évolution dans le temps</td></tr>
+            <tr><td>Secteurs (camembert)</td><td>Une répartition en pourcentage (5 catégories max)</td></tr>
+            <tr><td>Barres</td><td>Comparer des valeurs avec de longs libellés</td></tr>
+          </table>
+          <div class="astuce"><b>Piège fréquent :</b> ne jamais utiliser un camembert pour plus de 5-6 catégories — il devient illisible. Préférer un histogramme dans ce cas.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Créez un tableau de 3 colonnes x 4 lignes présentant des données fictives, puis un graphique en histogramme reprenant ces mêmes données sur une autre diapositive.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 6 ===================== -->
+  <section class="block" id="seq6">
+    <div class="seq-header">
+      <div class="seq-badge">6</div>
+      <div>
+        <h2>Dynamiser sa présentation : animations et transitions</h2>
+        <div class="duree">25 minutes</div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Transitions vs animations</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <table class="compare-table">
+            <tr><th>Transition</th><th>Animation</th></tr>
+            <tr><td>Effet entre deux diapositives</td><td>Effet appliqué à un élément à l'intérieur d'une diapositive</td></tr>
+            <tr><td>Onglet Transitions</td><td>Onglet Animations</td></tr>
+            <tr><td>Une seule par diapositive</td><td>Plusieurs animations possibles, dans un ordre défini</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Appliquer et régler une animation</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Sélectionner l'élément > Onglet Animations > choisir un effet (apparition, fondu, déplacement)</li>
+            <li>Volet Animation pour réordonner et régler le déclenchement (au clic, après la précédente, avec la précédente)</li>
+            <li>Régler la vitesse et le retard dans le panneau d'options</li>
+          </ul>
+          <div class="astuce"><b>Bon usage :</b> une à deux animations sobres (apparition, fondu) suffisent. Les effets sonores et rotations excessives nuisent au professionnalisme et distraient l'auditoire.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Appliquez une transition sobre entre toutes vos diapositives (Onglet Transitions > Appliquer partout), puis une animation d'apparition sur les éléments d'une liste à puces, avec déclenchement au clic.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 7 ===================== -->
+  <section class="block" id="seq7">
+    <div class="seq-header">
+      <div class="seq-badge">7</div>
+      <div>
+        <h2>Cohérence visuelle : thèmes et masques de diapositives</h2>
+        <div class="duree">20 minutes</div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Appliquer un thème</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Onglet Création propose des thèmes prêts à l'emploi (couleurs, polices, effets cohérents) ainsi que des variantes de couleurs. Appliquer un thème en un clic garantit une harmonie visuelle sans compétence en design.</p>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Le masque des diapositives</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Affichage > Masque des diapositives permet de modifier une fois pour toutes la mise en page de référence : logo, position des titres, couleurs, polices. Toute modification se répercute automatiquement sur toutes les diapositives utilisant ce modèle.</p>
+          <div class="astuce"><b>Lien avec votre futur métier :</b> en tant que formateur, vous pourrez créer le masque d'un organisme de formation une seule fois (logo, charte graphique) puis le réutiliser pour tous vos supports — un gain de temps considérable.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Ouvrez le Masque des diapositives, modifiez la couleur de fond du masque principal et la position du titre, puis observez l'effet sur l'ensemble de votre présentation.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 8 ===================== -->
+  <section class="block" id="seq8">
+    <div class="seq-header">
+      <div class="seq-badge">8</div>
+      <div>
+        <h2>Multimédia et mode présentateur</h2>
+        <div class="duree">25 minutes</div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Insérer son et vidéo</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Insertion > Vidéo (depuis un fichier ou en ligne) ou Insertion > Audio</li>
+            <li>Options de lecture : automatique / au clic, en boucle, masquer pendant la présentation</li>
+            <li>Préférer l'intégration du fichier multimédia (et non un simple lien) pour éviter les problèmes lors d'un changement d'ordinateur</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Le mode présentateur</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Le mode présentateur (Diaporama > Utiliser le mode présentateur) affiche sur l'écran du présentateur la diapositive en cours, la suivante, le chronomètre et les notes — alors que le public ne voit que la diapositive en plein écran.</p>
+          <ul>
+            <li>Rédiger ses notes dans le volet Notes ou en mode Page de notes</li>
+            <li>Utiliser le stylet/surligneur virtuel pour annoter en direct</li>
+            <li>Répéter sa présentation avec Diaporama > Répétition chronométrée pour calibrer son timing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Rédigez une note de présentateur sur 2 diapositives, puis lancez le mode présentateur pour vous entraîner à présenter en regardant vos notes plutôt que l'écran public.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 9 ===================== -->
+  <section class="block" id="seq9">
+    <div class="seq-header">
+      <div class="seq-badge">9</div>
+      <div>
+        <h2>Finaliser, exporter et partager</h2>
+        <div class="duree">20 minutes</div>
+      </div>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Vérifications avant diffusion</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li><b>Vérificateur d'accessibilité</b> (onglet Révision) : repère les textes alternatifs manquants, contrastes insuffisants</li>
+            <li><b>Vérificateur de compatibilité</b> : alerte sur les fonctions non supportées par d'anciennes versions</li>
+            <li>Relecture orthographique (F7)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Exporter et imprimer</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <table class="compare-table">
+            <tr><th>Format de sortie</th><th>Usage</th></tr>
+            <tr><td>PDF</td><td>Diffusion figée, lecture sur tout appareil</td></tr>
+            <tr><td>Vidéo (.mp4)</td><td>Présentation autonome avec narration et minutage</td></tr>
+            <tr><td>Images (.png/.jpg)</td><td>Export de chaque diapositive en image</td></tr>
+            <tr><td>Document Word</td><td>Export des notes pour un compte-rendu écrit</td></tr>
+          </table>
+          <p>Fichier > Imprimer permet de choisir le format d'impression : diapositives pleine page, pages de notes, ou mode page (plusieurs diapositives par page pour un support papier participant).</p>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">3</span>Partage et collaboration</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Le partage via OneDrive ou Teams permet un travail collaboratif en temps réel sur un même fichier, avec suivi des modifications et commentaires — utile en équipe pédagogique.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice-box">
+      <h4>Exercice pratique</h4>
+      <p>Lancez le vérificateur d'accessibilité sur votre présentation, corrigez au moins une alerte, puis exportez votre fichier final au format PDF.</p>
+    </div>
+  </section>
+
+  <!-- ===================== SEQ 10 ===================== -->
+  <section class="block" id="seq10">
+    <div class="seq-header">
+      <div class="seq-badge">10</div>
+      <div>
+        <h2>Réussir sa présentation à l'oral</h2>
+        <div class="duree">20 minutes</div>
+      </div>
+    </div>
+
+    <div class="objectifs-box">
+      <h4>Objectifs de la séquence</h4>
+      <ul>
+        <li>Relier les bonnes pratiques de design vues dans le module à la prestation orale.</li>
+        <li>Identifier les attentes spécifiques de l'épreuve de certification FPA.</li>
+      </ul>
+    </div>
+
+    <div class="accordion">
+      <div class="acc-item open">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">1</span>Le support au service du discours</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>Le diaporama n'est jamais le discours lui-même : c'est un appui visuel. Un jury ou un public lit plus vite qu'il n'écoute — si vos diapositives contiennent toutes vos phrases, l'attention se détourne de votre parole.</p>
+          <ul>
+            <li>Le support porte les mots-clés et les visuels ; vous portez l'explication</li>
+            <li>Une diapositive = une idée forte, pas un paragraphe</li>
+            <li>Préparez des "diapositives de transition" (titre de section) pour ponctuer votre discours</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">2</span>Gérer le trac et le timing</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Répétez à voix haute en utilisant le mode présentateur et le chronomètre</li>
+            <li>Prévoyez un minutage par partie pour ne pas être pris de court</li>
+            <li>Respirez, marquez des pauses : le silence structure autant que la parole</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <div class="acc-head"><span class="title-line"><span class="icon-wrap">3</span>Lien avec l'épreuve de certification FPA</span><span class="chevron">▾</span></div>
+        <div class="acc-body">
+          <p>L'épreuve de certification évalue votre capacité à concevoir et animer une séquence de formation. Le support PowerPoint que vous présenterez au jury doit démontrer :</p>
+          <ul>
+            <li>Une structuration pédagogique claire (objectifs, déroulé, évaluation)</li>
+            <li>Une mise en forme professionnelle et lisible</li>
+            <li>Une cohérence avec votre discours et votre posture de formateur</li>
+          </ul>
+          <div class="astuce"><b>Conseil :</b> commencez la préparation de votre support de certification dès maintenant, en appliquant chaque notion vue aujourd'hui au fur et à mesure.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section class="block" id="quiz">
+    <div class="seq-header">
+      <div class="seq-badge">✓</div>
+      <div>
+        <h2>Quiz de validation des acquis</h2>
+        <div class="duree">15 questions — répondez puis cliquez sur "Vérifier mes réponses"</div>
+      </div>
+    </div>
+
+    <div id="quiz-container"></div>
+    <button id="quiz-submit">Vérifier mes réponses</button>
+    <div id="quiz-result"></div>
+  </section>
+
+  <section class="block" id="ressources">
+    <div class="seq-header">
+      <div class="seq-badge">+</div>
+      <div>
+        <h2>Pour aller plus loin</h2>
+      </div>
+    </div>
+    <div class="objectifs-box">
+      <ul>
+        <li>Un fichier PowerPoint de démonstration vous a été remis : il illustre chacune des techniques vues dans ce module (mises en page, SmartArt, tableau, graphique, animations, masque). Réutilisez-le comme base d'entraînement.</li>
+        <li>Entraînez-vous en reconstruisant une présentation existante (la vôtre, ou un support trouvé en ligne) pour appliquer les bonnes pratiques de ce module.</li>
+        <li>Préparez progressivement le support de votre épreuve de certification en appliquant ces principes dès la première version.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    Module FPA — Mise à niveau PowerPoint · <b>Real Conseil</b> · RNCP37275
+  </footer>
+</div>
+
+<script>
+/* ---------- Accordion ---------- */
+document.querySelectorAll('.acc-head').forEach(head=>{
+  head.addEventListener('click', ()=>{
+    const item = head.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    item.classList.toggle('open');
+    body.style.maxHeight = isOpen ? null : body.scrollHeight + "px";
+  });
+});
+// init open ones
+document.querySelectorAll('.acc-item.open .acc-body').forEach(b=>{
+  b.style.maxHeight = b.scrollHeight + "px";
+});
+
+/* ---------- Scroll spy ---------- */
+const sections = document.querySelectorAll('section.block, header.hero');
+const navLinks = document.querySelectorAll('#navlinks a');
+function onScroll(){
+  let current = "";
+  sections.forEach(sec=>{
+    const rect = sec.getBoundingClientRect();
+    if(rect.top <= 140) current = sec.id || current;
+  });
+  navLinks.forEach(link=>{
+    link.classList.toggle('active', link.getAttribute('href') === '#'+current);
+  });
+}
+window.addEventListener('scroll', onScroll);
+onScroll();
+
+/* ---------- Quiz ---------- */
+const questions = [
+  {q:"À quoi sert principalement PowerPoint ?", options:["Gérer une base de données","Construire un support visuel pour accompagner une prise de parole","Modifier des images comme Photoshop","Programmer des scripts"], correct:1},
+  {q:"Quel onglet permet d'insérer une image, un tableau ou un graphique ?", options:["Accueil","Création","Insertion","Révision"], correct:2},
+  {q:"Quel mode affiche uniquement les titres et le texte pour structurer ses idées ?", options:["Mode Trieuse","Mode Plan","Mode Présentateur","Mode Page de notes"], correct:1},
+  {q:"Quel format est le format natif recommandé pour enregistrer une présentation PowerPoint récente ?", options:[".odp",".ppt",".pptx",".pdf"], correct:2},
+  {q:"À quoi servent les sections dans un diaporama long ?", options:["À crypter le fichier","À regrouper les diapositives par grandes parties","À ajouter des animations automatiquement","À changer la résolution d'écran"], correct:1},
+  {q:"Que recommande la règle du « 6x6 » ?", options:["6 diapositives par section maximum","6 couleurs par thème maximum","6 lignes par diapositive et 6 mots par ligne maximum","6 minutes par diapositive maximum"], correct:2},
+  {q:"Quel outil permet de transformer une liste à puces en schéma visuel (processus, cycle, hiérarchie) ?", options:["WordArt","SmartArt","Quick Parts","Filigrane"], correct:1},
+  {q:"Pour comparer des valeurs entre plusieurs catégories, quel type de graphique est le plus adapté ?", options:["Camembert avec 10 catégories","Histogramme / colonnes","Nuage de points uniquement","Aucun graphique, un tableau suffit toujours"], correct:1},
+  {q:"Quelle est la différence entre une transition et une animation ?", options:["Il n'y a aucune différence","La transition concerne le passage entre diapositives, l'animation un élément à l'intérieur d'une diapositive","L'animation ne fonctionne que sur les vidéos","La transition s'applique uniquement au texte"], correct:1},
+  {q:"Quel est le principal risque d'un usage excessif d'animations ?", options:["Le fichier devient plus léger","Cela améliore toujours la compréhension","Cela distrait l'auditoire et nuit au professionnalisme","PowerPoint ne permet pas plus de 2 animations"], correct:2},
+  {q:"À quoi sert le Masque des diapositives ?", options:["À masquer des diapositives sensibles au public","À définir une fois pour toutes la mise en page de référence (logo, polices, couleurs)","À crypter la présentation par mot de passe","À créer des transitions automatiques"], correct:1},
+  {q:"Quel mode affiche au présentateur ses notes et le minutage, sans que le public ne les voie ?", options:["Mode Trieuse","Mode Présentateur","Mode Lecture","Mode Plan"], correct:1},
+  {q:"Quel outil permet de repérer un texte alternatif manquant ou un contraste insuffisant avant diffusion ?", options:["Le vérificateur d'orthographe","Le vérificateur d'accessibilité","Le mode Plan","Le volet Animation"], correct:1},
+  {q:"Pour diffuser une présentation sans qu'elle puisse être modifiée, quel format choisir ?", options:[".pptx",".potx","PDF",".odp"], correct:2},
+  {q:"Lors d'une présentation à l'oral, quel est le rôle du diaporama ?", options:["Remplacer le discours en affichant toutes les phrases à dire","Servir d'appui visuel avec les idées-clés, pendant que l'orateur explique","Servir uniquement de décor sans lien avec le propos","Être lu intégralement par le présentateur"], correct:1}
+];
+
+const quizContainer = document.getElementById('quiz-container');
+questions.forEach((item, qi)=>{
+  const div = document.createElement('div');
+  div.className = 'quiz-question';
+  div.innerHTML = `<p class="q-text">${qi+1}. ${item.q}</p>` +
+    item.options.map((opt, oi)=>`
+      <label data-qi="${qi}" data-oi="${oi}">
+        <input type="radio" name="q${qi}" value="${oi}"> ${opt}
+      </label>`).join('');
+  quizContainer.appendChild(div);
+});
+
+document.getElementById('quiz-submit').addEventListener('click', ()=>{
+  let score = 0;
+  questions.forEach((item, qi)=>{
+    const selected = document.querySelector(`input[name="q${qi}"]:checked`);
+    const labels = document.querySelectorAll(`label[data-qi="${qi}"]`);
+    labels.forEach(label=>{
+      label.classList.remove('correct','incorrect');
+      const oi = parseInt(label.getAttribute('data-oi'));
+      if(oi === item.correct) label.classList.add('correct');
+      if(selected && parseInt(selected.value) === oi && oi !== item.correct) label.classList.add('incorrect');
+    });
+    if(selected && parseInt(selected.value) === item.correct) score++;
+  });
+  const result = document.getElementById('quiz-result');
+  result.classList.add('show');
+  result.classList.remove('good','mid','low');
+  const pct = Math.round((score/questions.length)*100);
+  if(pct >= 80){ result.classList.add('good'); result.textContent = `Score : ${score}/${questions.length} (${pct}%) — Excellent, les notions sont acquises !`; }
+  else if(pct >= 50){ result.classList.add('mid'); result.textContent = `Score : ${score}/${questions.length} (${pct}%) — Bonnes bases, revoyez les points en rouge.`; }
+  else { result.classList.add('low'); result.textContent = `Score : ${score}/${questions.length} (${pct}%) — Reprenez les séquences correspondant aux réponses en rouge.`; }
+  result.scrollIntoView({behavior:'smooth', block:'center'});
+});
+</script>
+
+</body>
+</html>
